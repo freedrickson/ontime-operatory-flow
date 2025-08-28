@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface NavigationOverlayProps {
   isOpen: boolean;
@@ -8,6 +9,7 @@ interface NavigationOverlayProps {
 
 const NavigationOverlay = ({ isOpen, onClose }: NavigationOverlayProps) => {
   const [hoveredItem, setHoveredItem] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isOpen) {
@@ -22,8 +24,8 @@ const NavigationOverlay = ({ isOpen, onClose }: NavigationOverlayProps) => {
   }, [isOpen]);
 
   const mainItems = [
-    { id: 'home', label: 'Home', href: '#hero' },
-    { id: 'build', label: 'Build', href: '#features' },
+    { id: 'home', label: 'Home', href: '/' },
+    { id: 'build', label: 'Build', href: '/build' },
     { id: 'manage', label: 'Manage', href: '#team' },
     { id: 'analyze', label: 'Analyze', href: '#closing' }
   ];
@@ -41,6 +43,8 @@ const NavigationOverlay = ({ isOpen, onClose }: NavigationOverlayProps) => {
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
       }
+    } else if (href.startsWith('/')) {
+      navigate(href);
     }
     onClose();
   };
