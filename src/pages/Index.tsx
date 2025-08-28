@@ -14,12 +14,12 @@ const Index = () => {
       {/* Fixed Navigation Header */}
       <header className="fixed top-0 left-0 right-0 z-40 p-8">
         <div className="flex justify-between items-center">
-          <div className="text-2xl font-bold text-current">
+          <div className="text-2xl font-bold text-pure-white">
             On Time
           </div>
           <button
             onClick={() => setIsMenuOpen(true)}
-            className="text-lg font-medium text-current hover:opacity-70 transition-opacity"
+            className="text-lg font-medium text-pure-white hover:opacity-70 transition-opacity"
           >
             MENU
           </button>
