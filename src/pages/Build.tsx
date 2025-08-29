@@ -18,7 +18,7 @@ const Build = () => {
               Back to Home
             </Link>
             <div className="h-6 w-px bg-border" />
-            <h1 className="text-2xl font-bold">Floor Plan Builder</h1>
+            <h1 className="text-2xl font-bold">Setup Your Office Floor Plan</h1>
           </div>
         </div>
       </header>

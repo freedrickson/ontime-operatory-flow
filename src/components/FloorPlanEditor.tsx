@@ -8,7 +8,7 @@ import { RoomType, Room } from "@/types/floorplan";
 const ROOM_TYPES: { [key in RoomType]: { color: string; label: string } } = {
   treatment: { color: "bg-green-500", label: "Treatment Room" },
   sterilization: { color: "bg-blue-500", label: "Sterilization" },
-  public: { color: "bg-yellow-500", label: "Public Space" },
+  public: { color: "bg-yellow-500", label: "Lobby Chair" },
   admin: { color: "bg-gray-500", label: "Admin Space" }
 };
 
@@ -150,8 +150,36 @@ const FloorPlanEditor = () => {
 
   return (
     <div className="flex h-[calc(100vh-73px)]">
-      {/* Side Panel */}
-      <div className="w-80 bg-muted/30 border-r border-border p-6 space-y-6">
+      {/* Canvas Area */}
+      <div className="flex-1 relative overflow-hidden">
+        <div
+          ref={canvasRef}
+          className="absolute inset-0 bg-muted/20"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(0,0,0,.1) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(0,0,0,.1) 1px, transparent 1px)
+            `,
+            backgroundSize: `${GRID_SIZE}px ${GRID_SIZE}px`
+          }}
+          onClick={() => setSelectedRoom(null)}
+        >
+          {rooms.map(room => (
+            <RoomBlock
+              key={room.id}
+              room={room}
+              isSelected={selectedRoom === room.id}
+              onSelect={() => setSelectedRoom(room.id)}
+              onUpdate={updateRoom}
+              snapToGrid={snapToGrid}
+              roomConfig={ROOM_TYPES[room.type]}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* Sidebar (Right) */}
+      <div className="w-80 bg-muted/30 border-l border-border p-6 space-y-6">
         <div>
           <h2 className="text-lg font-semibold mb-4">Room Types</h2>
           <div className="grid grid-cols-1 gap-2">
@@ -195,24 +223,58 @@ const FloorPlanEditor = () => {
         )}
 
         <div>
-          <h2 className="text-lg font-semibold mb-4">Export</h2>
+          <h2 className="text-lg font-semibold mb-4">Actions</h2>
           <div className="space-y-2">
             <Button
-              variant="outline"
-              onClick={exportAsImage}
-              className="w-full justify-start gap-2"
-            >
-              <Download size={16} />
-              Export as Image
-            </Button>
-            <Button
-              variant="outline"
+              variant="default"
               onClick={exportAsJSON}
               className="w-full justify-start gap-2"
             >
               <Save size={16} />
-              Export as JSON
+              Save
             </Button>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setRooms([]);
+                setSelectedRoom(null);
+                toast.success("Floor plan cleared");
+              }}
+              className="w-full justify-start gap-2"
+            >
+              <Trash2 size={16} />
+              Reset / Clear All
+            </Button>
+          </div>
+        </div>
+
+        <div>
+          <h2 className="text-lg font-semibold mb-4">Mini Preview</h2>
+          <div className="w-full h-32 bg-muted border rounded-lg p-2">
+            <div 
+              className="w-full h-full bg-background relative"
+              style={{
+                backgroundImage: `
+                  linear-gradient(rgba(0,0,0,.1) 1px, transparent 1px),
+                  linear-gradient(90deg, rgba(0,0,0,.1) 1px, transparent 1px)
+                `,
+                backgroundSize: `4px 4px`
+              }}
+            >
+              {rooms.map(room => (
+                <div
+                  key={room.id}
+                  className={`absolute rounded-sm ${ROOM_TYPES[room.type].color}`}
+                  style={{
+                    left: `${(room.x / 800) * 100}%`,
+                    top: `${(room.y / 600) * 100}%`,
+                    width: `${(room.width / 800) * 100}%`,
+                    height: `${(room.height / 600) * 100}%`,
+                    transform: `rotate(${room.rotation}deg)`
+                  }}
+                />
+              ))}
+            </div>
           </div>
         </div>
 
@@ -225,34 +287,6 @@ const FloorPlanEditor = () => {
             <li>• Double-click to rename</li>
             <li>• Rooms snap to grid automatically</li>
           </ul>
-        </div>
-      </div>
-
-      {/* Canvas Area */}
-      <div className="flex-1 relative overflow-hidden">
-        <div
-          ref={canvasRef}
-          className="absolute inset-0 bg-background"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(0,0,0,.1) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(0,0,0,.1) 1px, transparent 1px)
-            `,
-            backgroundSize: `${GRID_SIZE}px ${GRID_SIZE}px`
-          }}
-          onClick={() => setSelectedRoom(null)}
-        >
-          {rooms.map(room => (
-            <RoomBlock
-              key={room.id}
-              room={room}
-              isSelected={selectedRoom === room.id}
-              onSelect={() => setSelectedRoom(room.id)}
-              onUpdate={updateRoom}
-              snapToGrid={snapToGrid}
-              roomConfig={ROOM_TYPES[room.type]}
-            />
-          ))}
         </div>
       </div>
     </div>
