@@ -1,11 +1,10 @@
-import CenterPull from "./CenterPull";
 import ScrollReveal from "./ScrollReveal";
 
 const WhatItIsSection = () => {
   return (
-    <section id="what-it-is" className="h-screen bg-pure-white text-pure-black flex flex-col justify-center relative">
+    <section id="what-it-is" className="min-h-screen bg-pure-white text-pure-black flex flex-col justify-center relative">
       <div className="container mx-auto px-8">
-        <CenterPull>
+        <ScrollReveal>
           <div className="text-center">
             <h2 className="section-title">
               <span className="block">Your practice.</span>
@@ -13,7 +12,7 @@ const WhatItIsSection = () => {
               <span className="block">Your rules.</span>
             </h2>
           </div>
-        </CenterPull>
+        </ScrollReveal>
 
         <ScrollReveal className="mt-16">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
