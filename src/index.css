@@ -121,7 +121,7 @@ All colors MUST be HSL.
   }
   
   .section-title {
-    @apply text-[4rem] md:text-[6rem] lg:text-[8rem] font-black leading-[0.85] tracking-tight;
+    @apply text-[12rem] md:text-[16rem] lg:text-[20rem] font-black leading-[0.85] tracking-tight;
   }
   
   .subtitle-text {
