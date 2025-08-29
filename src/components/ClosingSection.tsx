@@ -1,16 +1,17 @@
+import CenterPull from "./CenterPull";
 import ScrollReveal from "./ScrollReveal";
 
 const ClosingSection = () => {
   return (
-    <section id="closing" className="min-h-screen bg-pure-black text-pure-white flex flex-col justify-center">
+    <section id="closing" className="h-screen bg-pure-black text-pure-white flex flex-col justify-center">
       <div className="container mx-auto px-8 text-center">
-        <ScrollReveal>
+        <CenterPull>
           <h2 className="section-title mb-16">
             <span className="block">The Real Risk</span>
             <span className="block">is Running</span>
             <span className="block">Late.</span>
           </h2>
-        </ScrollReveal>
+        </CenterPull>
 
         <ScrollReveal>
           <div className="max-w-2xl mx-auto mb-16">

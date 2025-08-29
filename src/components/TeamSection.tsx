@@ -1,10 +1,11 @@
+import CenterPull from "./CenterPull";
 import ScrollReveal from "./ScrollReveal";
 
 const TeamSection = () => {
   return (
-    <section id="team" className="min-h-screen bg-pure-white text-pure-black flex flex-col justify-center">
+    <section id="team" className="h-screen bg-pure-white text-pure-black flex flex-col justify-center">
       <div className="container mx-auto px-8">
-        <ScrollReveal>
+        <CenterPull>
           <div className="text-center mb-16">
             <h2 className="section-title">
               <span className="block">Enrollment</span>
@@ -12,7 +13,7 @@ const TeamSection = () => {
               <span className="block">Team Sport.</span>
             </h2>
           </div>
-        </ScrollReveal>
+        </CenterPull>
 
         <ScrollReveal>
           <div className="max-w-4xl mx-auto text-center">

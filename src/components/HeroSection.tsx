@@ -1,26 +1,27 @@
+import CenterPull from "./CenterPull";
 import ScrollReveal from "./ScrollReveal";
 
 const HeroSection = () => {
   return (
-    <section id="hero" className="min-h-screen bg-pure-black text-pure-white flex flex-col justify-center relative overflow-hidden">
+    <section id="hero" className="h-screen bg-pure-black text-pure-white flex flex-col justify-center relative overflow-hidden">
       <div className="container mx-auto px-8 relative z-10">
-        <ScrollReveal>
+        <CenterPull>
           <div className="text-center">
             <h1 className="hero-text">
               <span className="block">Dental</span>
               <span className="block">Chaos</span>
             </h1>
           </div>
-        </ScrollReveal>
+        </CenterPull>
         
-        <ScrollReveal className="mt-8">
+        <CenterPull className="mt-8">
           <div className="text-center">
             <h2 className="hero-text text-pure-white">
               <span className="block">Made</span>
               <span className="block">Clockwork</span>
             </h2>
           </div>
-        </ScrollReveal>
+        </CenterPull>
 
         <ScrollReveal className="mt-16">
           <div className="text-center max-w-4xl mx-auto">
