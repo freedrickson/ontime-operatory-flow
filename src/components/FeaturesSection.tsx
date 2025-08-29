@@ -1,4 +1,5 @@
 import ScrollReveal from "./ScrollReveal";
+import MarginPull from "./MarginPull";
 
 const FeaturesSection = () => {
   const features = [
@@ -29,18 +30,20 @@ const FeaturesSection = () => {
       <div className="container mx-auto px-8">
         {features.map((feature, index) => (
           <ScrollReveal key={index} className="mb-32">
-            <div className={`${feature.align === 'right' ? 'text-right' : 'text-left'}`}>
-              <h3 className="section-title mb-6">
-                {feature.title.split(' ').map((word, wordIndex) => (
-                  <span key={wordIndex} className="block">
-                    {word}
-                  </span>
-                ))}
-              </h3>
-              <p className="subtitle-text text-gray-300 max-w-2xl mx-auto">
-                {feature.description}
-              </p>
-            </div>
+            <MarginPull align={feature.align as "left" | "right"}>
+              <div className={`${feature.align === 'right' ? 'text-right' : 'text-left'}`}>
+                <h3 className="section-title mb-6">
+                  {feature.title.split(' ').map((word, wordIndex) => (
+                    <span key={wordIndex} className="block">
+                      {word}
+                    </span>
+                  ))}
+                </h3>
+                <p className="subtitle-text text-gray-300 max-w-2xl mx-auto">
+                  {feature.description}
+                </p>
+              </div>
+            </MarginPull>
           </ScrollReveal>
         ))}
       </div>

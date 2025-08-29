@@ -1,15 +1,18 @@
 import ScrollReveal from "./ScrollReveal";
+import MarginPull from "./MarginPull";
 
 const ClosingSection = () => {
   return (
     <section id="closing" className="min-h-screen bg-pure-black text-pure-white flex flex-col justify-center">
       <div className="container mx-auto px-8 text-center">
         <ScrollReveal>
-          <h2 className="section-title mb-16">
-            <span className="block">The Real Risk</span>
-            <span className="block">is Running</span>
-            <span className="block">Late.</span>
-          </h2>
+          <MarginPull align="left">
+            <h2 className="section-title mb-16 text-left">
+              <span className="block">The Real Risk</span>
+              <span className="block">is Running</span>
+              <span className="block">Late.</span>
+            </h2>
+          </MarginPull>
         </ScrollReveal>
 
         <ScrollReveal>
