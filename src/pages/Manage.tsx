@@ -13,7 +13,7 @@ export default function Manage() {
       </header>
 
       {/* Main Dashboard Layout */}
-      <div className="flex h-[calc(100vh-80px)]">
+      <div className="flex h-[calc(100vh-80px-80px)]"> {/* Account for header and chat footer */}
         {/* Left Side - Lobby and Treatment Rooms */}
         <div className="flex-1 flex flex-col p-6 space-y-6">
           {/* Section A - Lobby */}
