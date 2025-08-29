@@ -45,18 +45,18 @@ const MarginPull = ({ children, align, className = "" }: MarginPullProps) => {
 
   // Calculate transform based on alignment and scroll progress
   const getTransform = () => {
-    const maxOffset = 40; // percentage to move from margin
+    const maxOffset = 60; // percentage to move from far edges
     const offset = align === 'right' 
-      ? maxOffset * (1 - scrollProgress) // Start right, move to center
-      : -maxOffset * (1 - scrollProgress); // Start left, move to center
+      ? maxOffset * (1 - scrollProgress) // Start far right, move to center
+      : -maxOffset * (1 - scrollProgress); // Start far left, move to center
     
-    return `translateX(${offset}%)`;
+    return `translateX(${offset}vw)`;
   };
 
   return (
     <div
       ref={ref}
-      className={`transition-transform duration-700 ease-out ${className}`}
+      className={`transition-transform duration-700 ease-out overflow-hidden ${className}`}
       style={{
         transform: getTransform(),
       }}
