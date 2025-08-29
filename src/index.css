@@ -121,7 +121,7 @@ All colors MUST be HSL.
   }
   
   .section-title {
-    @apply text-6xl md:text-8xl lg:text-10xl xl:text-12xl font-black leading-[0.85] tracking-tight;
+    @apply text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black leading-[0.85] tracking-tight;
   }
   
   .subtitle-text {
