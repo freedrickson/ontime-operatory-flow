@@ -27,11 +27,13 @@ const MarginPull = ({ children, align, className = "" }: MarginPullProps) => {
       let progress = 0;
       
       if (elementTop <= windowHeight && elementBottom >= 0) {
-        // Element is in viewport
-        const visibleTop = Math.max(0, windowHeight - elementTop);
-        const visibleBottom = Math.min(windowHeight, windowHeight - (elementBottom - windowHeight));
-        const totalVisible = elementHeight + windowHeight;
-        progress = Math.min(1, visibleTop / (totalVisible / 2));
+        // Element is in viewport - start animation when section is 20% visible
+        if (elementTop <= windowHeight * 0.8) {
+          // Full animation when element is 20% visible
+          const remainingDistance = Math.max(0, elementTop - (windowHeight * 0.2));
+          const totalDistance = windowHeight * 0.6; // Distance from 80% to 20% viewport
+          progress = Math.min(1, Math.max(0, 1 - (remainingDistance / totalDistance)));
+        }
       }
       
       setScrollProgress(Math.max(0, Math.min(1, progress)));
