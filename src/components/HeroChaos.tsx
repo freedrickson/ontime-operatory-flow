@@ -73,9 +73,20 @@ export default function HeroChaos() {
   // Scroll-to-clarity via IntersectionObserver (skip if reduced motion)
   useEffect(() => {
     if (!rootRef.current) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { setChaos(false); return; }
+    console.log("Setting up intersection observer");
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { 
+      console.log("Reduced motion detected, skipping chaos");
+      setChaos(false); 
+      return; 
+    }
     const io = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { if (e.isIntersecting && e.intersectionRatio > 0.2) setChaos(false); }),
+      (entries) => entries.forEach((e) => { 
+        console.log("Intersection:", e.isIntersecting, e.intersectionRatio);
+        if (e.isIntersecting && e.intersectionRatio > 0.2) {
+          console.log("Clearing chaos");
+          setChaos(false);
+        }
+      }),
       { threshold: [0, 0.2, 0.5, 1] }
     );
     io.observe(rootRef.current);
