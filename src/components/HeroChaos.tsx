@@ -1,12 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 
 export default function HeroChaos() {
-  const rootRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [chaos, setChaos] = useState(true);
+  const [revealedWords, setRevealedWords] = useState<boolean[]>([false, false, false, false]);
   const [hoverWord, setHoverWord] = useState<number | null>(null);
 
-  // Matrix overlay (auto-disposes after ~1.8s)
+  // Matrix overlay (continuous)
   useEffect(() => {
     if (!canvasRef.current) return;
     const canvas = canvasRef.current;
@@ -15,7 +14,6 @@ export default function HeroChaos() {
 
     let raf = 0;
     let alive = true;
-    const start = performance.now();
     const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
 
     const resize = () => {
@@ -34,17 +32,14 @@ export default function HeroChaos() {
     const cols = () => Math.ceil((canvas.width / DPR) / colW);
     let drops = Array.from({ length: cols() }, () => Math.floor(Math.random() * 20));
 
-    const draw = (t: number) => {
+    const draw = () => {
       if (!alive) return;
-      const life = 1800; // ms
-      const elapsed = t - start;
-      const alpha = Math.max(0, 1 - elapsed / life);
 
       // trail
-      ctx.fillStyle = `rgba(0,0,0,0.10)`;
+      ctx.fillStyle = `rgba(0,0,0,0.08)`;
       ctx.fillRect(0, 0, canvas.width / DPR, canvas.height / DPR);
 
-      ctx.fillStyle = `rgba(255,255,255,${0.55 * alpha})`;
+      ctx.fillStyle = `rgba(255,255,255,0.3)`;
       ctx.font = "16px monospace";
 
       const currentCols = cols();
@@ -57,12 +52,6 @@ export default function HeroChaos() {
         drops[i]++;
       }
 
-      if (alpha <= 0.01) {
-        alive = false;
-        ctx.clearRect(0, 0, canvas.width / DPR, canvas.height / DPR);
-        if (canvas && canvas.parentElement) canvas.parentElement.removeChild(canvas);
-        return;
-      }
       raf = requestAnimationFrame(draw);
     };
 
@@ -70,46 +59,48 @@ export default function HeroChaos() {
     return () => { alive = false; cancelAnimationFrame(raf); window.removeEventListener("resize", resize); };
   }, []);
 
-  // Scroll-to-clarity via IntersectionObserver (skip if reduced motion)
+  // Staged word revelation
   useEffect(() => {
-    if (!rootRef.current) return;
-    console.log("Setting up intersection observer");
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { 
-      console.log("Reduced motion detected, skipping chaos");
-      setChaos(false); 
-      return; 
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setRevealedWords([true, true, true, true]);
+      return;
     }
-    const io = new IntersectionObserver(
-      (entries) => entries.forEach((e) => { 
-        console.log("Intersection:", e.isIntersecting, e.intersectionRatio);
-        if (e.isIntersecting && e.intersectionRatio > 0.2) {
-          console.log("Clearing chaos");
-          setChaos(false);
-        }
-      }),
-      { threshold: [0, 0.2, 0.5, 1] }
-    );
-    io.observe(rootRef.current);
-    return () => io.disconnect();
+
+    const timers = [
+      setTimeout(() => setRevealedWords(prev => [true, prev[1], prev[2], prev[3]]), 1000),
+      setTimeout(() => setRevealedWords(prev => [prev[0], true, prev[2], prev[3]]), 2000),
+      setTimeout(() => setRevealedWords(prev => [prev[0], prev[1], true, prev[3]]), 3000),
+      setTimeout(() => setRevealedWords(prev => [prev[0], prev[1], prev[2], true]), 3500),
+    ];
+
+    return () => timers.forEach(timer => clearTimeout(timer));
   }, []);
 
   const words = ["Dental", "Chaos", "Made", "Clockwork"];
 
+  const generateMatrixText = (word: string) => {
+    return Array.from({ length: word.length }, () => 
+      String.fromCharCode(0x30A0 + Math.floor(Math.random() * 96))
+    ).join("");
+  };
+
   return (
     <section id="hero" className="min-h-screen bg-pure-black text-pure-white flex flex-col justify-center relative overflow-hidden">
-      {/* Matrix overlay (removed after fade) */}
+      {/* Matrix overlay (continuous) */}
       <div className="pointer-events-none absolute inset-0">
         <canvas ref={canvasRef} className="w-full h-full" />
       </div>
 
-      <div ref={rootRef} className="container mx-auto px-8 relative z-10">
+      <div className="container mx-auto px-8 relative z-10">
         <div className="text-center">
           {/* Four-line stacked heading */}
-          {words.map((w, idx) => {
+          {words.map((word, idx) => {
             const hovered = hoverWord === idx;
-            const resolve = !chaos || hovered;
+            const revealed = revealedWords[idx] || hovered;
+            const displayText = revealed ? word : generateMatrixText(word);
+            
             return (
-              <h1 key={idx}
+              <h1 key={`${idx}-${revealed}`}
                   onMouseEnter={() => setHoverWord(idx)}
                   onMouseLeave={() => setHoverWord(null)}
                   className={[
@@ -118,15 +109,16 @@ export default function HeroChaos() {
                     "will-change-transform transition-all duration-500 ease-out select-none"
                   ].join(" ")}
                   style={{
-                    filter: resolve ? "none" : "blur(8px)",
-                    opacity: resolve ? 1 : 0.8,
-                    transform: resolve
+                    filter: revealed ? "none" : "blur(2px)",
+                    opacity: revealed ? 1 : 0.7,
+                    transform: revealed
                       ? "translate3d(0,0,0) scale(1)"
-                      : `translate3d(${(Math.random()*6-3).toFixed(1)}px, ${(Math.random()*6-3).toFixed(1)}px, 0) scale(1.04)`,
-                    letterSpacing: resolve ? "0em" : (Math.random() > 0.5 ? "0.04em" : "-0.02em"),
-                    transitionDelay: resolve ? "40ms" : "0ms",
+                      : `translate3d(${(Math.random()*4-2).toFixed(1)}px, ${(Math.random()*4-2).toFixed(1)}px, 0) scale(1.02)`,
+                    letterSpacing: revealed ? "0em" : "0.1em",
+                    transitionDelay: revealed ? "0ms" : "0ms",
+                    fontFamily: revealed ? "inherit" : "monospace"
                   }}>
-                {w}
+                {displayText}
               </h1>
             );
           })}
