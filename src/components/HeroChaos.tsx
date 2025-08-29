@@ -46,7 +46,7 @@ export default function HeroChaos() {
       if (drops.length !== currentCols) drops = Array.from({ length: currentCols }, () => 1);
 
       for (let i = 0; i < drops.length; i++) {
-        const ch = String.fromCharCode(0x30A0 + Math.floor(Math.random() * 96));
+        const ch = Math.random() > 0.5 ? "1" : "0";
         ctx.fillText(ch, i * colW, drops[i] * colW);
         if (Math.random() > 0.975) drops[i] = 0;
         drops[i]++;
@@ -80,7 +80,7 @@ export default function HeroChaos() {
 
   const generateMatrixText = (word: string) => {
     return Array.from({ length: word.length }, () => 
-      String.fromCharCode(0x30A0 + Math.floor(Math.random() * 96))
+      Math.random() > 0.5 ? "1" : "0"
     ).join("");
   };
 
