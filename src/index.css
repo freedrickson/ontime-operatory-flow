@@ -117,7 +117,7 @@ All colors MUST be HSL.
 
 @layer components {
   .hero-text {
-    @apply text-[4rem] md:text-[6rem] lg:text-[8rem] xl:text-[10rem] font-black leading-[0.9] tracking-tight;
+    @apply text-[6rem] md:text-[8rem] lg:text-[12rem] xl:text-[15rem] font-black leading-[0.9] tracking-tight;
   }
   
   .section-title {
