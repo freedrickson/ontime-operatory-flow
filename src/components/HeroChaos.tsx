@@ -5,59 +5,7 @@ export default function HeroChaos() {
   const [revealedWords, setRevealedWords] = useState<boolean[]>([false, false, false, false]);
   const [hoverWord, setHoverWord] = useState<number | null>(null);
 
-  // Matrix overlay (continuous)
-  useEffect(() => {
-    if (!canvasRef.current) return;
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    let raf = 0;
-    let alive = true;
-    const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-
-    const resize = () => {
-      if (!canvas.parentElement) return;
-      const { clientWidth, clientHeight } = canvas.parentElement;
-      canvas.width = clientWidth * DPR;
-      canvas.height = clientHeight * DPR;
-      canvas.style.width = clientWidth + "px";
-      canvas.style.height = clientHeight + "px";
-      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    };
-    resize();
-    window.addEventListener("resize", resize);
-
-    const colW = 16;
-    const cols = () => Math.ceil((canvas.width / DPR) / colW);
-    let drops = Array.from({ length: cols() }, () => Math.floor(Math.random() * 20));
-
-    const draw = () => {
-      if (!alive) return;
-
-      // trail
-      ctx.fillStyle = `rgba(0,0,0,0.08)`;
-      ctx.fillRect(0, 0, canvas.width / DPR, canvas.height / DPR);
-
-      ctx.fillStyle = `rgba(255,255,255,0.3)`;
-      ctx.font = "16px monospace";
-
-      const currentCols = cols();
-      if (drops.length !== currentCols) drops = Array.from({ length: currentCols }, () => 1);
-
-      for (let i = 0; i < drops.length; i++) {
-        const ch = Math.random() > 0.5 ? "1" : "0";
-        ctx.fillText(ch, i * colW, drops[i] * colW);
-        if (Math.random() > 0.975) drops[i] = 0;
-        drops[i]++;
-      }
-
-      raf = requestAnimationFrame(draw);
-    };
-
-    raf = requestAnimationFrame(draw);
-    return () => { alive = false; cancelAnimationFrame(raf); window.removeEventListener("resize", resize); };
-  }, []);
+  // Matrix overlay removed
 
   // Staged word revelation
   useEffect(() => {
@@ -86,10 +34,6 @@ export default function HeroChaos() {
 
   return (
     <section id="hero" className="min-h-screen bg-pure-black text-pure-white flex flex-col justify-center relative overflow-hidden">
-      {/* Matrix overlay (continuous) */}
-      <div className="pointer-events-none absolute inset-0">
-        <canvas ref={canvasRef} className="w-full h-full" />
-      </div>
 
       <div className="container mx-auto px-8 relative z-10">
         <div className="text-center">
