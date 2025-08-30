@@ -47,7 +47,7 @@ const MarginPull = ({ children, align, className = "" }: MarginPullProps) => {
 
   // Calculate transform based on alignment and scroll progress
   const getTransform = () => {
-    const maxOffset = 60; // percentage to move to far edges
+    const maxOffset = 20; // percentage to move to edges (reduced for readability)
     const offset = align === 'right' 
       ? maxOffset * scrollProgress // Start center, move to right
       : -maxOffset * scrollProgress; // Start center, move to left
