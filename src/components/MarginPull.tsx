@@ -18,25 +18,51 @@ const MarginPull = ({ children, align, className = "", strength = 0.5 }: MarginP
       if (!ref.current) return;
 
       const element = ref.current;
-      const container = element.parentElement;
+      
+      // Find the actual layout container (with mx-auto or container classes)
+      let container = element.parentElement;
+      while (container && !container.classList.contains('container') && !container.classList.contains('mx-auto')) {
+        container = container.parentElement;
+      }
+      
+      if (!container) {
+        container = element.parentElement; // Fallback to direct parent
+      }
+      
       if (!container) return;
 
-      const elementRect = element.getBoundingClientRect();
-      const containerRect = container.getBoundingClientRect();
+      // Use offsetWidth for more reliable measurements
+      const elementWidth = element.offsetWidth;
+      const containerWidth = container.offsetWidth;
       
-      // Calculate safe movement space (in pixels)
-      const safeSpace = Math.max(0, (containerRect.width - elementRect.width) / 2);
+      // Get container padding to account for it
+      const containerStyles = window.getComputedStyle(container);
+      const paddingLeft = parseFloat(containerStyles.paddingLeft) || 0;
+      const paddingRight = parseFloat(containerStyles.paddingRight) || 0;
+      const totalPadding = paddingLeft + paddingRight;
       
-      // Convert to percentage of viewport width for consistent scaling
-      const maxOffsetVw = (safeSpace / window.innerWidth) * 100;
+      // Calculate available content width (container minus padding)
+      const availableWidth = containerWidth - totalPadding;
       
-      setMaxOffset(Math.min(maxOffsetVw, 15)); // Cap at 15vw for reasonable movement
+      // Calculate safe movement space with a small safety buffer (10px)
+      const safetyBuffer = 10;
+      const safeSpace = Math.max(0, (availableWidth - elementWidth) / 2 - safetyBuffer);
+      
+      // Convert to percentage of container width for consistent scaling
+      const maxOffsetPercent = (safeSpace / containerWidth) * 100;
+      
+      setMaxOffset(Math.max(0, Math.min(maxOffsetPercent, 12))); // Cap at 12% for reasonable movement
     };
 
-    calculateMaxOffset();
+    // Add a small delay to ensure DOM is fully rendered
+    const timeoutId = setTimeout(calculateMaxOffset, 50);
+    
     window.addEventListener('resize', calculateMaxOffset, { passive: true });
     
-    return () => window.removeEventListener('resize', calculateMaxOffset);
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener('resize', calculateMaxOffset);
+    };
   }, []);
 
   useEffect(() => {
@@ -71,8 +97,8 @@ const MarginPull = ({ children, align, className = "", strength = 0.5 }: MarginP
 
   // Calculate transform based on alignment and scroll progress with boundary clamping
   const getTransform = () => {
-    // Use calculated maxOffset or fallback to a safe default
-    const safeMaxOffset = maxOffset > 0 ? maxOffset : 10;
+    // Use calculated maxOffset or fallback to a safe default (in percentage)
+    const safeMaxOffset = maxOffset > 0 ? maxOffset : 8;
     
     // Apply strength multiplier for easy tweaking
     const adjustedOffset = safeMaxOffset * strength;
@@ -81,7 +107,7 @@ const MarginPull = ({ children, align, className = "", strength = 0.5 }: MarginP
       ? adjustedOffset * scrollProgress // Start center, move to right
       : -adjustedOffset * scrollProgress; // Start center, move to left
     
-    return `translateX(${offset}vw)`;
+    return `translateX(${offset}%)`;
   };
 
   return (
