@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { X, Volume2, Vibrate, Eye, Watch } from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from '@/components/ui/dialog';
+import React, { useState, useEffect } from 'react';
+import { Volume2, Vibrate, Eye, Watch, Play } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -8,14 +8,20 @@ import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { ChevronDown } from 'lucide-react';
+import { EventType, ChannelConfig, Role, HapticPattern, SoundStyle, BannerStyle } from '@/types/notifications';
+import { useNotifications } from '@/hooks/useNotifications';
 
 interface NotificationCustomModalProps {
   isOpen: boolean;
   onClose: () => void;
+  eventId: EventType;
   eventName: string;
+  userId?: string;
+  role: Role;
+  isRoleDefault?: boolean;
 }
 
-const hapticOptions = [
+const hapticOptions: HapticPattern[] = [
   'Single Tap',
   'Double Tap', 
   'Triple Tap',
@@ -28,7 +34,7 @@ const hapticOptions = [
   'Urgent Alert'
 ];
 
-const soundOptions = [
+const soundOptions: SoundStyle[] = [
   'Soft Ping',
   'Standard Ding',
   'Urgent Alert',
@@ -37,7 +43,7 @@ const soundOptions = [
   'Silent'
 ];
 
-const bannerOptions = [
+const bannerOptions: BannerStyle[] = [
   'Banner only',
   'Badge only',
   'Both'
@@ -46,64 +52,91 @@ const bannerOptions = [
 export const NotificationCustomModal: React.FC<NotificationCustomModalProps> = ({
   isOpen,
   onClose,
-  eventName
+  eventId,
+  eventName,
+  userId,
+  role,
+  isRoleDefault = false
 }) => {
-  const [hapticStyle, setHapticStyle] = useState('Single Tap');
-  const [soundStyle, setSoundStyle] = useState('Standard Ding');
-  const [volume, setVolume] = useState([75]);
-  const [bannerEnabled, setBannerEnabled] = useState(true);
-  const [bannerStyle, setBannerStyle] = useState('Both');
-  const [watchEnabled, setWatchEnabled] = useState(false);
-  const [watchHaptic, setWatchHaptic] = useState('Single Tap');
+  const { 
+    getEventConfig, 
+    getRoleDefault, 
+    updateRoleDefault, 
+    updateUserOverride, 
+    resetToRoleDefaults,
+    previewHaptic,
+    previewSound,
+    previewAll
+  } = useNotifications();
+
+  const [config, setConfig] = useState<ChannelConfig>({
+    haptic: { enabled: false, pattern: 'Single Tap' },
+    sound: { enabled: false, style: 'Standard Ding', volume: 75 },
+    banner: { enabled: true, style: 'Both' },
+    watch: { enabled: false, pattern: 'Single Tap' }
+  });
+
+  // Load current configuration when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      if (isRoleDefault) {
+        const roleDefault = getRoleDefault(role);
+        if (roleDefault) {
+          setConfig(roleDefault.events[eventId]);
+        }
+      } else if (userId) {
+        const currentConfig = getEventConfig(userId, role, eventId);
+        setConfig(currentConfig);
+      }
+    }
+  }, [isOpen, isRoleDefault, userId, role, eventId, getRoleDefault, getEventConfig]);
   
   const [hapticOpen, setHapticOpen] = useState(false);
   const [soundOpen, setSoundOpen] = useState(false);
   const [bannerOpen, setBannerOpen] = useState(false);
   const [watchOpen, setWatchOpen] = useState(false);
 
+  const handleConfigChange = (channel: keyof ChannelConfig, updates: Partial<ChannelConfig[keyof ChannelConfig]>) => {
+    setConfig(prev => ({
+      ...prev,
+      [channel]: { ...prev[channel], ...updates }
+    }));
+  };
+
   const handlePreviewHaptic = () => {
-    // Simulate haptic feedback if available
-    if (navigator.vibrate) {
-      switch (hapticStyle) {
-        case 'Single Tap':
-          navigator.vibrate(100);
-          break;
-        case 'Double Tap':
-          navigator.vibrate([100, 100, 100]);
-          break;
-        case 'Triple Tap':
-          navigator.vibrate([100, 100, 100, 100, 100]);
-          break;
-        case 'Long Press':
-          navigator.vibrate(500);
-          break;
-        case 'Pulse':
-          navigator.vibrate([200, 100, 200, 100, 200]);
-          break;
-        default:
-          navigator.vibrate(100);
+    previewHaptic(config.haptic.pattern);
+  };
+
+  const handlePreviewSound = () => {
+    previewSound(config.sound.style, config.sound.volume);
+  };
+
+  const handlePreviewAll = () => {
+    previewAll(config);
+  };
+
+  const handleReset = () => {
+    if (isRoleDefault) {
+      resetToRoleDefaults(role);
+      const roleDefault = getRoleDefault(role);
+      if (roleDefault) {
+        setConfig(roleDefault.events[eventId]);
+      }
+    } else if (userId) {
+      // Reset user to role default
+      const roleDefault = getRoleDefault(role);
+      if (roleDefault) {
+        setConfig(roleDefault.events[eventId]);
       }
     }
   };
 
-  const handlePreviewSound = () => {
-    // Simulate sound preview (would integrate with actual audio system)
-    console.log(`Playing ${soundStyle} at ${volume[0]}% volume`);
-  };
-
-  const handleReset = () => {
-    setHapticStyle('Single Tap');
-    setSoundStyle('Standard Ding');
-    setVolume([75]);
-    setBannerEnabled(true);
-    setBannerStyle('Both');
-    setWatchEnabled(false);
-    setWatchHaptic('Single Tap');
-  };
-
   const handleSave = () => {
-    // Save notification settings
-    console.log('Saving notification settings for:', eventName);
+    if (isRoleDefault) {
+      updateRoleDefault(role, eventId, config);
+    } else if (userId) {
+      updateUserOverride(userId, role, eventId, config);
+    }
     onClose();
   };
 
@@ -127,25 +160,40 @@ export const NotificationCustomModal: React.FC<NotificationCustomModalProps> = (
               <ChevronDown className={`h-4 w-4 transition-transform ${hapticOpen ? 'rotate-180' : ''}`} />
             </CollapsibleTrigger>
             <CollapsibleContent className="mt-4 space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label>Haptic Pattern</Label>
-                  <Select value={hapticStyle} onValueChange={setHapticStyle}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {hapticOptions.map(option => (
-                        <SelectItem key={option} value={option}>{option}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <Label>Enable Haptic</Label>
+                  <Switch 
+                    checked={config.haptic.enabled} 
+                    onCheckedChange={(enabled) => handleConfigChange('haptic', { enabled })} 
+                  />
                 </div>
-                <div className="flex items-end">
-                  <Button variant="outline" onClick={handlePreviewHaptic}>
-                    Preview
-                  </Button>
-                </div>
+                {config.haptic.enabled && (
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label>Haptic Pattern</Label>
+                      <Select 
+                        value={config.haptic.pattern} 
+                        onValueChange={(pattern: HapticPattern) => handleConfigChange('haptic', { pattern })}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {hapticOptions.map(option => (
+                            <SelectItem key={option} value={option}>{option}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="flex items-end">
+                      <Button variant="outline" onClick={handlePreviewHaptic}>
+                        <Play className="h-4 w-4 mr-2" />
+                        Preview
+                      </Button>
+                    </div>
+                  </div>
+                )}
               </div>
             </CollapsibleContent>
           </Collapsible>
@@ -160,36 +208,51 @@ export const NotificationCustomModal: React.FC<NotificationCustomModalProps> = (
               <ChevronDown className={`h-4 w-4 transition-transform ${soundOpen ? 'rotate-180' : ''}`} />
             </CollapsibleTrigger>
             <CollapsibleContent className="mt-4 space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label>Sound Style</Label>
-                  <Select value={soundStyle} onValueChange={setSoundStyle}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {soundOptions.map(option => (
-                        <SelectItem key={option} value={option}>{option}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="flex items-end">
-                  <Button variant="outline" onClick={handlePreviewSound}>
-                    Preview
-                  </Button>
-                </div>
-              </div>
-              <div>
-                <Label>Volume ({volume[0]}%)</Label>
-                <Slider
-                  value={volume}
-                  onValueChange={setVolume}
-                  max={100}
-                  step={1}
-                  className="mt-2"
+              <div className="flex items-center justify-between">
+                <Label>Enable Sound</Label>
+                <Switch 
+                  checked={config.sound.enabled} 
+                  onCheckedChange={(enabled) => handleConfigChange('sound', { enabled })} 
                 />
               </div>
+              {config.sound.enabled && (
+                <>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label>Sound Style</Label>
+                      <Select 
+                        value={config.sound.style} 
+                        onValueChange={(style: SoundStyle) => handleConfigChange('sound', { style })}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {soundOptions.map(option => (
+                            <SelectItem key={option} value={option}>{option}</SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="flex items-end">
+                      <Button variant="outline" onClick={handlePreviewSound}>
+                        <Play className="h-4 w-4 mr-2" />
+                        Preview
+                      </Button>
+                    </div>
+                  </div>
+                  <div>
+                    <Label>Volume ({config.sound.volume}%)</Label>
+                    <Slider
+                      value={[config.sound.volume]}
+                      onValueChange={([volume]) => handleConfigChange('sound', { volume })}
+                      max={100}
+                      step={1}
+                      className="mt-2"
+                    />
+                  </div>
+                </>
+              )}
             </CollapsibleContent>
           </Collapsible>
 
@@ -205,12 +268,18 @@ export const NotificationCustomModal: React.FC<NotificationCustomModalProps> = (
             <CollapsibleContent className="mt-4 space-y-4">
               <div className="flex items-center justify-between">
                 <Label>Enable Banner Notifications</Label>
-                <Switch checked={bannerEnabled} onCheckedChange={setBannerEnabled} />
+                <Switch 
+                  checked={config.banner.enabled} 
+                  onCheckedChange={(enabled) => handleConfigChange('banner', { enabled })} 
+                />
               </div>
-              {bannerEnabled && (
+              {config.banner.enabled && (
                 <div>
                   <Label>Display Style</Label>
-                  <Select value={bannerStyle} onValueChange={setBannerStyle}>
+                  <Select 
+                    value={config.banner.style} 
+                    onValueChange={(style: BannerStyle) => handleConfigChange('banner', { style })}
+                  >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -237,12 +306,18 @@ export const NotificationCustomModal: React.FC<NotificationCustomModalProps> = (
             <CollapsibleContent className="mt-4 space-y-4">
               <div className="flex items-center justify-between">
                 <Label>Enable Watch Notifications</Label>
-                <Switch checked={watchEnabled} onCheckedChange={setWatchEnabled} />
+                <Switch 
+                  checked={config.watch.enabled} 
+                  onCheckedChange={(enabled) => handleConfigChange('watch', { enabled })} 
+                />
               </div>
-              {watchEnabled && (
+              {config.watch.enabled && (
                 <div>
                   <Label>Watch Haptic Pattern</Label>
-                  <Select value={watchHaptic} onValueChange={setWatchHaptic}>
+                  <Select 
+                    value={config.watch.pattern} 
+                    onValueChange={(pattern: HapticPattern) => handleConfigChange('watch', { pattern })}
+                  >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -258,10 +333,18 @@ export const NotificationCustomModal: React.FC<NotificationCustomModalProps> = (
           </Collapsible>
         </div>
 
+        {/* Global Preview */}
+        <div className="pt-4 border-t">
+          <Button variant="outline" onClick={handlePreviewAll} className="w-full">
+            <Play className="h-4 w-4 mr-2" />
+            Preview All Channels
+          </Button>
+        </div>
+
         {/* Footer */}
         <div className="flex justify-between pt-6 border-t">
           <Button variant="outline" onClick={handleReset}>
-            Reset to Role Default
+            {isRoleDefault ? 'Reset Role Default' : 'Reset to Role Default'}
           </Button>
           <div className="flex gap-2">
             <Button variant="outline" onClick={onClose}>

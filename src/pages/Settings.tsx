@@ -1,156 +1,238 @@
-import { useState } from "react";
-import NavigationOverlay from "@/components/NavigationOverlay";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { Bell, Users, Settings as SettingsIcon, BarChart3, Puzzle, User, Shield, HelpCircle } from "lucide-react";
-import { NotificationCustomModal } from "@/components/NotificationCustomModal";
+import React, { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Slider } from '@/components/ui/slider';
+import { 
+  Settings, 
+  Bell, 
+  Users, 
+  Building, 
+  BarChart3, 
+  Plug, 
+  User, 
+  Shield, 
+  HelpCircle,
+  Volume2,
+  Vibrate,
+  Eye,
+  Smartphone
+} from 'lucide-react';
+import { NotificationCustomModal } from '@/components/NotificationCustomModal';
+import { useNotifications } from '@/hooks/useNotifications';
+import { EventType, Role } from '@/types/notifications';
 
-export default function Settings() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("notifications");
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState("");
+const SettingsPage = () => {
+  const [activeSection, setActiveSection] = useState('notifications');
+  const [customModalOpen, setCustomModalOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<{
+    eventId: EventType;
+    eventName: string;
+    userId?: string;
+    role: Role;
+    isRoleDefault: boolean;
+  } | null>(null);
+  
+  const { events, roleDefaults } = useNotifications();
+  
   const [practiceSettings, setPracticeSettings] = useState({
-    name: "Downtown Dental Practice",
-    logo: null,
-    accentColor: "#14b8a6",
-    waitTimeThresholds: {
-      green: { min: 0, max: 5 },
-      yellow: { min: 5, max: 10 },
-      red: { min: 10, max: 999 }
-    },
-    emergencyColor: "#3b82f6",
-    lobbyChairCount: 12,
+    name: 'Smile Dental Practice',
+    accentColor: '#168076',
+    lobbyChairs: 12,
     officeHours: {
-      monday: { start: "08:00", end: "17:00" },
-      tuesday: { start: "08:00", end: "17:00" },
-      wednesday: { start: "08:00", end: "17:00" },
-      thursday: { start: "08:00", end: "17:00" },
-      friday: { start: "08:00", end: "17:00" },
-      saturday: { start: "09:00", end: "14:00" },
-      sunday: { start: "", end: "" }
+      start: '08:00',
+      end: '17:00'
     }
   });
 
-  const sidebarSections = [
-    { id: "notifications", label: "Notifications", icon: Bell },
-    { id: "roles", label: "Roles & Permissions", icon: Users },
-    { id: "practice", label: "Practice Settings", icon: SettingsIcon },
-    { id: "analytics", label: "Analytics Preferences", icon: BarChart3 },
-    { id: "integrations", label: "Integrations", icon: Puzzle },
-    { id: "profile", label: "User Profile", icon: User },
-    { id: "security", label: "Account & Security", icon: Shield },
-    { id: "support", label: "Help & Support", icon: HelpCircle }
+  const teamMembers = [
+    { name: 'Dr. Sarah Johnson', email: 'sarah@practice.com', role: 'Doctor', initials: 'SJ' },
+    { name: 'Mike Chen', email: 'mike@practice.com', role: 'Clinical Lead', initials: 'MC' },
+    { name: 'Emma Davis', email: 'emma@practice.com', role: 'Hygienist', initials: 'ED' },
+    { name: 'Alex Smith', email: 'alex@practice.com', role: 'Assistant', initials: 'AS' },
+    { name: 'Lisa Wong', email: 'lisa@practice.com', role: 'Front Desk', initials: 'LW' }
   ];
 
   const roleTemplates = [
-    { name: "Doctor", permissions: ["all"], haptic: "Double", sound: "Standard" },
-    { name: "Clinical Lead", permissions: ["patient_management", "staff_management"], haptic: "Single", sound: "Soft" },
-    { name: "Hygienist", permissions: ["patient_management"], haptic: "Pulse", sound: "Soft" },
-    { name: "Assistant", permissions: ["patient_view"], haptic: "Single", sound: "Soft" },
-    { name: "Front Desk", permissions: ["scheduling", "patient_management"], haptic: "Long", sound: "Urgent" }
+    { name: 'Doctor', permissions: ['Full Access', 'Patient Records', 'Scheduling'] },
+    { name: 'Clinical Lead', permissions: ['Team Management', 'Scheduling', 'Reports'] },
+    { name: 'Hygienist', permissions: ['Patient Records', 'Scheduling'] },
+    { name: 'Assistant', permissions: ['Basic Access', 'Scheduling'] },
+    { name: 'Front Desk', permissions: ['Scheduling', 'Check-in/out', 'Billing'] }
   ];
 
-  const notificationEvents = [
-    "Doctor Request",
-    "Wait Time Changed", 
-    "Emergency Walk-In",
-    "New Message",
-    "Queue Updated"
+  const integrations = [
+    { name: 'Open Dental PMS', status: 'connected', description: 'Practice management system integration' },
+    { name: 'Dentrix', status: 'available', description: 'Alternative PMS integration' },
+    { name: 'Eaglesoft', status: 'coming-soon', description: 'PMS integration coming soon' }
   ];
 
-  const notificationChannels = ["Haptic", "Sound", "Banner", "Watch"];
-
-  const teamMembers = [
-    { name: "Dr. Sarah Johnson", role: "Doctor", email: "sarah@practice.com", initials: "SJ" },
-    { name: "Mike Chen", role: "Clinical Lead", email: "mike@practice.com", initials: "MC" },
-    { name: "Lisa Rodriguez", role: "Hygienist", email: "lisa@practice.com", initials: "LR" },
-    { name: "Tom Wilson", role: "Assistant", email: "tom@practice.com", initials: "TW" },
-    { name: "Emma Davis", role: "Front Desk", email: "emma@practice.com", initials: "ED" }
+  const faqItems = [
+    { 
+      question: 'How do I reset my notification preferences?', 
+      answer: 'You can reset your notification preferences by going to the Notifications section and clicking "Reset to Defaults".' 
+    },
+    { 
+      question: 'Can I customize notifications for specific events?', 
+      answer: 'Yes, you can customize haptic patterns, sounds, and display options for each event type.' 
+    },
+    { 
+      question: 'What devices support notifications?', 
+      answer: 'Notifications work on desktop, mobile, and smartwatch devices when properly configured.' 
+    }
   ];
+
+  const sidebarItems = [
+    { id: 'notifications', label: 'Notifications', icon: Bell },
+    { id: 'roles', label: 'Roles & Permissions', icon: Users },
+    { id: 'practice', label: 'Practice Settings', icon: Building },
+    { id: 'analytics', label: 'Analytics Preferences', icon: BarChart3 },
+    { id: 'integrations', label: 'Integrations', icon: Plug },
+    { id: 'profile', label: 'User Profile', icon: User },
+    { id: 'security', label: 'Account & Security', icon: Shield },
+    { id: 'support', label: 'Help & Support', icon: HelpCircle },
+  ];
+
+  const openCustomModal = (eventId: EventType, eventName: string, userId?: string, role: Role = 'Doctor', isRoleDefault: boolean = false) => {
+    setSelectedEvent({ eventId, eventName, userId, role, isRoleDefault });
+    setCustomModalOpen(true);
+  };
+
+  const closeCustomModal = () => {
+    setCustomModalOpen(false);
+    setSelectedEvent(null);
+  };
 
   const renderNotifications = () => (
     <div className="space-y-8">
       <div>
-        <h3 className="text-2xl font-bold mb-4">Notification Settings</h3>
-        <p className="text-muted-foreground mb-6">Configure how and when team members receive notifications.</p>
+        <h3 className="text-2xl font-bold mb-4">Notifications</h3>
+        <p className="text-muted-foreground mb-6">Configure how and when you receive notifications for different events.</p>
       </div>
 
       <Card>
         <CardHeader>
           <CardTitle>Role Default Profiles</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
-          {roleTemplates.map((role) => (
-            <div key={role.name} className="flex items-center justify-between p-4 border rounded-lg">
-              <div>
-                <Badge variant="outline">{role.name}</Badge>
-                <p className="text-sm text-muted-foreground mt-1">
-                  Haptic: {role.haptic} • Sound: {role.sound}
-                </p>
+        <CardContent>
+          <div className="space-y-4">
+            {roleDefaults.map((roleProfile) => (
+              <div key={roleProfile.role} className="flex items-center justify-between p-4 border rounded-lg">
+                <div>
+                  <Badge variant="outline">{roleProfile.role}</Badge>
+                  <p className="text-sm text-muted-foreground mt-1">
+                    Default notification settings for {roleProfile.role} role
+                  </p>
+                </div>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => openCustomModal('doctor-request-initial', `${roleProfile.role} Defaults`, undefined, roleProfile.role, true)}
+                >
+                  Edit Defaults
+                </Button>
               </div>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => {
-                  setSelectedEvent(role.name);
-                  setModalOpen(true);
-                }}
-              >
-                Customize
-              </Button>
-            </div>
-          ))}
+            ))}
+          </div>
         </CardContent>
       </Card>
 
       <Card>
         <CardHeader>
-          <CardTitle>Event × Channel Matrix</CardTitle>
+          <CardTitle>Event Notifications</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
-            <table className="w-full border-collapse">
+            <table className="w-full">
               <thead>
-                <tr>
-                  <th className="text-left p-2 border-b">Event</th>
-                  {notificationChannels.map(channel => (
-                    <th key={channel} className="text-center p-2 border-b">{channel}</th>
-                  ))}
+                <tr className="border-b">
+                  <th className="text-left p-3">Event</th>
+                  <th className="text-left p-3">Domain</th>
+                  <th className="text-center p-3">
+                    <div className="flex items-center justify-center gap-1">
+                      <Vibrate className="h-4 w-4" />
+                      <span className="text-xs">Haptic</span>
+                    </div>
+                  </th>
+                  <th className="text-center p-3">
+                    <div className="flex items-center justify-center gap-1">
+                      <Volume2 className="h-4 w-4" />
+                      <span className="text-xs">Sound</span>
+                    </div>
+                  </th>
+                  <th className="text-center p-3">
+                    <div className="flex items-center justify-center gap-1">
+                      <Eye className="h-4 w-4" />
+                      <span className="text-xs">Banner</span>
+                    </div>
+                  </th>
+                  <th className="text-center p-3">
+                    <div className="flex items-center justify-center gap-1">
+                      <Smartphone className="h-4 w-4" />
+                      <span className="text-xs">Watch</span>
+                    </div>
+                  </th>
+                  <th className="text-center p-3">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {notificationEvents.map(event => (
-                  <tr key={event}>
-                    <td className="p-2 border-b">
-                      <div className="flex items-center justify-between">
-                        <span>{event}</span>
+                {events.map((event) => {
+                  const roleDefault = roleDefaults.find(rd => rd.role === 'Doctor'); // Show Doctor as example
+                  const config = roleDefault?.events[event.id];
+                  
+                  return (
+                    <tr key={event.id} className="border-b">
+                      <td className="p-3">
+                        <div>
+                          <div className="font-medium">{event.name}</div>
+                          <div className="text-xs text-muted-foreground">{event.description}</div>
+                          {event.adminLocked && (
+                            <Badge variant="destructive" className="text-xs mt-1">Admin Locked</Badge>
+                          )}
+                        </div>
+                      </td>
+                      <td className="p-3">
+                        <Badge variant="secondary" className="capitalize">{event.domain}</Badge>
+                      </td>
+                      <td className="text-center p-3">
+                        <div className={`w-2 h-2 rounded-full mx-auto ${
+                          config?.haptic.enabled ? 'bg-green-500' : 'bg-gray-300'
+                        }`}></div>
+                      </td>
+                      <td className="text-center p-3">
+                        <div className={`w-2 h-2 rounded-full mx-auto ${
+                          config?.sound.enabled ? 'bg-green-500' : 'bg-gray-300'
+                        }`}></div>
+                      </td>
+                      <td className="text-center p-3">
+                        <div className={`w-2 h-2 rounded-full mx-auto ${
+                          config?.banner.enabled ? 'bg-green-500' : 'bg-gray-300'
+                        }`}></div>
+                      </td>
+                      <td className="text-center p-3">
+                        <div className={`w-2 h-2 rounded-full mx-auto ${
+                          config?.watch.enabled ? 'bg-green-500' : 'bg-gray-300'
+                        }`}></div>
+                      </td>
+                      <td className="text-center p-3">
                         <Button 
-                          variant="ghost" 
+                          variant="outline" 
                           size="sm"
-                          onClick={() => {
-                            setSelectedEvent(event);
-                            setModalOpen(true);
-                          }}
+                          onClick={() => openCustomModal(event.id, event.name, 'user-1', 'Doctor', false)}
+                          disabled={!event.canCustomize}
                         >
                           Customize
                         </Button>
-                      </div>
-                    </td>
-                    {notificationChannels.map(channel => (
-                      <td key={`${event}-${channel}`} className="text-center p-2 border-b">
-                        <Switch />
                       </td>
-                    ))}
-                  </tr>
-                ))}
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -159,29 +241,26 @@ export default function Settings() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Device Settings</CardTitle>
+          <CardTitle>Do Not Disturb</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="flex items-center justify-between">
-            <div>
-              <Label>Desktop Notifications</Label>
-              <p className="text-sm text-muted-foreground">Receive notifications on desktop browsers</p>
-            </div>
-            <Switch defaultChecked />
-          </div>
-          <div className="flex items-center justify-between">
-            <div>
-              <Label>Mobile Notifications</Label>
-              <p className="text-sm text-muted-foreground">Push notifications to mobile devices</p>
-            </div>
-            <Switch defaultChecked />
-          </div>
-          <div className="flex items-center justify-between">
-            <div>
-              <Label>Watch Notifications</Label>
-              <p className="text-sm text-muted-foreground">Sync with smartwatch devices</p>
-            </div>
+            <Label>Enable Do Not Disturb</Label>
             <Switch />
+          </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Start Time</Label>
+              <Input type="time" defaultValue="18:00" />
+            </div>
+            <div>
+              <Label>End Time</Label>
+              <Input type="time" defaultValue="08:00" />
+            </div>
+          </div>
+          <div className="flex items-center justify-between">
+            <Label>Allow Emergency Override</Label>
+            <Switch defaultChecked />
           </div>
         </CardContent>
       </Card>
@@ -299,24 +378,31 @@ export default function Settings() {
         <CardContent className="space-y-4">
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <Label>Green (0-5 min)</Label>
-              <div className="flex gap-2">
-                <Input type="number" placeholder="0" className="flex-1" />
-                <Input type="number" placeholder="5" className="flex-1" />
+              <Label>Green (Good)</Label>
+              <div className="text-sm text-muted-foreground mb-2">0-5 minutes</div>
+              <div className="flex items-center gap-2">
+                <Input type="number" defaultValue="0" className="w-20" />
+                <span>to</span>
+                <Input type="number" defaultValue="5" className="w-20" />
+                <span>min</span>
               </div>
             </div>
             <div>
-              <Label>Yellow (5-10 min)</Label>
-              <div className="flex gap-2">
-                <Input type="number" placeholder="5" className="flex-1" />
-                <Input type="number" placeholder="10" className="flex-1" />
+              <Label>Yellow (Caution)</Label>
+              <div className="text-sm text-muted-foreground mb-2">5-10 minutes</div>
+              <div className="flex items-center gap-2">
+                <Input type="number" defaultValue="5" className="w-20" />
+                <span>to</span>
+                <Input type="number" defaultValue="10" className="w-20" />
+                <span>min</span>
               </div>
             </div>
             <div>
-              <Label>Red (10+ min)</Label>
-              <div className="flex gap-2">
-                <Input type="number" placeholder="10" className="flex-1" />
-                <Input type="number" placeholder="∞" className="flex-1" disabled />
+              <Label>Red (Alert)</Label>
+              <div className="text-sm text-muted-foreground mb-2">10+ minutes</div>
+              <div className="flex items-center gap-2">
+                <Input type="number" defaultValue="10" className="w-20" />
+                <span>+ min</span>
               </div>
             </div>
           </div>
@@ -325,28 +411,51 @@ export default function Settings() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Operational Settings</CardTitle>
+          <CardTitle>Lobby Configuration</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <Label htmlFor="lobbyChairs">Lobby Chair Count</Label>
-            <Input 
-              id="lobbyChairs" 
-              type="number" 
-              value={practiceSettings.lobbyChairCount}
-              onChange={(e) => setPracticeSettings(prev => ({ ...prev, lobbyChairCount: parseInt(e.target.value) }))}
+            <Label>Number of Lobby Chairs</Label>
+            <Slider
+              value={[practiceSettings.lobbyChairs]}
+              onValueChange={([value]) => setPracticeSettings(prev => ({ ...prev, lobbyChairs: value }))}
+              max={50}
+              min={1}
+              step={1}
+              className="mt-2"
             />
+            <div className="text-sm text-muted-foreground mt-1">{practiceSettings.lobbyChairs} chairs</div>
           </div>
-          <div>
-            <Label>Office Hours</Label>
-            <div className="grid grid-cols-7 gap-2 mt-2">
-              {Object.entries(practiceSettings.officeHours).map(([day, hours]) => (
-                <div key={day} className="space-y-1">
-                  <Label className="text-xs capitalize">{day}</Label>
-                  <Input type="time" value={hours.start} className="text-xs" />
-                  <Input type="time" value={hours.end} className="text-xs" />
-                </div>
-              ))}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Office Hours</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label>Opening Time</Label>
+              <Input 
+                type="time" 
+                value={practiceSettings.officeHours.start}
+                onChange={(e) => setPracticeSettings(prev => ({ 
+                  ...prev, 
+                  officeHours: { ...prev.officeHours, start: e.target.value }
+                }))}
+              />
+            </div>
+            <div>
+              <Label>Closing Time</Label>
+              <Input 
+                type="time" 
+                value={practiceSettings.officeHours.end}
+                onChange={(e) => setPracticeSettings(prev => ({ 
+                  ...prev, 
+                  officeHours: { ...prev.officeHours, end: e.target.value }
+                }))}
+              />
             </div>
           </div>
         </CardContent>
@@ -360,35 +469,46 @@ export default function Settings() {
     <div className="space-y-8">
       <div>
         <h3 className="text-2xl font-bold mb-4">Analytics Preferences</h3>
-        <p className="text-muted-foreground mb-6">Configure analytics displays and benchmarks.</p>
+        <p className="text-muted-foreground mb-6">Configure analytics views and reporting preferences.</p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>KPI Configuration</CardTitle>
+          <CardTitle>KPI Display Settings</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between p-3 border rounded">
-              <span>On-Time Percentage</span>
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">Target: 90%</span>
-                <Button variant="ghost" size="sm">⋮</Button>
-              </div>
+          <div className="flex items-center justify-between">
+            <Label>Show Individual Provider Metrics</Label>
+            <Switch />
+          </div>
+          <div className="flex items-center justify-between">
+            <Label>Include Benchmark Comparisons</Label>
+            <Switch defaultChecked />
+          </div>
+          <div className="flex items-center justify-between">
+            <Label>Real-time Updates</Label>
+            <Switch defaultChecked />
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Performance Targets</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <Label>On-Time Percentage Target</Label>
+            <div className="flex items-center gap-2 mt-2">
+              <Slider defaultValue={[85]} max={100} min={50} step={5} className="flex-1" />
+              <span className="text-sm font-medium w-12">85%</span>
             </div>
-            <div className="flex items-center justify-between p-3 border rounded">
-              <span>Average Response Time</span>
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">Target: 2 min</span>
-                <Button variant="ghost" size="sm">⋮</Button>
-              </div>
-            </div>
-            <div className="flex items-center justify-between p-3 border rounded">
-              <span>Patient Satisfaction</span>
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground">Target: 4.5/5</span>
-                <Button variant="ghost" size="sm">⋮</Button>
-              </div>
+          </div>
+          <div>
+            <Label>Average Response Time Target (minutes)</Label>
+            <div className="flex items-center gap-2 mt-2">
+              <Slider defaultValue={[3]} max={10} min={1} step={1} className="flex-1" />
+              <span className="text-sm font-medium w-12">3 min</span>
             </div>
           </div>
         </CardContent>
@@ -396,7 +516,7 @@ export default function Settings() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Export Preferences</CardTitle>
+          <CardTitle>Export Options</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
@@ -412,12 +532,19 @@ export default function Settings() {
               </SelectContent>
             </Select>
           </div>
-          <div className="flex items-center justify-between">
-            <div>
-              <Label>Include Provider Breakdown</Label>
-              <p className="text-sm text-muted-foreground">Show individual provider metrics in exports</p>
-            </div>
-            <Switch defaultChecked />
+          <div>
+            <Label>Automated Report Schedule</Label>
+            <Select defaultValue="weekly">
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="daily">Daily</SelectItem>
+                <SelectItem value="weekly">Weekly</SelectItem>
+                <SelectItem value="monthly">Monthly</SelectItem>
+                <SelectItem value="none">No Automation</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </CardContent>
       </Card>
@@ -428,31 +555,48 @@ export default function Settings() {
     <div className="space-y-8">
       <div>
         <h3 className="text-2xl font-bold mb-4">Integrations</h3>
-        <p className="text-muted-foreground mb-6">Connect your practice management system and other tools.</p>
+        <p className="text-muted-foreground mb-6">Connect your practice management systems and third-party tools.</p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Practice Management System</CardTitle>
+          <CardTitle>Practice Management Systems</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-between p-4 border rounded-lg">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <span className="text-blue-600 font-bold">OD</span>
-              </div>
+        <CardContent className="space-y-4">
+          {integrations.map((integration) => (
+            <div key={integration.name} className="flex items-center justify-between p-4 border rounded-lg">
               <div>
-                <h4 className="font-medium">Open Dental</h4>
-                <p className="text-sm text-muted-foreground">Sync patient schedules and updates</p>
+                <p className="font-medium">{integration.name}</p>
+                <p className="text-sm text-muted-foreground">{integration.description}</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <Badge 
+                  variant={integration.status === 'connected' ? 'default' : 'secondary'}
+                  className={integration.status === 'connected' ? 'bg-green-500' : ''}
+                >
+                  {integration.status === 'connected' ? 'Connected' : 
+                   integration.status === 'available' ? 'Available' : 'Coming Soon'}
+                </Badge>
+                {integration.status === 'connected' ? (
+                  <Button variant="outline" size="sm">Configure</Button>
+                ) : integration.status === 'available' ? (
+                  <Button size="sm">Connect</Button>
+                ) : null}
               </div>
             </div>
-            <Switch />
-          </div>
-          <div className="mt-4 p-4 bg-muted rounded-lg">
-            <p className="text-sm text-muted-foreground">
-              Additional PMS integrations coming soon. Contact support if you need a specific integration.
-            </p>
-          </div>
+          ))}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>API Configuration</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-sm text-muted-foreground">
+            Configure API keys and OAuth settings for third-party integrations.
+          </p>
+          <Button variant="outline">Manage API Keys</Button>
         </CardContent>
       </Card>
     </div>
@@ -462,7 +606,7 @@ export default function Settings() {
     <div className="space-y-8">
       <div>
         <h3 className="text-2xl font-bold mb-4">User Profile</h3>
-        <p className="text-muted-foreground mb-6">Manage your personal settings and preferences.</p>
+        <p className="text-muted-foreground mb-6">Manage your personal information and preferences.</p>
       </div>
 
       <Card>
@@ -472,30 +616,30 @@ export default function Settings() {
         <CardContent className="space-y-4">
           <div className="flex items-center gap-4 mb-4">
             <div className="w-16 h-16 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xl font-bold">
-              JD
+              SJ
             </div>
-            <Button variant="outline">Change Avatar</Button>
+            <Button variant="outline" size="sm">Change Avatar</Button>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="firstName">First Name</Label>
-              <Input id="firstName" defaultValue="John" />
+              <Label>First Name</Label>
+              <Input defaultValue="Sarah" />
             </div>
             <div>
-              <Label htmlFor="lastName">Last Name</Label>
-              <Input id="lastName" defaultValue="Doe" />
+              <Label>Last Name</Label>
+              <Input defaultValue="Johnson" />
             </div>
           </div>
           <div>
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" defaultValue="john.doe@practice.com" />
+            <Label>Email</Label>
+            <Input defaultValue="sarah@practice.com" />
           </div>
           <div>
-            <Label htmlFor="phone">Phone</Label>
-            <Input id="phone" type="tel" defaultValue="+1 (555) 123-4567" />
+            <Label>Phone</Label>
+            <Input defaultValue="+1 (555) 123-4567" />
           </div>
           <div>
-            <Label htmlFor="role">Role</Label>
+            <Label>Role</Label>
             <Select defaultValue="doctor">
               <SelectTrigger>
                 <SelectValue />
@@ -526,7 +670,7 @@ export default function Settings() {
               <SelectContent>
                 <SelectItem value="light">Light</SelectItem>
                 <SelectItem value="dark">Dark</SelectItem>
-                <SelectItem value="auto">Auto (System)</SelectItem>
+                <SelectItem value="auto">Auto</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -546,7 +690,7 @@ export default function Settings() {
         </CardContent>
       </Card>
 
-      <Button>Update Profile</Button>
+      <Button>Save Profile</Button>
     </div>
   );
 
@@ -554,7 +698,7 @@ export default function Settings() {
     <div className="space-y-8">
       <div>
         <h3 className="text-2xl font-bold mb-4">Account & Security</h3>
-        <p className="text-muted-foreground mb-6">Manage your account security and login preferences.</p>
+        <p className="text-muted-foreground mb-6">Manage your account security and login settings.</p>
       </div>
 
       <Card>
@@ -581,15 +725,15 @@ export default function Settings() {
           <div className="space-y-3">
             <div className="flex justify-between items-center p-3 border rounded">
               <div>
-                <p className="font-medium">Current Session</p>
-                <p className="text-sm text-muted-foreground">Chrome on Windows • 192.168.1.100</p>
+                <p className="font-medium">Desktop - Chrome</p>
+                <p className="text-sm text-muted-foreground">Today at 9:15 AM</p>
               </div>
-              <Badge variant="secondary">Active</Badge>
+              <Badge variant="outline">Current Session</Badge>
             </div>
             <div className="flex justify-between items-center p-3 border rounded">
               <div>
-                <p className="font-medium">Mobile App</p>
-                <p className="text-sm text-muted-foreground">iPhone • 2 hours ago</p>
+                <p className="font-medium">Mobile - Safari</p>
+                <p className="text-sm text-muted-foreground">Yesterday at 6:30 PM</p>
               </div>
               <Button variant="outline" size="sm">Revoke</Button>
             </div>
@@ -603,7 +747,7 @@ export default function Settings() {
     <div className="space-y-8">
       <div>
         <h3 className="text-2xl font-bold mb-4">Help & Support</h3>
-        <p className="text-muted-foreground mb-6">Get help and find answers to common questions.</p>
+        <p className="text-muted-foreground mb-6">Get help and support for using the On Time app.</p>
       </div>
 
       <Card>
@@ -612,30 +756,14 @@ export default function Settings() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            <details className="group">
-              <summary className="font-medium cursor-pointer hover:text-primary">
-                How do I set up notifications for my team?
-              </summary>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Navigate to the Notifications section in Settings to configure role-based notification preferences and device settings.
-              </p>
-            </details>
-            <details className="group">
-              <summary className="font-medium cursor-pointer hover:text-primary">
-                Can I customize wait time thresholds?
-              </summary>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Yes, you can adjust the color-coded wait time thresholds in Practice Settings to match your practice standards.
-              </p>
-            </details>
-            <details className="group">
-              <summary className="font-medium cursor-pointer hover:text-primary">
-                How do I integrate with my PMS?
-              </summary>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Currently we support Open Dental integration. Check the Integrations section to enable the connection.
-              </p>
-            </details>
+            {faqItems.map((item, index) => (
+              <div key={index} className="border rounded-lg p-4">
+                <details>
+                  <summary className="cursor-pointer font-medium">{item.question}</summary>
+                  <p className="mt-2 text-sm text-muted-foreground">{item.answer}</p>
+                </details>
+              </div>
+            ))}
           </div>
         </CardContent>
       </Card>
@@ -647,98 +775,83 @@ export default function Settings() {
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="supportName">Name</Label>
-              <Input id="supportName" placeholder="Your name" />
+              <Label>Name</Label>
+              <Input placeholder="Your name" />
             </div>
             <div>
-              <Label htmlFor="supportEmail">Email</Label>
-              <Input id="supportEmail" type="email" placeholder="your@email.com" />
+              <Label>Email</Label>
+              <Input placeholder="your@email.com" />
             </div>
           </div>
           <div>
-            <Label htmlFor="supportPhone">Phone (Optional)</Label>
-            <Input id="supportPhone" type="tel" placeholder="+1 (555) 123-4567" />
+            <Label>Phone (Optional)</Label>
+            <Input placeholder="+1 (555) 123-4567" />
           </div>
           <div>
-            <Label htmlFor="supportMessage">Message</Label>
-            <Textarea id="supportMessage" placeholder="Describe your issue or question..." className="min-h-24" />
+            <Label>Message</Label>
+            <Textarea placeholder="Describe your issue or question..." rows={4} />
           </div>
           <Button>Send Message</Button>
         </CardContent>
       </Card>
-
-      {/* Live Chat Widget Placeholder */}
-      <div className="fixed bottom-4 right-4 w-16 h-16 bg-primary rounded-full flex items-center justify-center text-primary-foreground shadow-lg cursor-pointer hover:scale-105 transition-transform">
-        <HelpCircle className="w-6 h-6" />
-      </div>
     </div>
   );
 
   const renderContent = () => {
     switch (activeSection) {
-      case "notifications": return renderNotifications();
-      case "roles": return renderRoles();
-      case "practice": return renderPractice();
-      case "analytics": return renderAnalytics();
-      case "integrations": return renderIntegrations();
-      case "profile": return renderProfile();
-      case "security": return renderSecurity();
-      case "support": return renderSupport();
-      default: return renderNotifications();
+      case 'notifications':
+        return renderNotifications();
+      case 'roles':
+        return renderRoles();
+      case 'practice':
+        return renderPractice();
+      case 'analytics':
+        return renderAnalytics();
+      case 'integrations':
+        return renderIntegrations();
+      case 'profile':
+        return renderProfile();
+      case 'security':
+        return renderSecurity();
+      case 'support':
+        return renderSupport();
+      default:
+        return renderNotifications();
     }
   };
 
   return (
-    <div className="relative min-h-screen bg-background">
-      {/* Fixed Navigation Header */}
-      <header className="fixed top-0 left-0 right-0 z-40 p-8">
-        <div className="flex justify-between items-center">
-          <div className="text-2xl font-bold text-foreground">
-            On Time
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b">
+        <div className="container mx-auto px-6 py-4">
+          <div className="flex items-center gap-4">
+            <Settings className="h-8 w-8" />
+            <h1 className="text-3xl font-bold">Settings</h1>
           </div>
-          <button
-            onClick={() => setIsMenuOpen(true)}
-            className="text-lg font-medium hover:opacity-70 transition-all duration-300 text-foreground"
-          >
-            MENU
-          </button>
         </div>
       </header>
 
-      {/* Navigation Overlay */}
-      <NavigationOverlay 
-        isOpen={isMenuOpen} 
-        onClose={() => setIsMenuOpen(false)} 
-      />
-
       {/* Main Content */}
-      <div className="pt-24 min-h-screen">
-        {/* Header */}
-        <header className="border-b border-border p-4">
-          <div className="max-w-7xl mx-auto">
-            <h1 className="text-2xl font-bold">Settings</h1>
-          </div>
-        </header>
-
-        {/* Two-column layout */}
-        <div className="flex max-w-7xl mx-auto">
+      <div className="container mx-auto px-6 py-8">
+        <div className="flex gap-8">
           {/* Left Sidebar */}
-          <div className="w-64 border-r border-border p-6">
+          <div className="w-64 flex-shrink-0">
             <nav className="space-y-2">
-              {sidebarSections.map((section) => {
-                const Icon = section.icon;
+              {sidebarItems.map((item) => {
+                const Icon = item.icon;
                 return (
                   <button
-                    key={section.id}
-                    onClick={() => setActiveSection(section.id)}
-                    className={`w-full flex items-center gap-3 p-3 rounded-lg text-left transition-colors ${
-                      activeSection === section.id
-                        ? "bg-primary text-primary-foreground"
-                        : "hover:bg-muted"
+                    key={item.id}
+                    onClick={() => setActiveSection(item.id)}
+                    className={`w-full flex items-center gap-3 px-4 py-3 text-left rounded-lg transition-colors ${
+                      activeSection === item.id
+                        ? 'bg-primary text-primary-foreground'
+                        : 'hover:bg-muted'
                     }`}
                   >
-                    <Icon className="w-5 h-5" />
-                    <span className="font-medium">{section.label}</span>
+                    <Icon className="h-5 w-5" />
+                    {item.label}
                   </button>
                 );
               })}
@@ -746,17 +859,25 @@ export default function Settings() {
           </div>
 
           {/* Right Content Panel */}
-          <div className="flex-1 p-6">
+          <div className="flex-1">
             {renderContent()}
           </div>
         </div>
       </div>
 
-      <NotificationCustomModal
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-        eventName={selectedEvent}
-      />
+      {selectedEvent && (
+        <NotificationCustomModal
+          isOpen={customModalOpen}
+          onClose={closeCustomModal}
+          eventId={selectedEvent.eventId}
+          eventName={selectedEvent.eventName}
+          userId={selectedEvent.userId}
+          role={selectedEvent.role}
+          isRoleDefault={selectedEvent.isRoleDefault}
+        />
+      )}
     </div>
   );
-}
+};
+
+export default SettingsPage;
