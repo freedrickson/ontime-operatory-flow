@@ -4,11 +4,40 @@ interface MarginPullProps {
   children: React.ReactNode;
   align: "left" | "right";
   className?: string;
+  strength?: number; // Animation strength multiplier (0-1)
 }
 
-const MarginPull = ({ children, align, className = "" }: MarginPullProps) => {
+const MarginPull = ({ children, align, className = "", strength = 0.5 }: MarginPullProps) => {
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [maxOffset, setMaxOffset] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
+
+  // Calculate maximum safe offset based on container and content dimensions
+  useEffect(() => {
+    const calculateMaxOffset = () => {
+      if (!ref.current) return;
+
+      const element = ref.current;
+      const container = element.parentElement;
+      if (!container) return;
+
+      const elementRect = element.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+      
+      // Calculate safe movement space (in pixels)
+      const safeSpace = Math.max(0, (containerRect.width - elementRect.width) / 2);
+      
+      // Convert to percentage of viewport width for consistent scaling
+      const maxOffsetVw = (safeSpace / window.innerWidth) * 100;
+      
+      setMaxOffset(Math.min(maxOffsetVw, 15)); // Cap at 15vw for reasonable movement
+    };
+
+    calculateMaxOffset();
+    window.addEventListener('resize', calculateMaxOffset, { passive: true });
+    
+    return () => window.removeEventListener('resize', calculateMaxOffset);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,19 +47,14 @@ const MarginPull = ({ children, align, className = "" }: MarginPullProps) => {
       const rect = element.getBoundingClientRect();
       const windowHeight = window.innerHeight;
       
-      // Calculate progress: 0 when element top is at bottom of viewport, 1 when element bottom is at top
-      const elementTop = rect.top;
-      const elementBottom = rect.bottom;
-      const elementHeight = rect.height;
-      
       // Progress calculation for smooth transition
       let progress = 0;
       
-      if (elementTop <= windowHeight && elementBottom >= 0) {
+      if (rect.top <= windowHeight && rect.bottom >= 0) {
         // Element is in viewport - start animation when section is 20% visible
-        if (elementTop <= windowHeight * 0.8) {
+        if (rect.top <= windowHeight * 0.8) {
           // Full animation when element is 20% visible
-          const remainingDistance = Math.max(0, elementTop - (windowHeight * 0.2));
+          const remainingDistance = Math.max(0, rect.top - (windowHeight * 0.2));
           const totalDistance = windowHeight * 0.6; // Distance from 80% to 20% viewport
           progress = Math.min(1, Math.max(0, 1 - (remainingDistance / totalDistance)));
         }
@@ -45,12 +69,17 @@ const MarginPull = ({ children, align, className = "" }: MarginPullProps) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Calculate transform based on alignment and scroll progress
+  // Calculate transform based on alignment and scroll progress with boundary clamping
   const getTransform = () => {
-    const maxOffset = 20; // percentage to move to edges (reduced for readability)
+    // Use calculated maxOffset or fallback to a safe default
+    const safeMaxOffset = maxOffset > 0 ? maxOffset : 10;
+    
+    // Apply strength multiplier for easy tweaking
+    const adjustedOffset = safeMaxOffset * strength;
+    
     const offset = align === 'right' 
-      ? maxOffset * scrollProgress // Start center, move to right
-      : -maxOffset * scrollProgress; // Start center, move to left
+      ? adjustedOffset * scrollProgress // Start center, move to right
+      : -adjustedOffset * scrollProgress; // Start center, move to left
     
     return `translateX(${offset}vw)`;
   };
