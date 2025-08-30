@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function HeroChaos() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [revealedWords, setRevealedWords] = useState<boolean[]>([false, false, false, false]);
   const [hoverWord, setHoverWord] = useState<number | null>(null);
+  const navigate = useNavigate();
 
   // Matrix overlay removed
 
@@ -73,7 +75,10 @@ export default function HeroChaos() {
             <p className="subtitle-text text-gray-300 mb-12">
               Custom operatory management on desktop, mobile, and watch.
             </p>
-            <button className="text-lg font-medium text-pure-white border-b border-pure-white hover:border-gray-300 hover:text-gray-300 transition-all duration-300">
+            <button 
+              onClick={() => navigate('/build')}
+              className="text-lg font-medium text-pure-white border-b border-pure-white hover:border-gray-300 hover:text-gray-300 transition-all duration-300 cursor-pointer"
+            >
               Start Mapping Your Practice
             </button>
           </div>

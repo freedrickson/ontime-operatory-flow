@@ -27,7 +27,8 @@ const NavigationOverlay = ({ isOpen, onClose }: NavigationOverlayProps) => {
     { id: 'home', label: 'Home', href: '/' },
     { id: 'build', label: 'Build', href: '/build' },
     { id: 'manage', label: 'Manage', href: '/manage' },
-    { id: 'analyze', label: 'Analyze', href: '/analyze' }
+    { id: 'analyze', label: 'Analyze', href: '/analyze' },
+    { id: 'settings', label: 'Settings', href: '/settings' }
   ];
 
   const sideItems = [
