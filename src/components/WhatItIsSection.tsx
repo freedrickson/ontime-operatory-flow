@@ -1,20 +1,17 @@
 import ScrollReveal from "./ScrollReveal";
-import MarginPull from "./MarginPull";
 
 const WhatItIsSection = () => {
   return (
     <section id="what-it-is" className="min-h-screen bg-pure-white text-pure-black flex flex-col justify-center relative">
       <div className="container mx-auto px-8">
         <ScrollReveal>
-          <MarginPull align="left">
-            <div className="text-left">
-              <h2 className="section-title">
-                <span className="block">Your practice.</span>
-                <span className="block">Your system.</span>
-                <span className="block">Your rules.</span>
-              </h2>
-            </div>
-          </MarginPull>
+          <div className="text-left">
+            <h2 className="section-title">
+              <span className="block">Your practice.</span>
+              <span className="block">Your system.</span>
+              <span className="block">Your rules.</span>
+            </h2>
+          </div>
         </ScrollReveal>
 
         <ScrollReveal className="mt-16">

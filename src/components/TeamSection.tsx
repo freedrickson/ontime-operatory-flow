@@ -1,20 +1,17 @@
 import ScrollReveal from "./ScrollReveal";
-import MarginPull from "./MarginPull";
 
 const TeamSection = () => {
   return (
     <section id="team" className="min-h-screen bg-pure-white text-pure-black flex flex-col justify-center">
       <div className="container mx-auto px-8">
         <ScrollReveal>
-          <MarginPull align="right">
-            <div className="text-right mb-16">
-              <h2 className="section-title">
-                <span className="block">Enrollment</span>
-                <span className="block">is a</span>
-                <span className="block">Team Sport.</span>
-              </h2>
-            </div>
-          </MarginPull>
+          <div className="text-right mb-16">
+            <h2 className="section-title">
+              <span className="block">Enrollment</span>
+              <span className="block">is a</span>
+              <span className="block">Team Sport.</span>
+            </h2>
+          </div>
         </ScrollReveal>
 
         <ScrollReveal>
