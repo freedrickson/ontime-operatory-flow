@@ -10,10 +10,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Bell, Users, Settings as SettingsIcon, BarChart3, Puzzle, User, Shield, HelpCircle } from "lucide-react";
+import { NotificationCustomModal } from "@/components/NotificationCustomModal";
 
 export default function Settings() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("notifications");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState("");
   const [practiceSettings, setPracticeSettings] = useState({
     name: "Downtown Dental Practice",
     logo: null,
@@ -93,7 +96,16 @@ export default function Settings() {
                   Haptic: {role.haptic} • Sound: {role.sound}
                 </p>
               </div>
-              <Button variant="outline" size="sm">Customize</Button>
+              <Button 
+                variant="outline" 
+                size="sm"
+                onClick={() => {
+                  setSelectedEvent(role.name);
+                  setModalOpen(true);
+                }}
+              >
+                Customize
+              </Button>
             </div>
           ))}
         </CardContent>
@@ -117,7 +129,21 @@ export default function Settings() {
               <tbody>
                 {notificationEvents.map(event => (
                   <tr key={event}>
-                    <td className="p-2 border-b">{event}</td>
+                    <td className="p-2 border-b">
+                      <div className="flex items-center justify-between">
+                        <span>{event}</span>
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={() => {
+                            setSelectedEvent(event);
+                            setModalOpen(true);
+                          }}
+                        >
+                          Customize
+                        </Button>
+                      </div>
+                    </td>
                     {notificationChannels.map(channel => (
                       <td key={`${event}-${channel}`} className="text-center p-2 border-b">
                         <Switch />
@@ -725,6 +751,12 @@ export default function Settings() {
           </div>
         </div>
       </div>
+
+      <NotificationCustomModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        eventName={selectedEvent}
+      />
     </div>
   );
 }
