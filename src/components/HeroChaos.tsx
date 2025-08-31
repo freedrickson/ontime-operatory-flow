@@ -49,11 +49,7 @@ export default function HeroChaos() {
               <h1 key={`${idx}-${revealed}`}
                   onMouseEnter={() => setHoverWord(idx)}
                   onMouseLeave={() => setHoverWord(null)}
-                  className={[
-                    "block hero-text font-extrabold tracking-tight",
-                    "text-6xl sm:text-7xl md:text-8xl",
-                    "will-change-transform transition-all duration-500 ease-out select-none"
-                  ].join(" ")}
+                  className="block hero-text font-extrabold tracking-tight will-change-transform transition-all duration-500 ease-out select-none"
                   style={{
                     filter: revealed ? "none" : "blur(2px)",
                     opacity: revealed ? 1 : 0.7,
