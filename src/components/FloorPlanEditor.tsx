@@ -179,9 +179,9 @@ const FloorPlanEditor = () => {
       </div>
 
       {/* Sidebar (Right) */}
-      <div className="w-80 bg-muted/30 border-l border-border p-6 space-y-6">
+      <div className="w-80 bg-card/50 backdrop-blur-sm border-l border-border/50 p-8 space-y-8">
         <div>
-          <h2 className="text-lg font-semibold mb-4">Room Types</h2>
+          <h2 className="text-2xl font-bold mb-6 text-foreground">Room Types</h2>
           <div className="grid grid-cols-1 gap-2">
             {Object.entries(ROOM_TYPES).map(([type, config]) => (
               <Button
@@ -200,7 +200,7 @@ const FloorPlanEditor = () => {
 
         {selectedRoom && (
           <div>
-            <h2 className="text-lg font-semibold mb-4">Room Actions</h2>
+            <h2 className="text-2xl font-bold mb-6 text-foreground">Room Actions</h2>
             <div className="space-y-2">
               <Button
                 variant="outline"
@@ -223,7 +223,7 @@ const FloorPlanEditor = () => {
         )}
 
         <div>
-          <h2 className="text-lg font-semibold mb-4">Actions</h2>
+          <h2 className="text-2xl font-bold mb-6 text-foreground">Actions</h2>
           <div className="space-y-2">
             <Button
               variant="default"
@@ -249,7 +249,7 @@ const FloorPlanEditor = () => {
         </div>
 
         <div>
-          <h2 className="text-lg font-semibold mb-4">Mini Preview</h2>
+          <h2 className="text-2xl font-bold mb-6 text-foreground">Mini Preview</h2>
           <div className="w-full h-32 bg-muted border rounded-lg p-2">
             <div 
               className="w-full h-full bg-background relative"

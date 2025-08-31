@@ -55,85 +55,106 @@ export default function DoctorQueue() {
   };
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="p-4 border-b flex items-center justify-between">
-        <h2 className="text-lg font-semibold">Doctor Queue</h2>
-        <Drawer>
-          <DrawerTrigger asChild>
-            <Button variant="ghost" size="sm">
-              <History className="w-4 h-4 mr-2" />
-              History
-            </Button>
-          </DrawerTrigger>
-          <DrawerContent>
-            <DrawerHeader>
-              <DrawerTitle>Completed Items</DrawerTitle>
-            </DrawerHeader>
-            <div className="p-4">
-              <ScrollArea className="h-64">
-                {history.length === 0 ? (
-                  <p className="text-muted-foreground text-center py-8">No completed items yet</p>
-                ) : (
-                  <div className="space-y-2">
-                    {history.map((item) => (
-                      <Card key={item.id} className="p-3">
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <div className="font-medium">{item.roomName}</div>
-                            <div className="text-sm text-muted-foreground">{item.patientName}</div>
+    <div className="h-full flex flex-col bg-background/50 backdrop-blur-sm">
+      <div className="p-6 border-b border-border/50 bg-background/80 backdrop-blur-sm">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold text-foreground">Doctor Queue</h2>
+          <Drawer>
+            <DrawerTrigger asChild>
+              <Button variant="outline" size="sm" className="bg-background/80 backdrop-blur-sm">
+                <History className="w-4 h-4 mr-2" />
+                History
+              </Button>
+            </DrawerTrigger>
+            <DrawerContent className="bg-background/95 backdrop-blur-lg">
+              <DrawerHeader>
+                <DrawerTitle className="text-xl font-bold">Completed Items</DrawerTitle>
+              </DrawerHeader>
+              <div className="p-6">
+                <ScrollArea className="h-64">
+                  {history.length === 0 ? (
+                    <div className="text-center py-12">
+                      <p className="text-muted-foreground text-lg">No completed items yet</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {history.map((item) => (
+                        <div key={item.id} className="p-4 bg-background/80 backdrop-blur-sm rounded-xl border border-border/50">
+                          <div className="flex items-center justify-between">
+                            <div>
+                              <div className="font-semibold text-foreground">{item.roomName}</div>
+                              <div className="text-sm text-muted-foreground">{item.patientName}</div>
+                            </div>
+                            <Badge 
+                              variant={item.urgency === 'high' ? 'destructive' : item.urgency === 'medium' ? 'secondary' : 'default'}
+                              className="bg-background/80 backdrop-blur-sm"
+                            >
+                              {item.urgency}
+                            </Badge>
                           </div>
-                          <Badge className={urgencyColors[item.urgency]}>
-                            {item.urgency}
-                          </Badge>
                         </div>
-                      </Card>
-                    ))}
-                  </div>
-                )}
-              </ScrollArea>
-            </div>
-          </DrawerContent>
-        </Drawer>
+                      ))}
+                    </div>
+                  )}
+                </ScrollArea>
+              </div>
+            </DrawerContent>
+          </Drawer>
+        </div>
       </div>
 
-      <ScrollArea className="flex-1 p-4">
+      <ScrollArea className="flex-1 p-6">
         {queueItems.length === 0 ? (
-          <p className="text-muted-foreground text-center py-8">No items in queue</p>
+          <div className="text-center py-12">
+            <div className="text-muted-foreground">
+              <p className="text-lg font-medium mb-2">Queue is empty</p>
+              <p className="text-sm">No pending requests</p>
+            </div>
+          </div>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-4">
             {queueItems.map((item) => (
-              <Card key={item.id} className="relative group cursor-pointer hover:shadow-md transition-shadow">
-                <CardContent className="p-4">
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <span className="font-medium">{item.roomName}</span>
-                        <Badge className={urgencyColors[item.urgency]}>
-                          {item.urgency}
-                        </Badge>
-                      </div>
-                      <div className="text-sm space-y-1">
-                        <div className="font-medium">{item.patientName}</div>
-                        <div className="text-muted-foreground">{item.examType}</div>
-                        <div className="text-xs text-muted-foreground line-clamp-2">
-                          {item.notes}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex flex-col items-end space-y-2">
-                      <GripVertical className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        className="text-xs"
-                        onClick={() => handleSwipeLeft(item.id)}
+              <div 
+                key={item.id} 
+                className="group relative p-4 bg-background/80 backdrop-blur-sm rounded-2xl border border-border/50 hover:border-[hsl(var(--accent-color))]/30 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg cursor-pointer active:scale-[0.98]"
+              >
+                <div className="flex items-start justify-between">
+                  <div className="flex-1">
+                    <div className="flex items-center gap-3 mb-3">
+                      <span className="font-semibold text-foreground text-lg">{item.roomName}</span>
+                      <Badge 
+                        variant={item.urgency === 'high' ? 'destructive' : item.urgency === 'medium' ? 'secondary' : 'default'}
+                        className={`text-xs ${
+                          item.urgency === 'high' ? 'animate-pulse bg-red-500/20 border-red-500/30' : 'bg-background/80 backdrop-blur-sm'
+                        }`}
                       >
-                        Clear
-                      </Button>
+                        {item.urgency}
+                      </Badge>
+                    </div>
+                    <div className="space-y-2">
+                      <div className="font-semibold text-foreground">{item.patientName}</div>
+                      <div className="text-sm text-muted-foreground">{item.examType}</div>
+                      <div className="text-xs text-muted-foreground italic line-clamp-2">
+                        {item.notes}
+                      </div>
                     </div>
                   </div>
-                </CardContent>
-              </Card>
+                  <div className="flex flex-col items-end ml-4">
+                    <GripVertical className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity mb-2" />
+                    <button
+                      className="px-3 py-1 text-xs font-medium text-red-500 bg-red-500/10 hover:bg-red-500/20 rounded-full transition-all duration-300 opacity-0 group-hover:opacity-100"
+                      onClick={() => handleSwipeLeft(item.id)}
+                    >
+                      Clear
+                    </button>
+                  </div>
+                </div>
+                
+                {/* iOS-style swipe hint */}
+                <div className="absolute right-4 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-60 transition-all duration-300 pointer-events-none">
+                  <div className="text-xs text-muted-foreground font-medium">← Swipe</div>
+                </div>
+              </div>
             ))}
           </div>
         )}

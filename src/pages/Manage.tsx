@@ -32,32 +32,63 @@ export default function Manage() {
       />
 
       {/* Main Content */}
-      <div className="pt-24">
-        {/* Header */}
-        <header className="border-b bg-card px-6 py-4">
-        <h1 className="text-2xl font-semibold text-foreground">Live Dashboard</h1>
-      </header>
+      <main className="pt-24">
+        {/* Hero Header Section */}
+        <section className="px-8 py-16 border-b border-border bg-gradient-to-br from-background to-muted/20">
+          <div className="max-w-7xl mx-auto">
+            <h1 className="section-title text-foreground mb-4">
+              Live Dashboard
+            </h1>
+            <p className="text-xl text-muted-foreground font-medium">
+              {new Date().toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+              })}
+            </p>
+          </div>
+        </section>
 
-      {/* Main Dashboard Layout */}
-      <div className="flex h-[calc(100vh-80px-80px)]"> {/* Account for header and chat footer */}
-        {/* Left Side - Lobby and Treatment Rooms */}
-        <div className="flex-1 flex flex-col p-6 space-y-6">
-          {/* Section A - Lobby */}
-          <LobbySection />
-          
-          {/* Section B - Treatment Rooms */}
-          <TreatmentRoomsSection />
+        {/* Main Dashboard Layout */}
+        <div className="flex min-h-[calc(100vh-320px)]">
+          {/* Left Side - Floor Plan & Activity */}
+          <div className="flex-1 p-8 space-y-8">
+            {/* Floor Plan Center Canvas */}
+            <div className="bg-card/50 backdrop-blur-sm rounded-2xl shadow-sm border border-border/50 p-8">
+              <h2 className="text-2xl font-bold text-foreground mb-6">Floor Plan View</h2>
+              <div className="bg-muted/20 rounded-xl p-6 min-h-[300px] relative">
+                {/* This will integrate with floor plan from Build page */}
+                <div className="text-center text-muted-foreground">
+                  <p className="text-lg">Interactive floor plan coming soon</p>
+                  <p className="text-sm mt-2">Will display live room status and patient flow</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Activity Sections */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Lobby Section */}
+              <div className="bg-card/50 backdrop-blur-sm rounded-2xl shadow-sm border border-border/50 overflow-hidden">
+                <LobbySection />
+              </div>
+              
+              {/* Treatment Rooms Section */}
+              <div className="bg-card/50 backdrop-blur-sm rounded-2xl shadow-sm border border-border/50 overflow-hidden">
+                <TreatmentRoomsSection />
+              </div>
+            </div>
+          </div>
+
+          {/* Right Side - Doctor Queue */}
+          <div className="w-96 border-l border-border/50 bg-card/30 backdrop-blur-sm">
+            <DoctorQueue />
+          </div>
         </div>
 
-        {/* Right Side - Doctor Queue */}
-        <div className="w-80 border-l">
-          <DoctorQueue />
-        </div>
-      </div>
-
-        {/* Section D - Intraoffice Messaging (Footer) */}
+        {/* Messaging Footer */}
         <IntraofficeMessaging />
-      </div>
+      </main>
     </div>
   );
 }
