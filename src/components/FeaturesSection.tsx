@@ -3,23 +3,23 @@ import ScrollReveal from "./ScrollReveal";
 const FeaturesSection = () => {
   const features = [
     {
-      title: "Build-Once Operatory Blueprints",
-      description: "Standardize rooms and handoffs in the Build page so every exam follows the same reliable playbook—fewer stalls, faster doctor time, predictable flow.",
+      title: "Build Your Floor Plan, Bring it to Life",
+      description: "Map out your practice once in the Build page and watch it power your Live Dashboard—every room and lobby chair color-coded in real time so you can spot delays before they become bottlenecks.",
       align: "left"
     },
     {
-      title: "Live Timing On Your Wrist",
-      description: "Never miss a beat with haptic feedback",
+      title: "Haptic-Driven Timing on Your Wrist",
+      description: "Role-aware, color-coded haptics cue doctors at the exact moment they’re needed—no hallway hunting, no guesswork.",
       align: "right"
     },
     {
-      title: "All-in-One Real-Time Dashboard",
-      description: "Complete practice visibility at a glance",
+      title: "Floor-Plan Dashboard Visibility",
+      description: "One live map for lobby dots and back-office rooms. See waits escalate in real time and act before they turn Red—because on-time care is customer service.",
       align: "left"
     },
     {
       title: "Communication Without the Chaos",
-      description: "Intuitive team messaging with smart notifications",
+      description: "Intuitive team messaging with smart notifications, context-aware notes tied directly to rooms and visits—fewer interruptions, cleaner handoffs, and the right details delivered at the right moment.",
       align: "right"
     }
   ];
