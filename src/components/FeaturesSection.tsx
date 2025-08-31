@@ -3,8 +3,8 @@ import ScrollReveal from "./ScrollReveal";
 const FeaturesSection = () => {
   const features = [
     {
-      title: "Custom Operatory Workflows",
-      description: "Design your perfect patient flow",
+      title: "Build-Once Operatory Blueprints",
+      description: "Standardize rooms and handoffs in the Build page so every exam follows the same reliable playbook—fewer stalls, faster doctor time, predictable flow.",
       align: "left"
     },
     {
