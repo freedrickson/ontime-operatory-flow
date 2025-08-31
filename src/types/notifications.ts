@@ -1,9 +1,14 @@
 export type EventType = 
-  | 'lobby-wait-time-changed'
+  | 'lobby-wait-0-5'
+  | 'lobby-wait-5-10'
+  | 'lobby-wait-10-plus'
   | 'emergency-walk-in'
-  | 'room-wait-time-changed' 
-  | 'doctor-request-initial'
-  | 'doctor-request-wait-time-changed'
+  | 'room-wait-0-5'
+  | 'room-wait-5-10'
+  | 'room-wait-10-plus'
+  | 'doctor-request-0-5'
+  | 'doctor-request-5-10'
+  | 'doctor-request-10-plus'
   | 'emergency-back-office'
   | 'new-message'
   | 'queue-updated';

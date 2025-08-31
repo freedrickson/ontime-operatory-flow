@@ -17,11 +17,23 @@ const DEFAULT_ROLE_PROFILES: RoleDefaultProfile[] = [
   {
     role: 'Doctor',
     events: {
-      'lobby-wait-time-changed': {
+      'lobby-wait-0-5': {
         haptic: { enabled: false, pattern: 'Single Tap' },
         sound: { enabled: false, style: 'Silent', volume: 0 },
         banner: { enabled: true, style: 'Banner only' },
         watch: { enabled: false, pattern: 'Single Tap' }
+      },
+      'lobby-wait-5-10': {
+        haptic: { enabled: false, pattern: 'Double Tap' },
+        sound: { enabled: true, style: 'Soft Ping', volume: 50 },
+        banner: { enabled: true, style: 'Banner only' },
+        watch: { enabled: false, pattern: 'Double Tap' }
+      },
+      'lobby-wait-10-plus': {
+        haptic: { enabled: true, pattern: 'Urgent Alert' },
+        sound: { enabled: true, style: 'Standard Ding', volume: 80 },
+        banner: { enabled: true, style: 'Both' },
+        watch: { enabled: true, pattern: 'Urgent Alert' }
       },
       'emergency-walk-in': {
         haptic: { enabled: true, pattern: 'Urgent Alert' },
@@ -29,23 +41,41 @@ const DEFAULT_ROLE_PROFILES: RoleDefaultProfile[] = [
         banner: { enabled: true, style: 'Both' },
         watch: { enabled: true, pattern: 'Urgent Alert' }
       },
-      'room-wait-time-changed': {
-        haptic: { enabled: true, pattern: 'Single Tap' },
-        sound: { enabled: true, style: 'Standard Ding', volume: 75 },
-        banner: { enabled: true, style: 'Both' },
-        watch: { enabled: true, pattern: 'Single Tap' }
+      'room-wait-0-5': {
+        haptic: { enabled: false, pattern: 'Single Tap' },
+        sound: { enabled: false, style: 'Silent', volume: 0 },
+        banner: { enabled: true, style: 'Banner only' },
+        watch: { enabled: false, pattern: 'Single Tap' }
       },
-      'doctor-request-initial': {
+      'room-wait-5-10': {
         haptic: { enabled: true, pattern: 'Double Tap' },
-        sound: { enabled: true, style: 'Urgent Alert', volume: 90 },
+        sound: { enabled: true, style: 'Standard Ding', volume: 70 },
         banner: { enabled: true, style: 'Both' },
         watch: { enabled: true, pattern: 'Double Tap' }
       },
-      'doctor-request-wait-time-changed': {
-        haptic: { enabled: true, pattern: 'Pulse' },
+      'room-wait-10-plus': {
+        haptic: { enabled: true, pattern: 'Urgent Alert' },
+        sound: { enabled: true, style: 'Urgent Alert', volume: 90 },
+        banner: { enabled: true, style: 'Both' },
+        watch: { enabled: true, pattern: 'Urgent Alert' }
+      },
+      'doctor-request-0-5': {
+        haptic: { enabled: true, pattern: 'Single Tap' },
+        sound: { enabled: true, style: 'Soft Ping', volume: 60 },
+        banner: { enabled: true, style: 'Banner only' },
+        watch: { enabled: true, pattern: 'Single Tap' }
+      },
+      'doctor-request-5-10': {
+        haptic: { enabled: true, pattern: 'Double Tap' },
         sound: { enabled: true, style: 'Standard Ding', volume: 80 },
         banner: { enabled: true, style: 'Both' },
-        watch: { enabled: true, pattern: 'Pulse' }
+        watch: { enabled: true, pattern: 'Double Tap' }
+      },
+      'doctor-request-10-plus': {
+        haptic: { enabled: true, pattern: 'Urgent Alert' },
+        sound: { enabled: true, style: 'Urgent Alert', volume: 100 },
+        banner: { enabled: true, style: 'Both' },
+        watch: { enabled: true, pattern: 'Urgent Alert' }
       },
       'emergency-back-office': {
         haptic: { enabled: true, pattern: 'Urgent Alert' },
@@ -70,11 +100,23 @@ const DEFAULT_ROLE_PROFILES: RoleDefaultProfile[] = [
   {
     role: 'Clinical Lead',
     events: {
-      'lobby-wait-time-changed': {
+      'lobby-wait-0-5': {
         haptic: { enabled: true, pattern: 'Single Tap' },
+        sound: { enabled: true, style: 'Soft Ping', volume: 60 },
+        banner: { enabled: true, style: 'Banner only' },
+        watch: { enabled: true, pattern: 'Single Tap' }
+      },
+      'lobby-wait-5-10': {
+        haptic: { enabled: true, pattern: 'Double Tap' },
         sound: { enabled: true, style: 'Standard Ding', volume: 70 },
         banner: { enabled: true, style: 'Both' },
-        watch: { enabled: true, pattern: 'Single Tap' }
+        watch: { enabled: true, pattern: 'Double Tap' }
+      },
+      'lobby-wait-10-plus': {
+        haptic: { enabled: true, pattern: 'Urgent Alert' },
+        sound: { enabled: true, style: 'Urgent Alert', volume: 90 },
+        banner: { enabled: true, style: 'Both' },
+        watch: { enabled: true, pattern: 'Urgent Alert' }
       },
       'emergency-walk-in': {
         haptic: { enabled: true, pattern: 'Urgent Alert' },
@@ -82,23 +124,41 @@ const DEFAULT_ROLE_PROFILES: RoleDefaultProfile[] = [
         banner: { enabled: true, style: 'Both' },
         watch: { enabled: true, pattern: 'Urgent Alert' }
       },
-      'room-wait-time-changed': {
+      'room-wait-0-5': {
         haptic: { enabled: true, pattern: 'Single Tap' },
+        sound: { enabled: true, style: 'Soft Ping', volume: 60 },
+        banner: { enabled: true, style: 'Banner only' },
+        watch: { enabled: true, pattern: 'Single Tap' }
+      },
+      'room-wait-5-10': {
+        haptic: { enabled: true, pattern: 'Double Tap' },
         sound: { enabled: true, style: 'Standard Ding', volume: 75 },
+        banner: { enabled: true, style: 'Both' },
+        watch: { enabled: true, pattern: 'Double Tap' }
+      },
+      'room-wait-10-plus': {
+        haptic: { enabled: true, pattern: 'Urgent Alert' },
+        sound: { enabled: true, style: 'Urgent Alert', volume: 95 },
+        banner: { enabled: true, style: 'Both' },
+        watch: { enabled: true, pattern: 'Urgent Alert' }
+      },
+      'doctor-request-0-5': {
+        haptic: { enabled: true, pattern: 'Single Tap' },
+        sound: { enabled: true, style: 'Standard Ding', volume: 70 },
         banner: { enabled: true, style: 'Both' },
         watch: { enabled: true, pattern: 'Single Tap' }
       },
-      'doctor-request-initial': {
+      'doctor-request-5-10': {
         haptic: { enabled: true, pattern: 'Double Tap' },
         sound: { enabled: true, style: 'Urgent Alert', volume: 85 },
         banner: { enabled: true, style: 'Both' },
         watch: { enabled: true, pattern: 'Double Tap' }
       },
-      'doctor-request-wait-time-changed': {
-        haptic: { enabled: true, pattern: 'Pulse' },
-        sound: { enabled: true, style: 'Standard Ding', volume: 75 },
+      'doctor-request-10-plus': {
+        haptic: { enabled: true, pattern: 'Urgent Alert' },
+        sound: { enabled: true, style: 'Urgent Alert', volume: 100 },
         banner: { enabled: true, style: 'Both' },
-        watch: { enabled: true, pattern: 'Pulse' }
+        watch: { enabled: true, pattern: 'Urgent Alert' }
       },
       'emergency-back-office': {
         haptic: { enabled: true, pattern: 'Urgent Alert' },
@@ -123,11 +183,23 @@ const DEFAULT_ROLE_PROFILES: RoleDefaultProfile[] = [
   {
     role: 'Front Desk',
     events: {
-      'lobby-wait-time-changed': {
+      'lobby-wait-0-5': {
         haptic: { enabled: true, pattern: 'Single Tap' },
-        sound: { enabled: true, style: 'Standard Ding', volume: 75 },
+        sound: { enabled: true, style: 'Soft Ping', volume: 70 },
         banner: { enabled: true, style: 'Both' },
         watch: { enabled: true, pattern: 'Single Tap' }
+      },
+      'lobby-wait-5-10': {
+        haptic: { enabled: true, pattern: 'Double Tap' },
+        sound: { enabled: true, style: 'Standard Ding', volume: 75 },
+        banner: { enabled: true, style: 'Both' },
+        watch: { enabled: true, pattern: 'Double Tap' }
+      },
+      'lobby-wait-10-plus': {
+        haptic: { enabled: true, pattern: 'Urgent Alert' },
+        sound: { enabled: true, style: 'Urgent Alert', volume: 90 },
+        banner: { enabled: true, style: 'Both' },
+        watch: { enabled: true, pattern: 'Urgent Alert' }
       },
       'emergency-walk-in': {
         haptic: { enabled: true, pattern: 'Urgent Alert' },
@@ -135,19 +207,37 @@ const DEFAULT_ROLE_PROFILES: RoleDefaultProfile[] = [
         banner: { enabled: true, style: 'Both' },
         watch: { enabled: true, pattern: 'Urgent Alert' }
       },
-      'room-wait-time-changed': {
+      'room-wait-0-5': {
         haptic: { enabled: false, pattern: 'Single Tap' },
         sound: { enabled: false, style: 'Silent', volume: 0 },
         banner: { enabled: true, style: 'Banner only' },
         watch: { enabled: false, pattern: 'Single Tap' }
       },
-      'doctor-request-initial': {
+      'room-wait-5-10': {
         haptic: { enabled: false, pattern: 'Single Tap' },
         sound: { enabled: false, style: 'Silent', volume: 0 },
         banner: { enabled: true, style: 'Banner only' },
         watch: { enabled: false, pattern: 'Single Tap' }
       },
-      'doctor-request-wait-time-changed': {
+      'room-wait-10-plus': {
+        haptic: { enabled: false, pattern: 'Single Tap' },
+        sound: { enabled: false, style: 'Silent', volume: 0 },
+        banner: { enabled: true, style: 'Banner only' },
+        watch: { enabled: false, pattern: 'Single Tap' }
+      },
+      'doctor-request-0-5': {
+        haptic: { enabled: false, pattern: 'Single Tap' },
+        sound: { enabled: false, style: 'Silent', volume: 0 },
+        banner: { enabled: true, style: 'Banner only' },
+        watch: { enabled: false, pattern: 'Single Tap' }
+      },
+      'doctor-request-5-10': {
+        haptic: { enabled: false, pattern: 'Single Tap' },
+        sound: { enabled: false, style: 'Silent', volume: 0 },
+        banner: { enabled: true, style: 'Banner only' },
+        watch: { enabled: false, pattern: 'Single Tap' }
+      },
+      'doctor-request-10-plus': {
         haptic: { enabled: false, pattern: 'Single Tap' },
         sound: { enabled: false, style: 'Silent', volume: 0 },
         banner: { enabled: true, style: 'Banner only' },
@@ -176,7 +266,19 @@ const DEFAULT_ROLE_PROFILES: RoleDefaultProfile[] = [
   {
     role: 'Hygienist',
     events: {
-      'lobby-wait-time-changed': {
+      'lobby-wait-0-5': {
+        haptic: { enabled: false, pattern: 'Single Tap' },
+        sound: { enabled: false, style: 'Silent', volume: 0 },
+        banner: { enabled: true, style: 'Banner only' },
+        watch: { enabled: false, pattern: 'Single Tap' }
+      },
+      'lobby-wait-5-10': {
+        haptic: { enabled: false, pattern: 'Single Tap' },
+        sound: { enabled: false, style: 'Silent', volume: 0 },
+        banner: { enabled: true, style: 'Banner only' },
+        watch: { enabled: false, pattern: 'Single Tap' }
+      },
+      'lobby-wait-10-plus': {
         haptic: { enabled: false, pattern: 'Single Tap' },
         sound: { enabled: false, style: 'Silent', volume: 0 },
         banner: { enabled: true, style: 'Banner only' },
@@ -188,19 +290,37 @@ const DEFAULT_ROLE_PROFILES: RoleDefaultProfile[] = [
         banner: { enabled: true, style: 'Both' },
         watch: { enabled: true, pattern: 'Urgent Alert' }
       },
-      'room-wait-time-changed': {
-        haptic: { enabled: true, pattern: 'Single Tap' },
-        sound: { enabled: true, style: 'Standard Ding', volume: 70 },
-        banner: { enabled: true, style: 'Both' },
-        watch: { enabled: true, pattern: 'Single Tap' }
-      },
-      'doctor-request-initial': {
+      'room-wait-0-5': {
         haptic: { enabled: false, pattern: 'Single Tap' },
         sound: { enabled: false, style: 'Silent', volume: 0 },
         banner: { enabled: true, style: 'Banner only' },
         watch: { enabled: false, pattern: 'Single Tap' }
       },
-      'doctor-request-wait-time-changed': {
+      'room-wait-5-10': {
+        haptic: { enabled: true, pattern: 'Single Tap' },
+        sound: { enabled: true, style: 'Standard Ding', volume: 60 },
+        banner: { enabled: true, style: 'Both' },
+        watch: { enabled: true, pattern: 'Single Tap' }
+      },
+      'room-wait-10-plus': {
+        haptic: { enabled: true, pattern: 'Double Tap' },
+        sound: { enabled: true, style: 'Standard Ding', volume: 80 },
+        banner: { enabled: true, style: 'Both' },
+        watch: { enabled: true, pattern: 'Double Tap' }
+      },
+      'doctor-request-0-5': {
+        haptic: { enabled: false, pattern: 'Single Tap' },
+        sound: { enabled: false, style: 'Silent', volume: 0 },
+        banner: { enabled: true, style: 'Banner only' },
+        watch: { enabled: false, pattern: 'Single Tap' }
+      },
+      'doctor-request-5-10': {
+        haptic: { enabled: false, pattern: 'Single Tap' },
+        sound: { enabled: false, style: 'Silent', volume: 0 },
+        banner: { enabled: true, style: 'Banner only' },
+        watch: { enabled: false, pattern: 'Single Tap' }
+      },
+      'doctor-request-10-plus': {
         haptic: { enabled: false, pattern: 'Single Tap' },
         sound: { enabled: false, style: 'Silent', volume: 0 },
         banner: { enabled: true, style: 'Banner only' },
@@ -229,7 +349,19 @@ const DEFAULT_ROLE_PROFILES: RoleDefaultProfile[] = [
   {
     role: 'Assistant',
     events: {
-      'lobby-wait-time-changed': {
+      'lobby-wait-0-5': {
+        haptic: { enabled: false, pattern: 'Single Tap' },
+        sound: { enabled: false, style: 'Silent', volume: 0 },
+        banner: { enabled: true, style: 'Banner only' },
+        watch: { enabled: false, pattern: 'Single Tap' }
+      },
+      'lobby-wait-5-10': {
+        haptic: { enabled: false, pattern: 'Single Tap' },
+        sound: { enabled: false, style: 'Silent', volume: 0 },
+        banner: { enabled: true, style: 'Banner only' },
+        watch: { enabled: false, pattern: 'Single Tap' }
+      },
+      'lobby-wait-10-plus': {
         haptic: { enabled: false, pattern: 'Single Tap' },
         sound: { enabled: false, style: 'Silent', volume: 0 },
         banner: { enabled: true, style: 'Banner only' },
@@ -241,23 +373,41 @@ const DEFAULT_ROLE_PROFILES: RoleDefaultProfile[] = [
         banner: { enabled: true, style: 'Both' },
         watch: { enabled: true, pattern: 'Urgent Alert' }
       },
-      'room-wait-time-changed': {
+      'room-wait-0-5': {
+        haptic: { enabled: false, pattern: 'Single Tap' },
+        sound: { enabled: false, style: 'Silent', volume: 0 },
+        banner: { enabled: true, style: 'Banner only' },
+        watch: { enabled: false, pattern: 'Single Tap' }
+      },
+      'room-wait-5-10': {
         haptic: { enabled: true, pattern: 'Single Tap' },
-        sound: { enabled: true, style: 'Standard Ding', volume: 65 },
+        sound: { enabled: true, style: 'Standard Ding', volume: 60 },
         banner: { enabled: true, style: 'Both' },
         watch: { enabled: true, pattern: 'Single Tap' }
       },
-      'doctor-request-initial': {
+      'room-wait-10-plus': {
         haptic: { enabled: true, pattern: 'Double Tap' },
         sound: { enabled: true, style: 'Standard Ding', volume: 75 },
         banner: { enabled: true, style: 'Both' },
         watch: { enabled: true, pattern: 'Double Tap' }
       },
-      'doctor-request-wait-time-changed': {
-        haptic: { enabled: true, pattern: 'Pulse' },
-        sound: { enabled: true, style: 'Standard Ding', volume: 70 },
+      'doctor-request-0-5': {
+        haptic: { enabled: true, pattern: 'Single Tap' },
+        sound: { enabled: true, style: 'Soft Ping', volume: 65 },
         banner: { enabled: true, style: 'Both' },
-        watch: { enabled: true, pattern: 'Pulse' }
+        watch: { enabled: true, pattern: 'Single Tap' }
+      },
+      'doctor-request-5-10': {
+        haptic: { enabled: true, pattern: 'Double Tap' },
+        sound: { enabled: true, style: 'Standard Ding', volume: 75 },
+        banner: { enabled: true, style: 'Both' },
+        watch: { enabled: true, pattern: 'Double Tap' }
+      },
+      'doctor-request-10-plus': {
+        haptic: { enabled: true, pattern: 'Urgent Alert' },
+        sound: { enabled: true, style: 'Urgent Alert', volume: 90 },
+        banner: { enabled: true, style: 'Both' },
+        watch: { enabled: true, pattern: 'Urgent Alert' }
       },
       'emergency-back-office': {
         haptic: { enabled: true, pattern: 'Urgent Alert' },
@@ -283,12 +433,25 @@ const DEFAULT_ROLE_PROFILES: RoleDefaultProfile[] = [
 
 const NOTIFICATION_EVENTS: NotificationEvent[] = [
   {
-    id: 'lobby-wait-time-changed',
-    name: 'Lobby Wait Time Changed',
-    description: 'When wait times in the lobby change status (Green/Yellow/Red)',
+    id: 'lobby-wait-0-5',
+    name: 'Lobby Wait: 0-5 Minutes',
+    description: 'Patient waiting 0-5 minutes in lobby (Green)',
     domain: 'lobby',
-    canCustomize: true,
-    hasWaitTimeStates: true
+    canCustomize: true
+  },
+  {
+    id: 'lobby-wait-5-10',
+    name: 'Lobby Wait: 5-10 Minutes',
+    description: 'Patient waiting 5-10 minutes in lobby (Yellow)',
+    domain: 'lobby',
+    canCustomize: true
+  },
+  {
+    id: 'lobby-wait-10-plus',
+    name: 'Lobby Wait: 10+ Minutes',
+    description: 'Patient waiting 10+ minutes in lobby (Red)',
+    domain: 'lobby',
+    canCustomize: true
   },
   {
     id: 'emergency-walk-in',
@@ -299,27 +462,46 @@ const NOTIFICATION_EVENTS: NotificationEvent[] = [
     adminLocked: true
   },
   {
-    id: 'room-wait-time-changed',
-    name: 'Room Wait Time Changed',
-    description: 'When wait times in treatment rooms change status',
-    domain: 'back-office',
-    canCustomize: true,
-    hasWaitTimeStates: true
-  },
-  {
-    id: 'doctor-request-initial',
-    name: 'Doctor Request (Initial)',
-    description: 'New doctor request submitted',
+    id: 'room-wait-0-5',
+    name: 'Room Wait: 0-5 Minutes',
+    description: 'Room flagged ready, 0-5 minutes elapsed (Green)',
     domain: 'back-office',
     canCustomize: true
   },
   {
-    id: 'doctor-request-wait-time-changed',
-    name: 'Doctor Request Wait Time Changed',
-    description: 'Doctor request wait time status changes',
+    id: 'room-wait-5-10',
+    name: 'Room Wait: 5-10 Minutes',
+    description: 'Room ready, 5-10 minutes elapsed (Yellow)',
     domain: 'back-office',
-    canCustomize: true,
-    hasWaitTimeStates: true
+    canCustomize: true
+  },
+  {
+    id: 'room-wait-10-plus',
+    name: 'Room Wait: 10+ Minutes',
+    description: 'Room ready, 10+ minutes elapsed (Red)',
+    domain: 'back-office',
+    canCustomize: true
+  },
+  {
+    id: 'doctor-request-0-5',
+    name: 'Doctor Request: 0-5 Minutes',
+    description: 'Doctor request pending 0-5 minutes (Green)',
+    domain: 'back-office',
+    canCustomize: true
+  },
+  {
+    id: 'doctor-request-5-10',
+    name: 'Doctor Request: 5-10 Minutes',
+    description: 'Doctor request pending 5-10 minutes (Yellow)',
+    domain: 'back-office',
+    canCustomize: true
+  },
+  {
+    id: 'doctor-request-10-plus',
+    name: 'Doctor Request: 10+ Minutes',
+    description: 'Doctor request pending 10+ minutes (Red)',
+    domain: 'back-office',
+    canCustomize: true
   },
   {
     id: 'emergency-back-office',

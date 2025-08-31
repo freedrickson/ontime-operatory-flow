@@ -133,7 +133,7 @@ const SettingsPage = () => {
                 <Button 
                   variant="outline" 
                   size="sm"
-                  onClick={() => openCustomModal('doctor-request-initial', `${roleProfile.role} Defaults`, undefined, roleProfile.role, true)}
+                  onClick={() => openCustomModal('doctor-request-0-5', `${roleProfile.role} Defaults`, undefined, roleProfile.role, true)}
                 >
                   Edit Defaults
                 </Button>
