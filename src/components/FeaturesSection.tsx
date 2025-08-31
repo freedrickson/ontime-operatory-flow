@@ -32,11 +32,18 @@ const FeaturesSection = () => {
             <div className={`${feature.align === 'right' ? 'text-right' : 'text-left'}`}>
               <div className="max-w-5xl">
                 <h3 className="section-title mb-6">
-                  {feature.title.split(' ').map((word, wordIndex) => (
-                    <span key={wordIndex} className="block">
-                      {word}
-                    </span>
-                  ))}
+                  {index === 0 ? (
+                    <>
+                      <span className="block">Build Your Floor</span>
+                      <span className="block">Plan, Bring it to Life</span>
+                    </>
+                  ) : (
+                    feature.title.split(' ').map((word, wordIndex) => (
+                      <span key={wordIndex} className="block">
+                        {word}
+                      </span>
+                    ))
+                  )}
                 </h3>
               </div>
               <p className="subtitle-text text-gray-300 max-w-2xl mx-auto">
