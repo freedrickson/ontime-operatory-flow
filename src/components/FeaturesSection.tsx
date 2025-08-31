@@ -13,7 +13,7 @@ const FeaturesSection = () => {
       align: "right"
     },
     {
-      title: "All-in-One Dashboard",
+      title: "All-in-One Real-Time Dashboard",
       description: "Complete practice visibility at a glance",
       align: "left"
     },
