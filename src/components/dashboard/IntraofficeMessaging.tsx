@@ -208,47 +208,44 @@ export default function IntraofficeMessaging() {
 
       {/* Compact Footer Chat Bar */}
       <div className="fixed bottom-0 left-0 right-0 bg-background border-t shadow-lg z-40">
-        <div className="max-w-7xl mx-auto px-6 py-3">
-          <div className="flex items-center space-x-4">
-            {/* Recent Messages Preview */}
+        <div className="max-w-7xl mx-auto px-4 py-2">
+          <div className="flex items-center space-x-3">
+            {/* Recent Messages Preview - Condensed */}
             <div className="flex-1 min-w-0">
-              <div className="text-sm font-medium mb-1">Team Chat</div>
-              <div className="space-y-1">
-                {recentMessages.map((message, index) => (
+              <div className="text-xs font-medium mb-1">Team Chat</div>
+              <div className="flex items-center space-x-4">
+                {recentMessages.slice(-1).map((message) => (
                   <div key={message.id} className="flex items-center space-x-2 text-xs">
                     <span className={`font-medium ${message.isOwn ? 'text-primary' : 'text-muted-foreground'}`}>
                       {message.isOwn ? 'You' : message.author}:
                     </span>
-                    <span className="text-muted-foreground truncate">
+                    <span className="text-muted-foreground truncate max-w-48">
                       {message.content}
                     </span>
-                    <span className="text-muted-foreground text-xs">
-                      {formatCompactTime(message.timestamp)}
-                    </span>
                     {message.urgent && (
-                      <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                      <div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></div>
                     )}
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Quick Input */}
-            <div className="flex items-center space-x-2 flex-shrink-0 w-80">
+            {/* Quick Input - Smaller */}
+            <div className="flex items-center space-x-2 flex-shrink-0 w-64">
               <Input
                 placeholder="Quick message..."
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
-                className="flex-1"
+                className="flex-1 h-8 text-sm"
               />
               <Button 
                 onClick={handleSendMessage} 
                 disabled={!newMessage.trim()}
                 size="sm"
-                className="rounded-full p-2"
+                className="rounded-full p-1.5 h-8 w-8"
               >
-                <Send className="w-4 h-4" />
+                <Send className="w-3 h-3" />
               </Button>
             </div>
 
@@ -257,9 +254,9 @@ export default function IntraofficeMessaging() {
               variant="ghost"
               size="sm"
               onClick={() => setIsExpanded(true)}
-              className="flex-shrink-0"
+              className="flex-shrink-0 h-8 w-8 p-1.5"
             >
-              <ChevronUp className="w-4 h-4" />
+              <ChevronUp className="w-3 h-3" />
             </Button>
           </div>
         </div>
