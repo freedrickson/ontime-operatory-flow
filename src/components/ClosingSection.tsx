@@ -28,13 +28,13 @@ const ClosingSection = () => {
           <div className="mt-32 pt-16 border-t border-gray-800">
             <div className="flex justify-between items-center">
               <div className="text-left">
-                <div className="text-2xl font-bold mb-2">On Time</div>
+                <div className="text-2xl font-bold mb-2">On Time Flow</div>
                 <div className="text-gray-400">Dental practice management</div>
               </div>
               
               <div className="text-right">
                 <div className="text-sm text-gray-400">
-                  © 2024 On Time. All rights reserved.
+                  © 2024 On Time Flow. All rights reserved.
                 </div>
               </div>
             </div>

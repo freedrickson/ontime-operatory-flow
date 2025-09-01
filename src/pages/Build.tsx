@@ -11,7 +11,7 @@ export default function Build() {
       <header className="fixed top-0 left-0 right-0 z-40 p-8">
         <div className="flex justify-between items-center">
           <div className="text-2xl font-bold text-foreground">
-            On Time
+            On Time Flow
           </div>
           <button
             onClick={() => setIsMenuOpen(true)}

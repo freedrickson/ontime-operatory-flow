@@ -414,7 +414,7 @@ const SettingsPage = () => {
     <div className="space-y-8">
       <div>
         <h2 className="text-4xl md:text-5xl font-black mb-6 text-foreground">Integrations</h2>
-        <p className="subtitle-text text-muted-foreground mb-8">Connect On Time with your existing practice management systems.</p>
+        <p className="subtitle-text text-muted-foreground mb-8">Connect On Time Flow with your existing practice management systems.</p>
       </div>
 
       <Card className="bg-card/50 backdrop-blur-sm border border-border/50">
@@ -665,7 +665,7 @@ const SettingsPage = () => {
     <div className="space-y-8">
       <div>
         <h2 className="text-4xl md:text-5xl font-black mb-6 text-foreground">Help & Support</h2>
-        <p className="subtitle-text text-muted-foreground mb-8">Get help with On Time and contact our support team.</p>
+        <p className="subtitle-text text-muted-foreground mb-8">Get help with On Time Flow and contact our support team.</p>
       </div>
 
       <Card className="bg-card/50 backdrop-blur-sm border border-border/50">
@@ -772,7 +772,7 @@ const SettingsPage = () => {
       <header className="fixed top-0 left-0 right-0 z-40 p-8 bg-background/80 backdrop-blur-sm">
         <div className="flex justify-between items-center">
           <div className="text-2xl font-bold text-foreground">
-            On Time
+            On Time Flow
           </div>
           <button
             onClick={() => setIsMenuOpen(true)}
