@@ -34,7 +34,7 @@ export default function Manage() {
       {/* Main Content */}
       <main className="pt-24">
         {/* Hero Header Section */}
-        <section className="px-8 py-16 border-b border-border bg-gradient-to-br from-background to-muted/20">
+        <section className="px-8 py-16 border-b-2 border-primary/10 bg-gradient-to-br from-background to-primary/5">
           <div className="max-w-7xl mx-auto">
             <h1 className="section-title text-foreground mb-4">
               Live Dashboard
@@ -55,9 +55,9 @@ export default function Manage() {
           {/* Left Side - Floor Plan & Activity */}
           <div className="flex-1 p-8 space-y-8">
             {/* Floor Plan Center Canvas */}
-            <div className="bg-card/50 backdrop-blur-sm rounded-2xl shadow-sm border border-border/50 p-8">
+            <div className="bg-card border-2 border-primary/20 rounded-2xl shadow-lg p-8">
               <h2 className="text-2xl font-bold text-foreground mb-6">Floor Plan View</h2>
-              <div className="bg-muted/20 rounded-xl p-6 min-h-[300px] relative">
+              <div className="bg-secondary/50 border border-border rounded-xl p-6 min-h-[300px] relative">
                 {/* This will integrate with floor plan from Build page */}
                 <div className="text-center text-muted-foreground">
                   <p className="text-lg">Interactive floor plan coming soon</p>
@@ -69,19 +69,19 @@ export default function Manage() {
             {/* Activity Sections */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Lobby Section */}
-              <div className="bg-card/50 backdrop-blur-sm rounded-2xl shadow-sm border border-border/50 overflow-hidden">
+              <div className="bg-card border-2 border-accent-color/20 rounded-2xl shadow-lg overflow-hidden">
                 <LobbySection />
               </div>
               
               {/* Treatment Rooms Section */}
-              <div className="bg-card/50 backdrop-blur-sm rounded-2xl shadow-sm border border-border/50 overflow-hidden">
+              <div className="bg-card border-2 border-accent-color/20 rounded-2xl shadow-lg overflow-hidden">
                 <TreatmentRoomsSection />
               </div>
             </div>
           </div>
 
           {/* Right Side - Doctor Queue */}
-          <div className="w-96 border-l border-border/50 bg-card/30 backdrop-blur-sm">
+          <div className="w-96 border-l-2 border-primary/20 bg-secondary/30 backdrop-blur-sm shadow-inner">
             <DoctorQueue />
           </div>
         </div>
