@@ -49,7 +49,16 @@ export default function TreatmentRoomsSection() {
       duration: 15
     },
     { id: '3', name: 'Room 3', status: 'available' },
-    { id: '4', name: 'Room 4', status: 'available' },
+    { 
+      id: '4', 
+      name: 'Room 4', 
+      status: 'waiting-doctor',
+      patientName: 'Sarah Connor',
+      examType: 'Root Canal',
+      urgency: 'high',
+      notes: 'Severe pain, needs immediate attention',
+      duration: 30
+    },
   ]);
 
   const [selectedRoom, setSelectedRoom] = useState<TreatmentRoom | null>(null);
@@ -82,20 +91,20 @@ export default function TreatmentRoomsSection() {
                   onClick={() => setSelectedRoom(room)}
                 >
                   <div className={`w-12 h-12 rounded ${statusColors[room.status]} mb-2`}></div>
-                  <div className="text-center">
-                    <div className="font-medium">{room.name}</div>
-                    {room.patientName && (
-                      <>
-                        <div className="text-sm text-muted-foreground">{room.patientName}</div>
-                        <div className="text-xs">{room.examType}</div>
-                        {room.urgency && (
-                          <Badge className={`text-xs mt-1 ${urgencyColors[room.urgency]}`}>
-                            {room.urgency}
-                          </Badge>
-                        )}
-                      </>
-                    )}
-                  </div>
+                     <div className="text-center">
+                     <div className="font-medium truncate">{room.name}</div>
+                     {room.patientName && (
+                       <>
+                         <div className="text-sm text-muted-foreground truncate max-w-full overflow-hidden text-ellipsis whitespace-nowrap">{room.patientName}</div>
+                         <div className="text-xs truncate max-w-full overflow-hidden text-ellipsis whitespace-nowrap">{room.examType}</div>
+                         {room.urgency && (
+                           <Badge className={`text-xs mt-1 ${urgencyColors[room.urgency]}`}>
+                             {room.urgency}
+                           </Badge>
+                         )}
+                       </>
+                     )}
+                   </div>
                 </Button>
               </DialogTrigger>
               

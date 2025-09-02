@@ -35,6 +35,15 @@ export default function DoctorQueue() {
       notes: 'Patient reports sensitivity to cold',
       urgency: 'medium',
       timestamp: new Date()
+    },
+    {
+      id: '3',
+      roomName: 'Room 4',
+      patientName: 'Sarah Connor',
+      examType: 'Root Canal',
+      notes: 'Severe pain, needs immediate attention',
+      urgency: 'high',
+      timestamp: new Date()
     }
   ]);
 
@@ -112,11 +121,16 @@ export default function DoctorQueue() {
             </div>
           </div>
         ) : (
-          <div className="space-y-4">
-            {queueItems.map((item) => (
+          <div className="space-y-3">
+            {queueItems.map((item, index) => (
               <div 
                 key={item.id} 
-                className="group relative p-4 bg-background/80 backdrop-blur-sm rounded-2xl border border-border/50 hover:border-[hsl(var(--accent-color))]/30 transition-all duration-300 hover:scale-[1.02] hover:shadow-lg cursor-pointer active:scale-[0.98]"
+                className="group relative p-5 bg-card border-2 border-primary/40 rounded-2xl shadow-xl hover:border-primary/60 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl cursor-pointer active:scale-[0.98]"
+                style={{ 
+                  transform: `translateY(${index * -8}px) translateX(${index * 4}px)`,
+                  zIndex: queueItems.length - index,
+                  boxShadow: `0 ${8 + index * 4}px ${20 + index * 8}px -8px rgba(0, 0, 0, 0.3)`
+                }}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
@@ -132,12 +146,12 @@ export default function DoctorQueue() {
                       </Badge>
                     </div>
                     <div className="space-y-2">
-                      <div className="font-semibold text-foreground">{item.patientName}</div>
-                      <div className="text-sm text-muted-foreground">{item.examType}</div>
-                      <div className="text-xs text-muted-foreground italic line-clamp-2">
-                        {item.notes}
-                      </div>
-                    </div>
+                       <div className="font-semibold text-foreground truncate max-w-full overflow-hidden text-ellipsis whitespace-nowrap">{item.patientName}</div>
+                       <div className="text-sm text-muted-foreground truncate max-w-full overflow-hidden text-ellipsis whitespace-nowrap">{item.examType}</div>
+                       <div className="text-xs text-muted-foreground italic line-clamp-2 max-w-full overflow-hidden">
+                         {item.notes}
+                       </div>
+                     </div>
                   </div>
                   <div className="flex flex-col items-end ml-4">
                     <GripVertical className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity mb-2" />

@@ -9,7 +9,7 @@ export default function Manage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <div className="relative min-h-screen bg-background">
+    <div className="relative min-h-screen bg-black">
       {/* Fixed Navigation Header */}
       <header className="fixed top-0 left-0 right-0 z-40 p-8">
         <div className="flex justify-between items-center">

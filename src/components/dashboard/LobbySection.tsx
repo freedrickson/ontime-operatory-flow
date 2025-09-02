@@ -78,12 +78,12 @@ export default function LobbySection() {
               }`}></div>
               <div className="text-xs text-center">
                 <div className="font-medium text-foreground">Chair {chair.id}</div>
-                {chair.patientName && (
-                  <div className="font-semibold text-[10px] text-foreground truncate mt-1">{chair.patientName}</div>
-                )}
-                {chair.waitTime !== undefined && chair.waitTime > 0 && (
-                  <div className="text-[10px] text-muted-foreground">{chair.waitTime}m</div>
-                )}
+                 {chair.patientName && (
+                   <div className="font-semibold text-[10px] text-foreground truncate mt-1 max-w-full overflow-hidden text-ellipsis whitespace-nowrap">{chair.patientName}</div>
+                 )}
+                 {chair.waitTime !== undefined && chair.waitTime > 0 && (
+                   <div className="text-[10px] text-muted-foreground">{chair.waitTime}m</div>
+                 )}
               </div>
             </button>
           ))}
