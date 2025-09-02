@@ -8,7 +8,7 @@ export default function Build() {
   return (
     <div className="relative min-h-screen bg-background">
       {/* Fixed Navigation Header */}
-      <header className="fixed top-0 left-0 right-0 z-40 p-8">
+      <header className="fixed top-0 left-0 right-0 z-30 p-8">
         <div className="flex justify-between items-center">
           <div className="text-2xl font-bold text-foreground">
             On Time Flow
