@@ -145,6 +145,27 @@ All colors MUST be HSL.
     @apply block;
   }
 
+  /* Split-flap board animation styles (Home page hero only) */
+  .split-flap-ticker {
+    position: relative;
+  }
+
+  .split-flap-ticker::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 30%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0) 100%);
+    pointer-events: none;
+    border-radius: 2px;
+  }
+
+  .split-flap-revealed {
+    position: relative;
+  }
+
   /* iOS Lock Screen / Fitness App Visual Language - Manage Page Only */
   .manage-page {
     /* iOS System Colors for Urgency Chips */

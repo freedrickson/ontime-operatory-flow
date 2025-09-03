@@ -1,13 +1,69 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+interface SplitFlapState {
+  phase: number[];
+  isRevealing: boolean[];
+}
+
 export default function HeroChaos() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [revealedWords, setRevealedWords] = useState<boolean[]>([false, false, false, false]);
   const [hoverWord, setHoverWord] = useState<number | null>(null);
+  const [splitFlapStates, setSplitFlapStates] = useState<SplitFlapState[]>([]);
+  const animationRef = useRef<number>();
+  const lastFrameTime = useRef<number>(0);
   const navigate = useNavigate();
 
-  // Matrix overlay removed
+  const words = ["Dental", "Chaos", "Made", "Clockwork"];
+
+  // Initialize split-flap states
+  useEffect(() => {
+    const initialStates = words.map(word => ({
+      phase: Array(word.length).fill(0),
+      isRevealing: Array(word.length).fill(false)
+    }));
+    setSplitFlapStates(initialStates);
+  }, []);
+
+  // Split-flap ticker animation
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setRevealedWords([true, true, true, true]);
+      return;
+    }
+
+    const FPS = 15;
+    const FRAME_INTERVAL = 1000 / FPS;
+    const COLUMN_OFFSET = 45; // ms between columns
+
+    const animate = (currentTime: number) => {
+      if (currentTime - lastFrameTime.current >= FRAME_INTERVAL) {
+        setSplitFlapStates(prevStates => 
+          prevStates.map((state, wordIndex) => {
+            if (revealedWords[wordIndex] || hoverWord === wordIndex) return state;
+            
+            const newPhase = state.phase.map((phase, charIndex) => {
+              const columnDelay = charIndex * COLUMN_OFFSET;
+              const elapsed = (currentTime - columnDelay) % 640; // 320ms * 2 for 0→1→0 cycle
+              return elapsed < 320 ? 1 : 0;
+            });
+
+            return { ...state, phase: newPhase };
+          })
+        );
+        lastFrameTime.current = currentTime;
+      }
+      
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    animationRef.current = requestAnimationFrame(animate);
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, [revealedWords, hoverWord]);
 
   // Staged word revelation
   useEffect(() => {
@@ -26,12 +82,13 @@ export default function HeroChaos() {
     return () => timers.forEach(timer => clearTimeout(timer));
   }, []);
 
-  const words = ["Dental", "Chaos", "Made", "Clockwork"];
-
-  const generateMatrixText = (word: string) => {
-    return Array.from({ length: word.length }, () => 
-      Math.random() > 0.5 ? "1" : "0"
-    ).join("");
+  const generateSplitFlapText = (word: string, wordIndex: number) => {
+    if (!splitFlapStates[wordIndex]) return word;
+    
+    return Array.from({ length: word.length }, (_, charIndex) => {
+      const phase = splitFlapStates[wordIndex].phase[charIndex];
+      return phase === 1 ? "1" : "0";
+    }).join("");
   };
 
   return (
@@ -43,7 +100,7 @@ export default function HeroChaos() {
           {words.map((word, idx) => {
             const hovered = hoverWord === idx;
             const revealed = revealedWords[idx] || hovered;
-            const displayText = revealed ? word : generateMatrixText(word);
+            const displayText = revealed ? word : generateSplitFlapText(word, idx);
             
             return (
               <h1 key={`${idx}-${revealed}`}
@@ -52,17 +109,24 @@ export default function HeroChaos() {
                   className={[
                     "block hero-text font-extrabold tracking-tight",
                     "text-6xl sm:text-7xl md:text-8xl",
-                    "will-change-transform transition-all duration-500 ease-out select-none"
+                    "will-change-transform select-none",
+                    revealed ? "split-flap-revealed" : "split-flap-ticker"
                   ].join(" ")}
                   style={{
-                    filter: revealed ? "none" : "blur(2px)",
-                    opacity: revealed ? 1 : 0.7,
-                    transform: revealed
-                      ? "translate3d(0,0,0) scale(1)"
-                      : `translate3d(${(Math.random()*4-2).toFixed(1)}px, ${(Math.random()*4-2).toFixed(1)}px, 0) scale(1.02)`,
-                    letterSpacing: revealed ? "0em" : "0.1em",
-                    transitionDelay: revealed ? "0ms" : "0ms",
-                    fontFamily: revealed ? "inherit" : "monospace"
+                    filter: revealed ? "none" : "blur(1px)",
+                    opacity: revealed ? 1.0 : 0.65,
+                    transform: revealed 
+                      ? "translate3d(0,0,0) scale(1.0) rotateX(0deg)" 
+                      : "translate3d(0,0,0) scale(0.95) rotateX(0deg)",
+                    letterSpacing: revealed ? "0em" : "0.05em",
+                    fontFamily: revealed ? "inherit" : "monospace",
+                    fontSize: revealed ? "inherit" : "0.92em",
+                    transition: revealed 
+                      ? "all 400ms cubic-bezier(0.22, 1, 0.36, 1)"
+                      : "none",
+                    textShadow: revealed 
+                      ? "none" 
+                      : "0 1px 0 rgba(255,255,255,0.08)"
                   }}>
                 {displayText}
               </h1>
