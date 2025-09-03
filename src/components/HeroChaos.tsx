@@ -156,7 +156,7 @@ export default function HeroChaos() {
                       : "translate3d(0,0,0) scale(0.95) rotateX(0deg)",
                     letterSpacing: revealed ? "0em" : "0.05em",
                     fontFamily: revealed ? "inherit" : "monospace",
-                    fontSize: revealed ? "inherit" : "0.92em",
+                    
                     transition: revealed 
                       ? "all 400ms cubic-bezier(0.22, 1, 0.36, 1)"
                       : "none",
@@ -185,7 +185,7 @@ export default function HeroChaos() {
                 : "translate3d(0,0,0) scale(0.95) rotateX(0deg)",
               letterSpacing: subtitleRevealed ? "0em" : "0.02em",
               fontFamily: subtitleRevealed ? "inherit" : "monospace",
-              fontSize: subtitleRevealed ? "inherit" : "0.95em",
+              
               transition: subtitleRevealed 
                 ? "all 400ms cubic-bezier(0.22, 1, 0.36, 1)"
                 : "none",
