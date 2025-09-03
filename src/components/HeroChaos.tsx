@@ -10,11 +10,14 @@ export default function HeroChaos() {
   const [revealedWords, setRevealedWords] = useState<boolean[]>([false, false, false, false]);
   const [hoverWord, setHoverWord] = useState<number | null>(null);
   const [splitFlapStates, setSplitFlapStates] = useState<SplitFlapState[]>([]);
+  const [subtitleRevealed, setSubtitleRevealed] = useState<boolean>(false);
+  const [subtitleSplitFlap, setSubtitleSplitFlap] = useState<SplitFlapState | null>(null);
   const animationRef = useRef<number>();
   const lastFrameTime = useRef<number>(0);
   const navigate = useNavigate();
 
   const words = ["Dental", "Chaos", "Made", "Clockwork"];
+  const subtitle = "Custom operatory management on desktop, mobile, and watch.";
 
   // Initialize split-flap states
   useEffect(() => {
@@ -23,12 +26,19 @@ export default function HeroChaos() {
       isRevealing: Array(word.length).fill(false)
     }));
     setSplitFlapStates(initialStates);
+    
+    // Initialize subtitle split-flap state
+    setSubtitleSplitFlap({
+      phase: Array(subtitle.length).fill(0),
+      isRevealing: Array(subtitle.length).fill(false)
+    });
   }, []);
 
   // Split-flap ticker animation
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setRevealedWords([true, true, true, true]);
+      setSubtitleRevealed(true);
       return;
     }
 
@@ -38,6 +48,7 @@ export default function HeroChaos() {
 
     const animate = (currentTime: number) => {
       if (currentTime - lastFrameTime.current >= FRAME_INTERVAL) {
+        // Animate main words
         setSplitFlapStates(prevStates => 
           prevStates.map((state, wordIndex) => {
             if (revealedWords[wordIndex] || hoverWord === wordIndex) return state;
@@ -51,6 +62,20 @@ export default function HeroChaos() {
             return { ...state, phase: newPhase };
           })
         );
+
+        // Animate subtitle
+        if (!subtitleRevealed && subtitleSplitFlap) {
+          setSubtitleSplitFlap(prevState => {
+            if (!prevState) return prevState;
+            const newPhase = prevState.phase.map((phase, charIndex) => {
+              const columnDelay = charIndex * 25; // Faster for subtitle
+              const elapsed = (currentTime - columnDelay) % 640;
+              return elapsed < 320 ? 1 : 0;
+            });
+            return { ...prevState, phase: newPhase };
+          });
+        }
+
         lastFrameTime.current = currentTime;
       }
       
@@ -63,12 +88,13 @@ export default function HeroChaos() {
         cancelAnimationFrame(animationRef.current);
       }
     };
-  }, [revealedWords, hoverWord]);
+  }, [revealedWords, hoverWord, subtitleRevealed, subtitleSplitFlap]);
 
   // Staged word revelation
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setRevealedWords([true, true, true, true]);
+      setSubtitleRevealed(true);
       return;
     }
 
@@ -77,6 +103,7 @@ export default function HeroChaos() {
       setTimeout(() => setRevealedWords(prev => [prev[0], true, prev[2], prev[3]]), 2000),
       setTimeout(() => setRevealedWords(prev => [prev[0], prev[1], true, prev[3]]), 3000),
       setTimeout(() => setRevealedWords(prev => [prev[0], prev[1], prev[2], true]), 3500),
+      setTimeout(() => setSubtitleRevealed(true), 4500), // Subtitle reveals after main words
     ];
 
     return () => timers.forEach(timer => clearTimeout(timer));
@@ -87,6 +114,16 @@ export default function HeroChaos() {
     
     return Array.from({ length: word.length }, (_, charIndex) => {
       const phase = splitFlapStates[wordIndex].phase[charIndex];
+      return phase === 1 ? "1" : "0";
+    }).join("");
+  };
+
+  const generateSubtitleSplitFlap = (text: string) => {
+    if (!subtitleSplitFlap) return text;
+    
+    return Array.from({ length: text.length }, (_, charIndex) => {
+      const phase = subtitleSplitFlap.phase[charIndex];
+      if (text[charIndex] === ' ') return ' '; // Keep spaces
       return phase === 1 ? "1" : "0";
     }).join("");
   };
@@ -107,8 +144,8 @@ export default function HeroChaos() {
                   onMouseEnter={() => setHoverWord(idx)}
                   onMouseLeave={() => setHoverWord(null)}
                   className={[
-                    "block hero-text font-extrabold tracking-tight",
-                    "text-6xl sm:text-7xl md:text-8xl",
+                    "block font-extrabold tracking-tight",
+                    "text-8xl sm:text-9xl md:text-[12rem] lg:text-[14rem]",
                     "will-change-transform select-none",
                     revealed ? "split-flap-revealed" : "split-flap-ticker"
                   ].join(" ")}
@@ -136,8 +173,28 @@ export default function HeroChaos() {
 
         <div className="mt-16">
           <div className="text-center max-w-4xl mx-auto">
-            <p className="subtitle-text text-gray-300 mb-12">
-              Custom operatory management on desktop, mobile, and watch.
+            <p className={[
+              "subtitle-text mb-12",
+              "will-change-transform select-none",
+              subtitleRevealed ? "split-flap-revealed text-gray-300" : "split-flap-ticker text-gray-500"
+            ].join(" ")}
+            style={{
+              filter: subtitleRevealed ? "none" : "blur(1px)",
+              opacity: subtitleRevealed ? 1.0 : 0.65,
+              transform: subtitleRevealed 
+                ? "translate3d(0,0,0) scale(1.0) rotateX(0deg)" 
+                : "translate3d(0,0,0) scale(0.95) rotateX(0deg)",
+              letterSpacing: subtitleRevealed ? "0em" : "0.02em",
+              fontFamily: subtitleRevealed ? "inherit" : "monospace",
+              fontSize: subtitleRevealed ? "inherit" : "0.95em",
+              transition: subtitleRevealed 
+                ? "all 400ms cubic-bezier(0.22, 1, 0.36, 1)"
+                : "none",
+              textShadow: subtitleRevealed 
+                ? "none" 
+                : "0 1px 0 rgba(255,255,255,0.08)"
+            }}>
+              {subtitleRevealed ? subtitle : generateSubtitleSplitFlap(subtitle)}
             </p>
             <button 
               onClick={() => navigate('/build')}
