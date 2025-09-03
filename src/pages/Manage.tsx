@@ -9,16 +9,16 @@ export default function Manage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <div className="relative min-h-screen bg-black">
+    <div className="relative min-h-screen bg-pure-black">
       {/* Fixed Navigation Header */}
       <header className="fixed top-0 left-0 right-0 z-40 p-8">
         <div className="flex justify-between items-center">
-          <div className="text-2xl font-bold text-foreground">
+          <div className="text-2xl font-bold text-pure-white">
             On Time Flow
           </div>
           <button
             onClick={() => setIsMenuOpen(true)}
-            className="text-lg font-medium hover:opacity-70 transition-all duration-300 text-foreground"
+            className="text-lg font-medium hover:opacity-70 transition-all duration-300 text-pure-white"
           >
             MENU
           </button>
@@ -32,14 +32,14 @@ export default function Manage() {
       />
 
       {/* Main Content */}
-      <main className="pt-24">
+      <main className="pt-32">
         {/* Hero Header Section */}
-        <section className="px-8 py-16 border-b-2 border-primary/10 bg-gradient-to-br from-background to-primary/5">
+        <section className="px-8 py-20 border-b border-white/10">
           <div className="max-w-7xl mx-auto">
-            <h1 className="section-title text-foreground mb-4">
+            <h1 className="hero-text text-pure-white mb-6">
               Live Dashboard
             </h1>
-            <p className="text-xl text-muted-foreground font-medium">
+            <p className="subtitle-text text-pure-white/70">
               {new Date().toLocaleDateString('en-US', { 
                 weekday: 'long', 
                 year: 'numeric', 
@@ -51,43 +51,45 @@ export default function Manage() {
         </section>
 
         {/* Main Dashboard Layout */}
-        <div className="flex min-h-[calc(100vh-320px)]">
+        <div className="flex min-h-[calc(100vh-400px)]">
           {/* Left Side - Floor Plan & Activity */}
-          <div className="flex-1 p-8 space-y-8">
+          <div className="flex-1 p-12 space-y-12">
             {/* Floor Plan Center Canvas */}
-            <div className="bg-card border-2 border-primary/20 rounded-2xl shadow-lg p-8">
-              <h2 className="text-2xl font-bold text-foreground mb-6">Floor Plan View</h2>
-              <div className="bg-secondary/50 border border-border rounded-xl p-6 min-h-[300px] relative">
+            <div className="bg-white/5 border border-white/20 rounded-3xl shadow-2xl p-12 backdrop-blur-sm">
+              <h2 className="text-4xl font-bold text-pure-white mb-8">Floor Plan View</h2>
+              <div className="bg-white/10 border border-white/20 rounded-2xl p-8 min-h-[300px] relative backdrop-blur-sm">
                 {/* This will integrate with floor plan from Build page */}
-                <div className="text-center text-muted-foreground">
-                  <p className="text-lg">Interactive floor plan coming soon</p>
-                  <p className="text-sm mt-2">Will display live room status and patient flow</p>
+                <div className="text-center text-pure-white/60">
+                  <p className="text-xl font-medium">Interactive floor plan coming soon</p>
+                  <p className="text-base mt-4">Will display live room status and patient flow</p>
                 </div>
               </div>
             </div>
 
             {/* Activity Sections */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               {/* Lobby Section */}
-              <div className="bg-card border-2 border-accent-color/20 rounded-2xl shadow-lg overflow-hidden">
+              <div className="bg-white/5 border border-accent-color/30 rounded-3xl shadow-2xl overflow-hidden backdrop-blur-sm">
                 <LobbySection />
               </div>
               
               {/* Treatment Rooms Section */}
-              <div className="bg-card border-2 border-accent-color/20 rounded-2xl shadow-lg overflow-hidden">
+              <div className="bg-white/5 border border-accent-color/30 rounded-3xl shadow-2xl overflow-hidden backdrop-blur-sm">
                 <TreatmentRoomsSection />
               </div>
             </div>
           </div>
 
           {/* Right Side - Doctor Queue */}
-          <div className="w-96 border-l-2 border-primary/20 bg-secondary/30 backdrop-blur-sm shadow-inner">
+          <div className="w-96 border-l border-white/20 bg-white/5 backdrop-blur-sm shadow-2xl">
             <DoctorQueue />
           </div>
         </div>
 
         {/* Messaging Footer */}
-        <IntraofficeMessaging />
+        <div className="border-t border-white/10">
+          <IntraofficeMessaging />
+        </div>
       </main>
     </div>
   );

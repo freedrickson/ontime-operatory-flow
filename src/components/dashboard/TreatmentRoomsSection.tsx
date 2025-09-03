@@ -76,29 +76,33 @@ export default function TreatmentRoomsSection() {
   };
 
   return (
-    <Card className="flex-1">
-      <CardHeader>
-        <CardTitle>Treatment Rooms</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="h-full">
+      <div className="p-6 border-b border-white/20">
+        <h2 className="text-3xl font-bold text-pure-white mb-6">Treatment Rooms</h2>
+      </div>
+      <div className="p-6">
+        <div className="grid grid-cols-2 gap-4">
           {rooms.map((room) => (
             <Dialog key={room.id}>
               <DialogTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="h-32 p-4 flex flex-col items-center justify-center hover:scale-105 transition-transform border"
+                  className="h-28 p-3 flex flex-col items-center justify-center hover:scale-105 transition-all duration-300 border border-white/20 hover:border-accent-color/50 bg-white/10 backdrop-blur-sm rounded-2xl"
                   onClick={() => setSelectedRoom(room)}
                 >
-                  <div className={`w-12 h-12 rounded ${statusColors[room.status]} mb-2`}></div>
+                  <div className={`w-8 h-8 rounded ${statusColors[room.status]} mb-2`}></div>
                      <div className="text-center">
-                     <div className="font-medium truncate">{room.name}</div>
+                     <div className="font-medium text-pure-white text-[10px]">{room.name}</div>
                      {room.patientName && (
                        <>
-                         <div className="text-sm text-muted-foreground truncate max-w-full overflow-hidden text-ellipsis whitespace-nowrap">{room.patientName}</div>
-                         <div className="text-xs truncate max-w-full overflow-hidden text-ellipsis whitespace-nowrap">{room.examType}</div>
+                         <div className="text-[9px] text-pure-white/90 truncate mt-1">
+                           {room.patientName.length > 10 ? `${room.patientName.substring(0, 10)}...` : room.patientName}
+                         </div>
+                         <div className="text-[8px] text-pure-white/70 truncate">
+                           {room.examType && room.examType.length > 12 ? `${room.examType.substring(0, 12)}...` : room.examType}
+                         </div>
                          {room.urgency && (
-                           <Badge className={`text-xs mt-1 ${urgencyColors[room.urgency]}`}>
+                           <Badge className={`text-[7px] mt-1 px-1 py-0 ${urgencyColors[room.urgency]}`}>
                              {room.urgency}
                            </Badge>
                          )}
@@ -186,7 +190,7 @@ export default function TreatmentRoomsSection() {
             </Dialog>
           ))}
         </div>
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
