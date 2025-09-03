@@ -149,11 +149,11 @@ export default function HeroChaos() {
                     revealed ? "split-flap-revealed" : "split-flap-ticker"
                   ].join(" ")}
                   style={{
-                    filter: revealed ? "none" : "blur(1px)",
-                    opacity: revealed ? 1.0 : 0.65,
+                    filter: revealed ? "none" : "blur(0.5px)",
+                    opacity: revealed ? 1.0 : 0.8,
                     transform: revealed 
                       ? "translate3d(0,0,0) scale(1.0) rotateX(0deg)" 
-                      : "translate3d(0,0,0) scale(0.95) rotateX(0deg)",
+                      : "translate3d(0,0,0) scale(1.1) rotateX(0deg)",
                     letterSpacing: revealed ? "0em" : "0.05em",
                     fontFamily: revealed ? "inherit" : "monospace",
                     
@@ -178,11 +178,11 @@ export default function HeroChaos() {
               subtitleRevealed ? "split-flap-revealed text-gray-300" : "split-flap-ticker text-gray-500"
             ].join(" ")}
             style={{
-              filter: subtitleRevealed ? "none" : "blur(1px)",
-              opacity: subtitleRevealed ? 1.0 : 0.65,
+              filter: subtitleRevealed ? "none" : "blur(0.5px)",
+              opacity: subtitleRevealed ? 1.0 : 0.8,
               transform: subtitleRevealed 
                 ? "translate3d(0,0,0) scale(1.0) rotateX(0deg)" 
-                : "translate3d(0,0,0) scale(0.95) rotateX(0deg)",
+                : "translate3d(0,0,0) scale(1.05) rotateX(0deg)",
               letterSpacing: subtitleRevealed ? "0em" : "0.02em",
               fontFamily: subtitleRevealed ? "inherit" : "monospace",
               
