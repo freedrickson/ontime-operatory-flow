@@ -144,8 +144,7 @@ export default function HeroChaos() {
                   onMouseEnter={() => setHoverWord(idx)}
                   onMouseLeave={() => setHoverWord(null)}
                   className={[
-                    "block font-extrabold tracking-tight",
-                    "text-8xl sm:text-9xl md:text-[12rem] lg:text-[14rem]",
+                    "block section-title font-extrabold tracking-tight leading-[0.85]",
                     "will-change-transform select-none",
                     revealed ? "split-flap-revealed" : "split-flap-ticker"
                   ].join(" ")}
