@@ -144,4 +144,148 @@ All colors MUST be HSL.
     content: '';
     @apply block;
   }
+
+  /* iOS Lock Screen / Fitness App Visual Language - Manage Page Only */
+  .manage-page {
+    /* iOS System Colors for Urgency Chips */
+    --ios-green: 142 76% 36%;      /* #30D158 */
+    --ios-yellow: 45 100% 51%;     /* #FFD60A */
+    --ios-red: 6 100% 59%;         /* #FF3B30 */
+    --ios-blue: 207 100% 52%;      /* #0A84FF */
+    
+    /* iOS Card Material Variables */
+    --ios-card-bg: rgba(28, 28, 30, 0.75);
+    --ios-card-border: rgba(255, 255, 255, 0.28);
+    --ios-card-shadow: 0 2px 4px rgba(0, 0, 0, 0.35), 0 10px 24px rgba(0, 0, 0, 0.45);
+    --ios-highlight-gradient: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0) 40%);
+  }
+
+  .manage-page .ios-card {
+    @apply rounded-[20px] border;
+    background: var(--ios-card-bg);
+    backdrop-filter: blur(22px) saturate(1.8);
+    -webkit-backdrop-filter: blur(22px) saturate(1.8);
+    border: 1px solid var(--ios-card-border);
+    box-shadow: var(--ios-card-shadow);
+    position: relative;
+  }
+
+  .manage-page .ios-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 40%;
+    background: var(--ios-highlight-gradient);
+    border-radius: 20px 20px 0 0;
+    pointer-events: none;
+  }
+
+  .manage-page .ios-chip {
+    @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-bold;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .manage-page .ios-chip::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    pointer-events: none;
+  }
+
+  .manage-page .ios-chip.green {
+    background: hsl(var(--ios-green));
+    color: white;
+  }
+
+  .manage-page .ios-chip.yellow {
+    background: hsl(var(--ios-yellow));
+    color: black;
+  }
+
+  .manage-page .ios-chip.red {
+    background: hsl(var(--ios-red));
+    color: white;
+    animation: redPulse 600ms ease-in-out;
+  }
+
+  .manage-page .ios-chip.blue {
+    background: hsl(var(--ios-blue));
+    color: white;
+    animation: bluePulse 600ms ease-in-out;
+  }
+
+  @keyframes redPulse {
+    0%, 100% { box-shadow: 0 0 0 0 hsla(var(--ios-red), 0.4); }
+    50% { box-shadow: 0 0 0 10px hsla(var(--ios-red), 0.1); }
+  }
+
+  @keyframes bluePulse {
+    0%, 100% { box-shadow: 0 0 0 0 hsla(var(--ios-blue), 0.4); }
+    50% { box-shadow: 0 0 0 10px hsla(var(--ios-blue), 0.1); }
+  }
+
+  .manage-page .ios-queue-card {
+    @apply transition-all duration-300 ease-out cursor-pointer;
+    transform-origin: center;
+  }
+
+  .manage-page .ios-queue-card:hover {
+    transform: scale(1.02);
+  }
+
+  .manage-page .ios-queue-card.dragging {
+    transform: scale(0.98);
+    z-index: 50;
+  }
+
+  .manage-page .ios-queue-card.swipe-delete {
+    animation: swipeDelete 300ms ease-out forwards;
+  }
+
+  @keyframes swipeDelete {
+    0% { transform: translateX(0) scale(1); opacity: 1; }
+    100% { transform: translateX(100%) scale(0.8); opacity: 0; }
+  }
+
+  .manage-page .ios-message-input {
+    @apply rounded-[24px] bg-white/10 border border-white/20 backdrop-blur-sm;
+    min-height: 96px;
+    resize: none;
+  }
+
+  .manage-page .ios-message-input:focus {
+    @apply outline-none border-white/40;
+    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+  }
+
+  .manage-page .room-tile {
+    @apply rounded-[16px] shadow-sm transition-all duration-200;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .manage-page .room-tile:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+
+  .manage-page .room-tile.occupied {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .manage-page * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
 }

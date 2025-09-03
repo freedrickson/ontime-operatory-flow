@@ -64,16 +64,18 @@ export default function DoctorQueue() {
   };
 
   return (
-    <div className="h-full flex flex-col bg-background/50 backdrop-blur-sm">
-      <div className="p-6 border-b border-border/50 bg-background/80 backdrop-blur-sm">
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold text-foreground">Doctor Queue</h2>
+    <div className="h-full flex flex-col">
+      <div className="p-6 border-b border-white/10">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="hero-text text-pure-white">Doctor Queue</h2>
           <Drawer>
             <DrawerTrigger asChild>
-              <Button variant="outline" size="sm" className="bg-background/80 backdrop-blur-sm">
-                <History className="w-4 h-4 mr-2" />
-                History
-              </Button>
+              <div className="ios-card px-4 py-2 cursor-pointer">
+                <div className="flex items-center gap-2">
+                  <History className="w-4 h-4 text-pure-white" />
+                  <span className="text-sm font-medium text-pure-white">History</span>
+                </div>
+              </div>
             </DrawerTrigger>
             <DrawerContent className="bg-background/95 backdrop-blur-lg">
               <DrawerHeader>
@@ -115,7 +117,7 @@ export default function DoctorQueue() {
       <ScrollArea className="flex-1 p-6">
         {queueItems.length === 0 ? (
           <div className="text-center py-12">
-            <div className="text-muted-foreground">
+            <div className="text-pure-white/60">
               <p className="text-lg font-medium mb-2">Queue is empty</p>
               <p className="text-sm">No pending requests</p>
             </div>
@@ -125,49 +127,61 @@ export default function DoctorQueue() {
             {queueItems.map((item, index) => (
               <div 
                 key={item.id} 
-                className="group relative p-5 bg-card border-2 border-primary/40 rounded-2xl shadow-xl hover:border-primary/60 transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl cursor-pointer active:scale-[0.98]"
+                className="ios-card ios-queue-card group relative p-4"
                 style={{ 
-                  transform: `translateY(${index * -8}px) translateX(${index * 4}px)`,
-                  zIndex: queueItems.length - index,
-                  boxShadow: `0 ${8 + index * 4}px ${20 + index * 8}px -8px rgba(0, 0, 0, 0.3)`
+                  transform: `translateY(${index * -3}px)`,
+                  zIndex: queueItems.length - index
                 }}
               >
-                <div className="flex items-start justify-between">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-3">
-                      <span className="font-semibold text-foreground text-lg">{item.roomName}</span>
-                      <Badge 
-                        variant={item.urgency === 'high' ? 'destructive' : item.urgency === 'medium' ? 'secondary' : 'default'}
-                        className={`text-xs ${
-                          item.urgency === 'high' ? 'animate-pulse bg-red-500/20 border-red-500/30' : 'bg-background/80 backdrop-blur-sm'
-                        }`}
-                      >
-                        {item.urgency}
-                      </Badge>
-                    </div>
-                    <div className="space-y-2">
-                       <div className="font-semibold text-foreground truncate max-w-full overflow-hidden text-ellipsis whitespace-nowrap">{item.patientName}</div>
-                       <div className="text-sm text-muted-foreground truncate max-w-full overflow-hidden text-ellipsis whitespace-nowrap">{item.examType}</div>
-                       <div className="text-xs text-muted-foreground italic line-clamp-2 max-w-full overflow-hidden">
-                         {item.notes}
-                       </div>
-                     </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-10 h-10 rounded-full bg-accent-color/20 flex items-center justify-center flex-shrink-0">
+                    <span className="text-accent-color font-bold text-sm">
+                      {item.roomName.charAt(item.roomName.length - 1)}
+                    </span>
                   </div>
-                  <div className="flex flex-col items-end ml-4">
-                    <GripVertical className="w-4 h-4 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity mb-2" />
-                    <button
-                      className="px-3 py-1 text-xs font-medium text-red-500 bg-red-500/10 hover:bg-red-500/20 rounded-full transition-all duration-300 opacity-0 group-hover:opacity-100"
-                      onClick={() => handleSwipeLeft(item.id)}
-                    >
-                      Clear
-                    </button>
+                  
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-1">
+                      <h3 className="font-semibold text-pure-white text-sm truncate">{item.roomName}</h3>
+                      <span className="text-pure-white/50 text-xs">
+                        {item.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </span>
+                    </div>
+                    
+                    <p className="text-pure-white/90 text-sm font-medium">{item.patientName}</p>
+                    <p className="text-pure-white/70 text-xs">{item.examType}</p>
+                    
+                    {item.notes && (
+                      <p className="text-pure-white/60 text-xs mt-2 line-clamp-2">
+                        {item.notes}
+                      </p>
+                    )}
+                    
+                    <div className="flex items-center justify-between mt-3">
+                      <span className={`ios-chip ${
+                        item.urgency === 'high' ? 'red' :
+                        item.urgency === 'medium' ? 'yellow' :
+                        'green'
+                      }`}>
+                        {item.urgency}
+                      </span>
+                      
+                      <button
+                        className="px-3 py-1 text-xs font-medium text-red-400 bg-red-500/10 hover:bg-red-500/20 rounded-full transition-all duration-300 opacity-0 group-hover:opacity-100"
+                        onClick={() => handleSwipeLeft(item.id)}
+                      >
+                        Clear
+                      </button>
+                    </div>
                   </div>
                 </div>
                 
                 {/* iOS-style swipe hint */}
-                <div className="absolute right-4 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-60 transition-all duration-300 pointer-events-none">
-                  <div className="text-xs text-muted-foreground font-medium">← Swipe</div>
-                </div>
+                {index === 0 && (
+                  <div className="absolute -right-2 top-1/2 transform -translate-y-1/2 text-pure-white/30 text-xs">
+                    ← swipe
+                  </div>
+                )}
               </div>
             ))}
           </div>

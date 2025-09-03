@@ -63,13 +63,15 @@ export default function LobbySection() {
           </div>
         </div>
       </div>
-      <div className="p-6">
+      <div className="p-8">
         <div className="grid grid-cols-4 gap-4">
           {chairs.map((chair) => (
             <button
               key={chair.id}
               onClick={() => handleChairClick(chair.id)}
-              className="group relative h-24 p-3 bg-white/10 backdrop-blur-sm rounded-2xl border border-white/20 hover:border-accent-color/50 transition-all duration-300 hover:scale-105 hover:shadow-lg active:scale-95"
+              className={`room-tile group relative h-24 p-3 transition-all duration-300 hover:scale-105 active:scale-95 ${
+                chair.status !== 'empty' ? 'occupied' : ''
+              }`}
             >
               <div className={`w-8 h-8 rounded-full ${statusColors[chair.status]} mb-2 mx-auto shadow-sm ${
                 chair.status === 'emergency' ? 'animate-pulse' : ''

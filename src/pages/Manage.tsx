@@ -9,7 +9,7 @@ export default function Manage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <div className="relative min-h-screen bg-pure-black">
+    <section id="manage" className="manage-page relative min-h-screen bg-pure-black">
       {/* Fixed Navigation Header */}
       <header className="fixed top-0 left-0 right-0 z-40 p-8">
         <div className="flex justify-between items-center">
@@ -55,9 +55,9 @@ export default function Manage() {
           {/* Left Side - Floor Plan & Activity */}
           <div className="flex-1 p-12 space-y-12">
             {/* Floor Plan Center Canvas */}
-            <div className="bg-white/5 border border-white/20 rounded-3xl shadow-2xl p-12 backdrop-blur-sm">
-              <h2 className="text-4xl font-bold text-pure-white mb-8">Floor Plan View</h2>
-              <div className="bg-white/10 border border-white/20 rounded-2xl p-8 min-h-[300px] relative backdrop-blur-sm">
+            <div className="ios-card p-12">
+              <h2 className="hero-text text-pure-white mb-8">Floor Plan View</h2>
+              <div className="bg-white/5 border border-white/10 rounded-2xl p-8 min-h-[300px] relative backdrop-blur-sm">
                 {/* This will integrate with floor plan from Build page */}
                 <div className="text-center text-pure-white/60">
                   <p className="text-xl font-medium">Interactive floor plan coming soon</p>
@@ -69,28 +69,28 @@ export default function Manage() {
             {/* Activity Sections */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               {/* Lobby Section */}
-              <div className="bg-white/5 border border-accent-color/30 rounded-3xl shadow-2xl overflow-hidden backdrop-blur-sm">
+              <div className="ios-card overflow-hidden">
                 <LobbySection />
               </div>
               
               {/* Treatment Rooms Section */}
-              <div className="bg-white/5 border border-accent-color/30 rounded-3xl shadow-2xl overflow-hidden backdrop-blur-sm">
+              <div className="ios-card overflow-hidden">
                 <TreatmentRoomsSection />
               </div>
             </div>
           </div>
 
           {/* Right Side - Doctor Queue */}
-          <div className="w-96 border-l border-white/20 bg-white/5 backdrop-blur-sm shadow-2xl">
+          <div className="w-96 border-l border-white/10 bg-black/20 backdrop-blur-sm">
             <DoctorQueue />
           </div>
         </div>
 
         {/* Messaging Footer */}
-        <div className="border-t border-white/10">
+        <div className="border-t border-white/10 bg-black/20 backdrop-blur-sm">
           <IntraofficeMessaging />
         </div>
       </main>
-    </div>
+    </section>
   );
 }

@@ -87,7 +87,9 @@ export default function TreatmentRoomsSection() {
               <DialogTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="h-28 p-3 flex flex-col items-center justify-center hover:scale-105 transition-all duration-300 border border-white/20 hover:border-accent-color/50 bg-white/10 backdrop-blur-sm rounded-2xl"
+                  className={`room-tile h-28 p-3 flex flex-col items-center justify-center hover:scale-105 transition-all duration-300 ${
+                    room.status !== 'available' ? 'occupied' : ''
+                  }`}
                   onClick={() => setSelectedRoom(room)}
                 >
                   <div className={`w-8 h-8 rounded ${statusColors[room.status]} mb-2`}></div>
@@ -101,11 +103,15 @@ export default function TreatmentRoomsSection() {
                          <div className="text-[8px] text-pure-white/70 truncate">
                            {room.examType && room.examType.length > 12 ? `${room.examType.substring(0, 12)}...` : room.examType}
                          </div>
-                         {room.urgency && (
-                           <Badge className={`text-[7px] mt-1 px-1 py-0 ${urgencyColors[room.urgency]}`}>
-                             {room.urgency}
-                           </Badge>
-                         )}
+                          {room.urgency && (
+                            <div className={`ios-chip text-[7px] mt-1 ${
+                              room.urgency === 'high' ? 'red' :
+                              room.urgency === 'medium' ? 'yellow' :
+                              'green'
+                            }`}>
+                              {room.urgency}
+                            </div>
+                          )}
                        </>
                      )}
                    </div>

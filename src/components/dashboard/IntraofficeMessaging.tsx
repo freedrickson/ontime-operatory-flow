@@ -207,46 +207,49 @@ export default function IntraofficeMessaging() {
       )}
 
       {/* Compact Footer Chat Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-background border-t shadow-lg z-40">
-        <div className="max-w-7xl mx-auto px-4 py-2">
-          <div className="flex items-center space-x-3">
+      <div className="fixed bottom-0 left-0 right-0 bg-black/80 backdrop-blur-lg border-t border-white/10 shadow-lg z-40">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center space-x-6">
             {/* Recent Messages Preview - Condensed */}
             <div className="flex-1 min-w-0">
-              <div className="text-xs font-medium mb-1">Team Chat</div>
+              <div className="text-sm font-medium mb-2 text-pure-white">Team Chat</div>
               <div className="flex items-center space-x-4">
                 {recentMessages.slice(-1).map((message) => (
-                  <div key={message.id} className="flex items-center space-x-2 text-xs">
-                    <span className={`font-medium ${message.isOwn ? 'text-primary' : 'text-muted-foreground'}`}>
+                  <div key={message.id} className="flex items-center space-x-2 text-sm">
+                    <span className={`font-medium ${message.isOwn ? 'text-accent-color' : 'text-pure-white/70'}`}>
                       {message.isOwn ? 'You' : message.author}:
                     </span>
-                    <span className="text-muted-foreground truncate max-w-48">
+                    <span className="text-pure-white/60 truncate max-w-48">
                       {message.content}
                     </span>
                     {message.urgent && (
-                      <div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse"></div>
+                      <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
                     )}
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Quick Input - Smaller */}
-            <div className="flex items-center space-x-2 flex-shrink-0 w-64">
-              <Input
-                placeholder="Quick message..."
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                onKeyPress={handleKeyPress}
-                className="flex-1 h-8 text-sm"
-              />
-              <Button 
-                onClick={handleSendMessage} 
-                disabled={!newMessage.trim()}
-                size="sm"
-                className="rounded-full p-1.5 h-8 w-8"
-              >
-                <Send className="w-3 h-3" />
-              </Button>
+            {/* Quick Input - iMessage Style */}
+            <div className="flex items-end space-x-3 flex-shrink-0 w-80">
+              <div className="ios-message-input flex items-end space-x-3 flex-1 p-3">
+                <textarea
+                  placeholder="Type a message..."
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  onKeyPress={handleKeyPress}
+                  className="flex-1 bg-transparent border-none outline-none text-pure-white placeholder-pure-white/50 text-sm resize-none min-h-[60px]"
+                  rows={2}
+                />
+                <Button 
+                  onClick={handleSendMessage} 
+                  disabled={!newMessage.trim()}
+                  size="sm"
+                  className="rounded-full p-2 h-8 w-8 bg-accent-color hover:bg-accent-color/80"
+                >
+                  <Send className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
 
             {/* Expand Button */}
@@ -254,9 +257,9 @@ export default function IntraofficeMessaging() {
               variant="ghost"
               size="sm"
               onClick={() => setIsExpanded(true)}
-              className="flex-shrink-0 h-8 w-8 p-1.5"
+              className="flex-shrink-0 h-10 w-10 p-2 text-pure-white hover:bg-white/10 rounded-full"
             >
-              <ChevronUp className="w-3 h-3" />
+              <ChevronUp className="w-4 h-4" />
             </Button>
           </div>
         </div>
