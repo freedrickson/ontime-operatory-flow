@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { AppHeader } from "@/components/layout/AppHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -45,7 +46,6 @@ interface TeamMember {
 
 export default function Analyze() {
   const [selectedTimeRange, setSelectedTimeRange] = useState('week');
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   
   // Mock data for metrics
   const keyMetrics: Metric[] = [
@@ -136,22 +136,7 @@ export default function Analyze() {
 
   return (
     <div className="relative min-h-screen bg-background">
-      {/* Fixed Navigation Header */}
-      <header className="fixed top-0 left-0 right-0 z-40 p-8">
-        <div className="flex justify-between items-center">
-          <div className="text-2xl font-bold text-foreground">
-            On Time Flow
-          </div>
-          <button
-            onClick={() => setIsMenuOpen(true)}
-            className="text-lg font-medium hover:opacity-70 transition-all duration-300 text-foreground"
-          >
-            MENU
-          </button>
-        </div>
-      </header>
-
-      {/* Navigation Overlay */}
+      <AppHeader />
 
       {/* Main Content */}
       <div className="pt-24">
