@@ -1,5 +1,4 @@
-import { useState } from "react";
-import NavigationOverlay from "@/components/NavigationOverlay";
+import { AppHeader } from "@/components/layout/AppHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -153,10 +152,6 @@ export default function Analyze() {
       </header>
 
       {/* Navigation Overlay */}
-      <NavigationOverlay 
-        isOpen={isMenuOpen} 
-        onClose={() => setIsMenuOpen(false)} 
-      />
 
       {/* Main Content */}
       <div className="pt-24">

@@ -1,32 +1,11 @@
 import { useState } from "react";
-import NavigationOverlay from "@/components/NavigationOverlay";
+import { AppHeader } from "@/components/layout/AppHeader";
 import FloorPlanEditor from "@/components/FloorPlanEditor";
 
 export default function Build() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
   return (
     <div className="relative min-h-screen bg-background">
-      {/* Fixed Navigation Header */}
-      <header className="fixed top-0 left-0 right-0 z-30 p-8">
-        <div className="flex justify-between items-center">
-          <div className="text-2xl font-bold text-foreground">
-            On Time Flow
-          </div>
-          <button
-            onClick={() => setIsMenuOpen(true)}
-            className="text-lg font-medium hover:opacity-70 transition-all duration-300 text-foreground"
-          >
-            MENU
-          </button>
-        </div>
-      </header>
-
-      {/* Navigation Overlay */}
-      <NavigationOverlay 
-        isOpen={isMenuOpen} 
-        onClose={() => setIsMenuOpen(false)} 
-      />
+      <AppHeader />
 
       {/* Main Content */}
       <main className="pt-24">

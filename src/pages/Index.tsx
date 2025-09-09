@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import NavigationOverlay from "@/components/NavigationOverlay";
+import { UserMenu } from "@/components/nav/UserMenu";
 import HeroSection from "@/components/HeroSection";
 import WhatItIsSection from "@/components/WhatItIsSection";
 import FeaturesSection from "@/components/FeaturesSection";
@@ -52,12 +53,17 @@ const Index = () => {
           <div className={`text-2xl font-bold transition-colors duration-300 ${headerTextColor}`}>
             On Time Flow
           </div>
-          <button
-            onClick={() => setIsMenuOpen(true)}
-            className={`text-lg font-medium hover:opacity-70 transition-all duration-300 ${headerTextColor}`}
-          >
-            MENU
-          </button>
+          <div className="flex items-center gap-4">
+            <div className={headerTextColor}>
+              <UserMenu />
+            </div>
+            <button
+              onClick={() => setIsMenuOpen(true)}
+              className={`text-lg font-medium hover:opacity-70 transition-all duration-300 ${headerTextColor}`}
+            >
+              MENU
+            </button>
+          </div>
         </div>
       </header>
 

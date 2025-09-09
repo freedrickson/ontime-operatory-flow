@@ -1,9 +1,14 @@
-import { useState, useRef, useCallback } from "react";
-import { Download, Save, RotateCw, Trash2, Plus } from "lucide-react";
+import { useState, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import { useAuth } from "@/context/AuthProvider";
+import { useOrg } from "@/hooks/useOrg";
+import { useNavigate } from "react-router-dom";
+import { LoginDialog } from "@/components/auth/LoginDialog";
+import { supabase } from "@/lib/supabase/client";
 import RoomBlock from "./RoomBlock";
-import { RoomType, Room } from "@/types/floorplan";
+import { Room, RoomType } from "@/types/floorplan";
+import { Download, Save, RotateCw, Trash2, Eye } from "lucide-react";
 
 const ROOM_TYPES: { [key in RoomType]: { color: string; label: string } } = {
   treatment: { color: "bg-green-500", label: "Treatment Room" },
@@ -15,11 +20,15 @@ const ROOM_TYPES: { [key in RoomType]: { color: string; label: string } } = {
 const GRID_SIZE = 20;
 
 const FloorPlanEditor = () => {
+  const { user } = useAuth();
+  const { currentOrgId, userOrgs } = useOrg();
+  const navigate = useNavigate();
   const [rooms, setRooms] = useState<Room[]>([]);
-  const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
+  const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
+  const [showLoginDialog, setShowLoginDialog] = useState(false);
   const canvasRef = useRef<HTMLDivElement>(null);
 
-  const addRoom = (type: RoomType) => {
+  const addRoom = useCallback((type: RoomType) => {
     const newRoom: Room = {
       id: `room-${Date.now()}`,
       type,
@@ -30,27 +39,29 @@ const FloorPlanEditor = () => {
       rotation: 0,
       name: `${ROOM_TYPES[type].label} ${rooms.filter(r => r.type === type).length + 1}`
     };
-    setRooms([...rooms, newRoom]);
-    toast.success("Room added");
-  };
+    setRooms(prev => [...prev, newRoom]);
+  }, [rooms]);
 
   const updateRoom = useCallback((id: string, updates: Partial<Room>) => {
     setRooms(prev => prev.map(room => 
-      room.id === id ? { ...room, ...updates } : room
+      room.id === id 
+        ? { ...room, ...updates, x: snapToGrid(updates.x ?? room.x), y: snapToGrid(updates.y ?? room.y) }
+        : room
     ));
   }, []);
 
-  const deleteRoom = (id: string) => {
+  const deleteRoom = useCallback((id: string) => {
     setRooms(prev => prev.filter(room => room.id !== id));
-    setSelectedRoom(null);
-    toast.success("Room deleted");
-  };
+    setSelectedRoomId(null);
+  }, []);
 
-  const rotateRoom = (id: string) => {
-    updateRoom(id, { 
-      rotation: (rooms.find(r => r.id === id)?.rotation || 0) + 90 
-    });
-  };
+  const rotateRoom = useCallback((id: string) => {
+    setRooms(prev => prev.map(room => 
+      room.id === id 
+        ? { ...room, rotation: (room.rotation + 90) % 360 }
+        : room
+    ));
+  }, []);
 
   const snapToGrid = (value: number) => {
     return Math.round(value / GRID_SIZE) * GRID_SIZE;
@@ -59,7 +70,6 @@ const FloorPlanEditor = () => {
   const exportAsImage = () => {
     if (!canvasRef.current) return;
     
-    // Create a canvas element to draw the floor plan
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
@@ -67,58 +77,40 @@ const FloorPlanEditor = () => {
     canvas.width = 800;
     canvas.height = 600;
     
-    // Draw grid background
-    ctx.fillStyle = '#f8f9fa';
+    // Fill background
+    ctx.fillStyle = '#f5f5f5';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
-    ctx.strokeStyle = '#e9ecef';
+    // Draw grid
+    ctx.strokeStyle = '#e0e0e0';
     ctx.lineWidth = 1;
-    
     for (let x = 0; x <= canvas.width; x += GRID_SIZE) {
       ctx.beginPath();
       ctx.moveTo(x, 0);
       ctx.lineTo(x, canvas.height);
       ctx.stroke();
     }
-    
     for (let y = 0; y <= canvas.height; y += GRID_SIZE) {
       ctx.beginPath();
       ctx.moveTo(0, y);
       ctx.lineTo(canvas.width, y);
       ctx.stroke();
     }
-
+    
     // Draw rooms
     rooms.forEach(room => {
-      ctx.save();
-      ctx.translate(room.x + room.width/2, room.y + room.height/2);
-      ctx.rotate((room.rotation * Math.PI) / 180);
+      ctx.fillStyle = ROOM_TYPES[room.type].color.replace('bg-', '#');
+      ctx.fillRect(room.x, room.y, room.width, room.height);
+      ctx.strokeStyle = '#333';
+      ctx.strokeRect(room.x, room.y, room.width, room.height);
       
-      // Room background
-      const colors = {
-        treatment: '#10b981',
-        sterilization: '#3b82f6',
-        public: '#eab308',
-        admin: '#6b7280'
-      };
-      
-      ctx.fillStyle = colors[room.type];
-      ctx.fillRect(-room.width/2, -room.height/2, room.width, room.height);
-      
-      // Room border
-      ctx.strokeStyle = '#374151';
-      ctx.lineWidth = 2;
-      ctx.strokeRect(-room.width/2, -room.height/2, room.width, room.height);
-      
-      // Room text
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '12px sans-serif';
+      // Add text
+      ctx.fillStyle = '#fff';
+      ctx.font = '12px Arial';
       ctx.textAlign = 'center';
-      ctx.fillText(room.name, 0, 4);
-      
-      ctx.restore();
+      ctx.fillText(room.name, room.x + room.width/2, room.y + room.height/2);
     });
-
+    
     // Download the image
     const link = document.createElement('a');
     link.download = 'floor-plan.png';
@@ -126,6 +118,58 @@ const FloorPlanEditor = () => {
     link.click();
     
     toast.success("Floor plan exported as image");
+  };
+
+  const handleSave = async () => {
+    if (!user) {
+      // Store floor plan data temporarily and open login dialog
+      const data = {
+        rooms,
+        metadata: {
+          exportDate: new Date().toISOString(),
+          version: "1.0"
+        }
+      };
+      localStorage.setItem('pendingFloorPlan', JSON.stringify(data));
+      setShowLoginDialog(true);
+      return;
+    }
+
+    if (userOrgs.length === 0) {
+      toast.error("You need to be a member of an organization to save floor plans");
+      return;
+    }
+
+    if (!currentOrgId) {
+      toast.error("Please select an organization first");
+      return;
+    }
+
+    // User is logged in and has org access, save directly
+    try {
+      const data = {
+        rooms,
+        metadata: {
+          exportDate: new Date().toISOString(),
+          version: "1.0"
+        }
+      };
+
+      const { error } = await supabase
+        .from('floor_plans')
+        .insert({
+          org_id: currentOrgId,
+          name: `Floor Plan ${new Date().toLocaleDateString()}`,
+          data: data as any,
+          created_by: user.id
+        });
+
+      if (error) throw error;
+
+      toast.success("Floor plan saved successfully");
+    } catch (error: any) {
+      toast.error("Failed to save floor plan: " + error.message);
+    }
   };
 
   const exportAsJSON = () => {
@@ -162,14 +206,13 @@ const FloorPlanEditor = () => {
             `,
             backgroundSize: `${GRID_SIZE}px ${GRID_SIZE}px`
           }}
-          onClick={() => setSelectedRoom(null)}
         >
           {rooms.map(room => (
             <RoomBlock
               key={room.id}
               room={room}
-              isSelected={selectedRoom === room.id}
-              onSelect={() => setSelectedRoom(room.id)}
+              isSelected={selectedRoomId === room.id}
+              onSelect={() => setSelectedRoomId(room.id)}
               onUpdate={updateRoom}
               snapToGrid={snapToGrid}
               roomConfig={ROOM_TYPES[room.type]}
@@ -178,45 +221,46 @@ const FloorPlanEditor = () => {
         </div>
       </div>
 
-      {/* Sidebar (Right) */}
-      <div className="w-80 bg-card/50 backdrop-blur-sm border-l border-border/50 p-8 space-y-8">
+      {/* Sidebar */}
+      <div className="w-80 bg-background border-l border-border p-6 space-y-6 overflow-y-auto">
+        {/* Room Types */}
         <div>
           <h2 className="text-2xl font-bold mb-6 text-foreground">Room Types</h2>
-          <div className="grid grid-cols-1 gap-2">
+          <div className="grid grid-cols-2 gap-2">
             {Object.entries(ROOM_TYPES).map(([type, config]) => (
               <Button
                 key={type}
                 variant="outline"
                 onClick={() => addRoom(type as RoomType)}
-                className="justify-start gap-3 h-12"
+                className="flex flex-col items-center gap-2 h-auto p-4"
               >
-                <div className={`w-4 h-4 rounded ${config.color}`} />
-                <Plus size={16} />
-                {config.label}
+                <div className={`w-8 h-6 ${config.color} rounded`} />
+                <span className="text-xs text-center">{config.label}</span>
               </Button>
             ))}
           </div>
         </div>
 
-        {selectedRoom && (
+        {/* Selected Room Actions */}
+        {selectedRoomId && (
           <div>
-            <h2 className="text-2xl font-bold mb-6 text-foreground">Room Actions</h2>
+            <h2 className="text-2xl font-bold mb-6 text-foreground">Selected Room</h2>
             <div className="space-y-2">
               <Button
                 variant="outline"
-                onClick={() => rotateRoom(selectedRoom)}
+                onClick={() => rotateRoom(selectedRoomId)}
                 className="w-full justify-start gap-2"
               >
                 <RotateCw size={16} />
-                Rotate
+                Rotate 90°
               </Button>
               <Button
                 variant="destructive"
-                onClick={() => deleteRoom(selectedRoom)}
+                onClick={() => deleteRoom(selectedRoomId)}
                 className="w-full justify-start gap-2"
               >
                 <Trash2 size={16} />
-                Delete
+                Delete Room
               </Button>
             </div>
           </div>
@@ -227,44 +271,61 @@ const FloorPlanEditor = () => {
           <div className="space-y-2">
             <Button
               variant="default"
-              onClick={exportAsJSON}
+              onClick={handleSave}
               className="w-full justify-start gap-2"
             >
               <Save size={16} />
-              Save
+              {user ? 'Save to Organization' : 'Save (Login Required)'}
             </Button>
             <Button
               variant="outline"
               onClick={() => {
                 setRooms([]);
-                setSelectedRoom(null);
+                setSelectedRoomId(null);
                 toast.success("Floor plan cleared");
               }}
               className="w-full justify-start gap-2"
             >
               <Trash2 size={16} />
-              Reset / Clear All
+              Clear All
+            </Button>
+            <Button
+              variant="outline"
+              onClick={exportAsImage}
+              className="w-full justify-start gap-2"
+            >
+              <Download size={16} />
+              Export as Image
+            </Button>
+            <Button
+              variant="outline"
+              onClick={exportAsJSON}
+              className="w-full justify-start gap-2"
+            >
+              <Download size={16} />
+              Export as JSON
             </Button>
           </div>
         </div>
 
+        {/* Mini Preview */}
         <div>
-          <h2 className="text-2xl font-bold mb-6 text-foreground">Mini Preview</h2>
-          <div className="w-full h-32 bg-muted border rounded-lg p-2">
-            <div 
-              className="w-full h-full bg-background relative"
+          <h2 className="text-2xl font-bold mb-6 text-foreground">Preview</h2>
+          <div className="border border-border rounded-lg p-4 bg-muted/20 aspect-[4/3] relative overflow-hidden">
+            <div
+              className="absolute inset-0"
               style={{
                 backgroundImage: `
                   linear-gradient(rgba(0,0,0,.1) 1px, transparent 1px),
                   linear-gradient(90deg, rgba(0,0,0,.1) 1px, transparent 1px)
                 `,
-                backgroundSize: `4px 4px`
+                backgroundSize: '8px 8px'
               }}
             >
               {rooms.map(room => (
                 <div
                   key={room.id}
-                  className={`absolute rounded-sm ${ROOM_TYPES[room.type].color}`}
+                  className={`absolute ${ROOM_TYPES[room.type].color} rounded-sm border border-gray-400`}
                   style={{
                     left: `${(room.x / 800) * 100}%`,
                     top: `${(room.y / 600) * 100}%`,
@@ -289,6 +350,16 @@ const FloorPlanEditor = () => {
           </ul>
         </div>
       </div>
+
+      {/* Login Dialog */}
+      <LoginDialog
+        open={showLoginDialog}
+        onOpenChange={setShowLoginDialog}
+        onSuccess={() => {
+          setShowLoginDialog(false);
+          navigate('/confirm/save?from=/build');
+        }}
+      />
     </div>
   );
 };
