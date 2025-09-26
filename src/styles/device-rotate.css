@@ -1,0 +1,39 @@
+/* Device Scroll Rotation Styles */
+.device-rotate-wrap {
+  perspective: 1200px;
+  display: grid;
+  place-items: center;
+}
+
+.device-img {
+  transform-style: preserve-3d;
+  transform: translateZ(var(--depth, 40px)) rotateY(var(--ry, 0deg));
+  transition: transform 0.06s linear;
+  will-change: transform;
+  max-width: 520px;
+  width: 100%;
+}
+
+.device-img.has-shadow {
+  filter: drop-shadow(0 20px 30px rgba(0,0,0,.15));
+  position: relative;
+}
+
+.device-img.has-shadow::after {
+  content: "";
+  position: absolute;
+  left: 0; 
+  right: 0; 
+  bottom: -6%;
+  height: 24%;
+  background: linear-gradient(to bottom, rgba(0,0,0,.15), transparent);
+  transform: scaleY(-1);
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,0.6), rgba(0,0,0,0));
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .device-img { 
+    transition: none; 
+  }
+}
