@@ -1,0 +1,26 @@
+/* Product showcase styles */
+.device-card-3d {
+  @apply bg-gray-50/60 backdrop-blur-sm rounded-3xl p-12 transition-all duration-300 hover:-translate-y-0.5 border border-gray-100/50;
+}
+
+.canvas-container {
+  @apply mb-8 h-48 w-full;
+}
+
+.device-info {
+  @apply text-center;
+}
+
+.device-title {
+  @apply text-2xl font-semibold text-gray-900 mb-3;
+}
+
+.device-subtitle {
+  @apply text-lg text-gray-600 leading-relaxed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .device-card-3d {
+    @apply transition-none;
+  }
+}
