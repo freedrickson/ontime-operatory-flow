@@ -15,7 +15,7 @@ export default function TeamAvatars() {
 
   const Card = ({ title, subtitle, children, ariaLabel }: any) => (
     <motion.div className="team-card" style={{ opacity, scale }}>
-      <div className="canvas-wrap" aria-hidden="true" aria-label={ariaLabel}>
+      <div className="canvas-wrap" aria-hidden="true">
         <Canvas dpr={[1,2]} camera={{ position: [0, 1.6, 3], fov: 30 }} frameloop="demand">
           <ambientLight intensity={0.6} />
           <directionalLight position={[2, 3, 2]} intensity={1.1} />
