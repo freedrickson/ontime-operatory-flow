@@ -1,4 +1,3 @@
-"use client";
 import dynamic from "next/dynamic";
 import { Canvas } from "@react-three/fiber";
 import { ContactShadows, Environment } from "@react-three/drei";
