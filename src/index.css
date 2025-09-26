@@ -310,3 +310,32 @@ All colors MUST be HSL.
     }
   }
 }
+
+/* Device 3D Animations */
+.rotating-device {
+  transform-style: preserve-3d;
+}
+
+.macbook-3d,
+.iphone-3d,
+.watch-3d {
+  animation: rotateX360 8s linear infinite;
+  transform-style: preserve-3d;
+}
+
+@keyframes rotateX360 {
+  from {
+    transform: rotateX(0deg);
+  }
+  to {
+    transform: rotateX(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .macbook-3d,
+  .iphone-3d,
+  .watch-3d {
+    animation: none;
+  }
+}
