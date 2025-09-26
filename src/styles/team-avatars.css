@@ -1,0 +1,68 @@
+/* Team Avatars Section */
+.team-avatars { 
+  padding: 56px 0; 
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.team-avatars .grid { 
+  display: grid; 
+  gap: 32px; 
+  grid-template-columns: repeat(3, 1fr);
+  padding: 0 24px;
+}
+
+@media (max-width: 900px) { 
+  .team-avatars .grid { 
+    grid-template-columns: 1fr; 
+    gap: 24px;
+  } 
+}
+
+.team-card { 
+  background: #ffffff; 
+  border-radius: 24px; 
+  padding: 24px; 
+  box-shadow: 0 8px 24px rgba(0,0,0,.06); 
+  transition: transform .25s ease, box-shadow .25s ease; 
+  border: 1px solid rgba(0,0,0,.05);
+}
+
+.team-card:hover { 
+  transform: translateY(-8px); 
+  box-shadow: 0 16px 48px rgba(0,0,0,.12);
+}
+
+.canvas-wrap { 
+  aspect-ratio: 3 / 4; 
+  border-radius: 16px; 
+  overflow: hidden; 
+  background: linear-gradient(135deg, #f8f8f8, #f0f0f0); 
+  position: relative;
+}
+
+.team-title { 
+  margin-top: 16px; 
+  font-weight: 700; 
+  font-size: 1.25rem;
+  color: #1a1a1a;
+  text-align: center;
+}
+
+.team-subtitle { 
+  color: #6b7280; 
+  margin-top: 4px; 
+  font-size: 0.9rem;
+  text-align: center;
+  line-height: 1.4;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .team-card { 
+    transition: none; 
+  }
+  
+  .team-card:hover {
+    transform: none;
+  }
+}
