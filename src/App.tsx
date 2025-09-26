@@ -4,6 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/context/AuthProvider";
+import ErrorBoundary from "@/components/ui/ErrorBoundary";
 import Index from "./pages/Index";
 import Build from "./pages/Build";
 import Manage from "./pages/Manage";
@@ -22,20 +23,22 @@ const App = () => (
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/build" element={<Build />} />
-            <Route path="/manage" element={<Manage />} />
-            <Route path="/analyze" element={<Analyze />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/auth/callback" element={<AuthCallback />} />
-            <Route path="/confirm/save" element={<ConfirmSave />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+        <ErrorBoundary fallback={<div className="min-h-screen flex items-center justify-center text-center p-8"><div><h1 className="text-2xl font-bold mb-4">Something went wrong</h1><p>Please refresh the page to continue.</p></div></div>}>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/build" element={<Build />} />
+              <Route path="/manage" element={<Manage />} />
+              <Route path="/analyze" element={<Analyze />} />
+              <Route path="/settings" element={<Settings />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/auth/callback" element={<AuthCallback />} />
+              <Route path="/confirm/save" element={<ConfirmSave />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </ErrorBoundary>
       </TooltipProvider>
     </AuthProvider>
   </QueryClientProvider>

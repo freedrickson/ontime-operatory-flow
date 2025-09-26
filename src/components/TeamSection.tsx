@@ -1,5 +1,7 @@
+import React, { Suspense } from "react";
 import ScrollReveal from "./ScrollReveal";
-import TeamAvatars from "./TeamAvatars";
+
+const TeamAvatars = React.lazy(() => import("./TeamAvatars"));
 
 const TeamSection = () => {
   return (
@@ -22,7 +24,9 @@ const TeamSection = () => {
               Treatment acceptance is a whole-team effort.
             </p>
 
-            <TeamAvatars />
+            <Suspense fallback={<div className="h-96 flex items-center justify-center"><div className="text-gray-500">Loading team...</div></div>}>
+              <TeamAvatars />
+            </Suspense>
           </div>
         </ScrollReveal>
       </div>
