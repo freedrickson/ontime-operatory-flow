@@ -39,7 +39,7 @@ export default function Hygienist(props: GroupProps & { idle?: boolean }) {
       
       {/* Body/Scrub top */}
       <mesh position={[0, 1.3, 0]}>
-        <capsuleGeometry args={[0.15, 0.4, 8, 16]} />
+        <cylinderGeometry args={[0.15, 0.15, 0.4, 16]} />
         <meshStandardMaterial color="#20B2AA" roughness={0.8} metalness={0.0} />
       </mesh>
       
@@ -51,11 +51,11 @@ export default function Hygienist(props: GroupProps & { idle?: boolean }) {
       
       {/* Arms */}
       <mesh position={[-0.22, 1.25, 0]} rotation={[0, 0, 0.2]}>
-        <capsuleGeometry args={[0.06, 0.35, 6, 12]} />
+        <cylinderGeometry args={[0.06, 0.06, 0.35, 12]} />
         <meshStandardMaterial color="#20B2AA" roughness={0.8} metalness={0.0} />
       </mesh>
       <mesh position={[0.22, 1.25, 0]} rotation={[0, 0, -0.2]}>
-        <capsuleGeometry args={[0.06, 0.35, 6, 12]} />
+        <cylinderGeometry args={[0.06, 0.06, 0.35, 12]} />
         <meshStandardMaterial color="#20B2AA" roughness={0.8} metalness={0.0} />
       </mesh>
       
@@ -77,11 +77,11 @@ export default function Hygienist(props: GroupProps & { idle?: boolean }) {
       
       {/* Legs/Scrub pants */}
       <mesh position={[-0.08, 0.7, 0]}>
-        <capsuleGeometry args={[0.08, 0.6, 6, 12]} />
+        <cylinderGeometry args={[0.08, 0.08, 0.6, 12]} />
         <meshStandardMaterial color="#20B2AA" roughness={0.8} metalness={0.0} />
       </mesh>
       <mesh position={[0.08, 0.7, 0]}>
-        <capsuleGeometry args={[0.08, 0.6, 6, 12]} />
+        <cylinderGeometry args={[0.08, 0.08, 0.6, 12]} />
         <meshStandardMaterial color="#20B2AA" roughness={0.8} metalness={0.0} />
       </mesh>
       

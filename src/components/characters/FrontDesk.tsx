@@ -33,7 +33,7 @@ export default function FrontDesk(props: GroupProps & { idle?: boolean }) {
       
       {/* Body/Torso */}
       <mesh position={[0, 1.3, 0]}>
-        <capsuleGeometry args={[0.15, 0.4, 8, 16]} />
+        <cylinderGeometry args={[0.15, 0.15, 0.4, 16]} />
         <meshStandardMaterial color="#4A90E2" roughness={0.7} metalness={0.0} />
       </mesh>
       
@@ -45,11 +45,11 @@ export default function FrontDesk(props: GroupProps & { idle?: boolean }) {
       
       {/* Arms */}
       <mesh position={[-0.22, 1.25, 0]} rotation={[0, 0, 0.3]}>
-        <capsuleGeometry args={[0.06, 0.35, 6, 12]} />
+        <cylinderGeometry args={[0.06, 0.06, 0.35, 12]} />
         <meshStandardMaterial color="#4A90E2" roughness={0.7} metalness={0.0} />
       </mesh>
       <mesh position={[0.22, 1.25, 0]} rotation={[0, 0, -0.3]}>
-        <capsuleGeometry args={[0.06, 0.35, 6, 12]} />
+        <cylinderGeometry args={[0.06, 0.06, 0.35, 12]} />
         <meshStandardMaterial color="#4A90E2" roughness={0.7} metalness={0.0} />
       </mesh>
       
@@ -71,11 +71,11 @@ export default function FrontDesk(props: GroupProps & { idle?: boolean }) {
       
       {/* Legs/Pants */}
       <mesh position={[-0.08, 0.7, 0]}>
-        <capsuleGeometry args={[0.08, 0.6, 6, 12]} />
+        <cylinderGeometry args={[0.08, 0.08, 0.6, 12]} />
         <meshStandardMaterial color="#2C3E50" roughness={0.8} metalness={0.0} />
       </mesh>
       <mesh position={[0.08, 0.7, 0]}>
-        <capsuleGeometry args={[0.08, 0.6, 6, 12]} />
+        <cylinderGeometry args={[0.08, 0.08, 0.6, 12]} />
         <meshStandardMaterial color="#2C3E50" roughness={0.8} metalness={0.0} />
       </mesh>
       
