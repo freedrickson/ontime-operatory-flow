@@ -22,15 +22,14 @@ export default function TeamAvatars() {
         </div>
       }>
         <div className="canvas-wrap" aria-hidden="true">
-          <Canvas dpr={[1,2]} camera={{ position: [0, 1.6, 3], fov: 30 }} frameloop="demand" gl={{ antialias: true, powerPreference: "high-performance", alpha: false, stencil: false, depth: true, preserveDrawingBuffer: false }}>
-            <ambientLight intensity={0.6} />
-            <directionalLight position={[2, 3, 2]} intensity={1.1} />
-            <directionalLight position={[-1, 2, -1]} intensity={0.4} />
+          <Canvas dpr={[1,2]} camera={{ position: [0, 1.6, 3], fov: 30 }} frameloop="always" gl={{ antialias: true, powerPreference: "high-performance", alpha: false, stencil: false, depth: true, preserveDrawingBuffer: false }}>
+            <hemisphereLight intensity={0.65} groundColor={0x444444} />
+            <ambientLight intensity={0.4} />
+            <directionalLight position={[2, 3, 2]} intensity={1.0} />
+            <directionalLight position={[-1, 2, -1]} intensity={0.3} />
             <Suspense fallback={null}>
-              <Environment preset="studio" />
               {children}
             </Suspense>
-            <ContactShadows position={[0, -1, 0]} opacity={0.25} blur={2.5} frames={1} />
           </Canvas>
         </div>
       </ErrorBoundary>
