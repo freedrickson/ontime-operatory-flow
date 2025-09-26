@@ -1,7 +1,7 @@
 "use client";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { ContactShadows, Environment } from "@react-three/drei";
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import * as THREE from "three";
 
 function LaptopModel({ rotationY = 0 }) {
@@ -148,17 +148,33 @@ export default function DeviceCard3D({
   const Model = variant === "laptop" ? LaptopModel : variant === "phone" ? PhoneModel : WatchModel;
   const cameraPosition: [number, number, number] =
     variant === "laptop" ? [0, 0.8, 3.5] : variant === "phone" ? [0, 0, 2.5] : [0, 0, 2];
+  const supportsWebGL = useMemo(() => {
+    if (typeof window === "undefined") return false;
+    try {
+      const canvas = document.createElement("canvas");
+      return !!(
+        (window as any).WebGL2RenderingContext && canvas.getContext("webgl2") ||
+        canvas.getContext("webgl")
+      );
+    } catch {
+      return false;
+    }
+  }, []);
 
   return (
     <div className="device-card-3d">
       <div className="canvas-container" aria-hidden="true">
-        <Canvas dpr={[1, 2]} camera={{ position: cameraPosition, fov: 30 }} frameloop="demand">
-          <ambientLight intensity={0.6} />
-          <directionalLight position={[2, 3, 2]} intensity={1.1} />
-          <Environment preset="city" />
-          <Model rotationY={rotationY} />
-          <ContactShadows position={[0, -0.8, 0]} opacity={0.3} blur={2.6} far={4} />
-        </Canvas>
+        {supportsWebGL ? (
+          <Canvas dpr={[1, 2]} camera={{ position: cameraPosition, fov: 30 }} frameloop="demand">
+            <ambientLight intensity={0.6} />
+            <directionalLight position={[2, 3, 2]} intensity={1.1} />
+            <Environment preset="city" />
+            <Model rotationY={rotationY} />
+            <ContactShadows position={[0, -0.8, 0]} opacity={0.3} blur={2.6} far={4} />
+          </Canvas>
+        ) : (
+          <div className="skeleton-placeholder" />
+        )}
       </div>
       <div className="device-info">
         <h3 className="device-title">{title}</h3>

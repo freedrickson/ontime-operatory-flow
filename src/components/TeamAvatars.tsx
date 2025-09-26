@@ -1,6 +1,6 @@
 "use client";
 import { Canvas } from "@react-three/fiber";
-import { useRef, Suspense } from "react";
+import { useRef, Suspense, useMemo } from "react";
 import { useScroll, useTransform, motion } from "framer-motion";
 import ErrorBoundary from "./ui/ErrorBoundary";
 import FrontDesk from "./characters/FrontDesk";
@@ -16,22 +16,39 @@ export default function TeamAvatars() {
   });
   const opacity = useTransform(scrollYProgress, [0, 1], [0, 1]);
   const scale = useTransform(scrollYProgress, [0, 1], [0.96, 1]);
+  const supportsWebGL = useMemo(() => {
+    if (typeof window === "undefined") return false;
+    try {
+      const canvas = document.createElement("canvas");
+      return !!(
+        (window as any).WebGL2RenderingContext && canvas.getContext("webgl2") ||
+        canvas.getContext("webgl")
+      );
+    } catch {
+      return false;
+    }
+  }, []);
 
   const Card = ({ title, subtitle, ariaLabel, children }: any) => (
     <motion.div className="team-card" style={{ opacity, scale }}>
       <div className="canvas-wrap" aria-hidden="true" aria-label={ariaLabel}>
         <ErrorBoundary fallback={<div className="skeleton-placeholder" />}>
-           <Canvas 
-            camera={{ position: [0, 1.6, 3], fov: 30 }}
-            gl={{ antialias: false, alpha: false }}
-          >
-            <ambientLight intensity={0.6} />
-            <directionalLight position={[5, 5, 5]} intensity={0.8} />
-            <directionalLight position={[-5, 5, -5]} intensity={0.4} />
-            <Suspense fallback={null}>
-              {children}
-            </Suspense>
-          </Canvas>
+          {supportsWebGL ? (
+            <Canvas 
+              camera={{ position: [0, 1.6, 3], fov: 30 }}
+              gl={{ antialias: false, alpha: false }}
+            >
+              <ambientLight intensity={0.6} />
+              <directionalLight position={[5, 5, 5]} intensity={0.8} />
+              <directionalLight position={[-5, 5, -5]} intensity={0.4} />
+              <Suspense fallback={null}>
+                {children}
+              </Suspense>
+            </Canvas>
+          ) : (
+            <div className="skeleton-placeholder" />
+          )}
+
         </ErrorBoundary>
       </div>
       <h4 className="team-title">{title}</h4>
