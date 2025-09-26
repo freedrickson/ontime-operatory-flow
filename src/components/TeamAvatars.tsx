@@ -24,7 +24,7 @@ export default function TeamAvatars() {
           <Canvas 
             dpr={[1, 2]} 
             camera={{ position: [0, 1.6, 3], fov: 30 }} 
-            frameloop="demand"
+            frameloop="always"
             gl={{
               antialias: true,
               powerPreference: "high-performance",
