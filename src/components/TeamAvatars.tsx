@@ -21,18 +21,9 @@ export default function TeamAvatars() {
     <motion.div className="team-card" style={{ opacity, scale }}>
       <div className="canvas-wrap" aria-hidden="true" aria-label={ariaLabel}>
         <ErrorBoundary fallback={<div className="skeleton-placeholder" />}>
-          <Canvas 
-            dpr={[1, 2]} 
-            camera={{ position: [0, 1.6, 3], fov: 30 }} 
-            frameloop="always"
-            gl={{
-              antialias: true,
-              powerPreference: "high-performance",
-              alpha: false,
-              stencil: false,
-              depth: true,
-              preserveDrawingBuffer: false
-            }}
+           <Canvas 
+            camera={{ position: [0, 1.6, 3], fov: 30 }}
+            gl={{ antialias: false, alpha: false }}
           >
             <ambientLight intensity={0.6} />
             <directionalLight position={[5, 5, 5]} intensity={0.8} />
