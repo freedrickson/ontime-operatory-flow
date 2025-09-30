@@ -22,20 +22,23 @@ export default function ProductsShowcase() {
     >
       <div className="container mx-auto px-8 max-w-7xl">
         <ScrollReveal>
-          <div className="text-center mb-24">
-            <h2 className="section-title text-center">
-              <span className="block">How it works</span>
-            </h2>
-            
-            <div className="max-w-4xl mx-auto mt-12 space-y-8">
-              <div className="text-left">
-                <h3 className="text-2xl font-semibold mb-2">1. Map your floor plan once – Build ops and lobby in minutes.</h3>
-              </div>
-              <div className="text-left">
-                <h3 className="text-2xl font-semibold mb-2">2. Start a visit – Procedure timers run quietly in the room.</h3>
-              </div>
-              <div className="text-left">
-                <h3 className="text-2xl font-semibold mb-2">3. Stay on time – Wrist/phone prompts cue the right person at the right moment; the live board shows on‑time, late‑risk, and who's needed next.</h3>
+          <div className="mb-32">
+            <div className="max-w-5xl">
+              <h3 className="section-title mb-6">
+                How it works
+              </h3>
+            </div>
+            <div className="max-w-2xl">
+              <div className="space-y-6">
+                <p className="subtitle-text text-gray-600">
+                  <strong>1. Map your floor plan once</strong> – Build ops and lobby in minutes.
+                </p>
+                <p className="subtitle-text text-gray-600">
+                  <strong>2. Start a visit</strong> – Procedure timers run quietly in the room.
+                </p>
+                <p className="subtitle-text text-gray-600">
+                  <strong>3. Stay on time</strong> – Wrist/phone prompts cue the right person at the right moment; the live board shows on‑time, late‑risk, and who's needed next.
+                </p>
               </div>
             </div>
           </div>
