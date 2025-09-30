@@ -1,8 +1,10 @@
 "use client";
 import { useRef } from "react";
 import { useScroll, useTransform, motion } from "framer-motion";
-import DeviceCard3D from "./DeviceCard3D";
 import ScrollReveal from "./ScrollReveal";
+import desktopImage from "@/assets/desktop-on-time-flow.png";
+import iphoneImage from "@/assets/iphone-on-time-flow.png";
+import appleWatchImage from "@/assets/apple-watch-on-time-flow.png";
 
 export default function ProductsShowcase() {
   const ref = useRef<HTMLDivElement>(null);
@@ -46,29 +48,47 @@ export default function ProductsShowcase() {
 
         <ScrollReveal className="mt-16">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 max-w-6xl mx-auto">
-            <motion.div style={{ rotateY: rotationY }}>
-              <DeviceCard3D 
-                variant="laptop" 
-                title="Desktop Dashboard" 
-                subtitle="Full operatory floor plan"
-              />
-            </motion.div>
+            <div className="device-card-3d">
+              <div className="mb-8">
+                <img 
+                  src={desktopImage} 
+                  alt="Desktop Dashboard showing live floor plan"
+                  className="w-full h-auto rounded-lg"
+                />
+              </div>
+              <div className="device-info">
+                <h3 className="device-title">Desktop Dashboard</h3>
+                <p className="device-subtitle">Full operatory floor plan</p>
+              </div>
+            </div>
             
-            <motion.div style={{ rotateY: rotationY }}>
-              <DeviceCard3D 
-                variant="phone" 
-                title="Mobile App" 
-                subtitle="On-the-go management"
-              />
-            </motion.div>
+            <div className="device-card-3d">
+              <div className="mb-8">
+                <img 
+                  src={iphoneImage} 
+                  alt="Mobile App showing floor plan on iPhone"
+                  className="w-full h-auto rounded-lg"
+                />
+              </div>
+              <div className="device-info">
+                <h3 className="device-title">Mobile App</h3>
+                <p className="device-subtitle">On-the-go management</p>
+              </div>
+            </div>
             
-            <motion.div style={{ rotateY: rotationY }}>
-              <DeviceCard3D 
-                variant="watch" 
-                title="Watch Companion" 
-                subtitle="Instant notifications"
-              />
-            </motion.div>
+            <div className="device-card-3d">
+              <div className="mb-8">
+                <img 
+                  src={appleWatchImage} 
+                  alt="Apple Watch showing floor plan notifications"
+                  className="w-full h-auto rounded-lg"
+                />
+              </div>
+              <div className="device-info">
+                <h3 className="device-title">Watch Companion</h3>
+                <p className="device-subtitle">Instant notifications</p>
+              </div>
+            </div>
           </div>
         </ScrollReveal>
       </div>
