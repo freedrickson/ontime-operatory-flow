@@ -7,7 +7,7 @@ interface SplitFlapState {
 }
 
 export default function HeroChaos() {
-  const [revealedWords, setRevealedWords] = useState<boolean[]>([false, false, false, false]);
+  const [revealedWords, setRevealedWords] = useState<boolean[]>([false, false, false, false, false, false]);
   const [hoverWord, setHoverWord] = useState<number | null>(null);
   const [splitFlapStates, setSplitFlapStates] = useState<SplitFlapState[]>([]);
   const [subtitleRevealed, setSubtitleRevealed] = useState<boolean>(false);
@@ -16,8 +16,8 @@ export default function HeroChaos() {
   const lastFrameTime = useRef<number>(0);
   const navigate = useNavigate();
 
-  const words = ["Dental", "Chaos", "Made", "Clockwork"];
-  const subtitle = "Custom operatory management on desktop, mobile, and watch.";
+  const words = ["Real‑time", "patient", "management", "for", "dental", "practices"];
+  const subtitle = "First‑of‑its‑kind platform that keeps every operatory on time using Apple Watch and phones your team already has—role‑aware haptic cues + a live floor‑plan dashboard.";
 
   // Initialize split-flap states
   useEffect(() => {
@@ -93,16 +93,18 @@ export default function HeroChaos() {
   // Staged word revelation
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setRevealedWords([true, true, true, true]);
+      setRevealedWords([true, true, true, true, true, true]);
       setSubtitleRevealed(true);
       return;
     }
 
     const timers = [
-      setTimeout(() => setRevealedWords(prev => [true, prev[1], prev[2], prev[3]]), 1000),
-      setTimeout(() => setRevealedWords(prev => [prev[0], true, prev[2], prev[3]]), 2000),
-      setTimeout(() => setRevealedWords(prev => [prev[0], prev[1], true, prev[3]]), 3000),
-      setTimeout(() => setRevealedWords(prev => [prev[0], prev[1], prev[2], true]), 3500),
+      setTimeout(() => setRevealedWords(prev => [true, prev[1], prev[2], prev[3], prev[4], prev[5]]), 1000),
+      setTimeout(() => setRevealedWords(prev => [prev[0], true, prev[2], prev[3], prev[4], prev[5]]), 1500),
+      setTimeout(() => setRevealedWords(prev => [prev[0], prev[1], true, prev[3], prev[4], prev[5]]), 2000),
+      setTimeout(() => setRevealedWords(prev => [prev[0], prev[1], prev[2], true, prev[4], prev[5]]), 2500),
+      setTimeout(() => setRevealedWords(prev => [prev[0], prev[1], prev[2], prev[3], true, prev[5]]), 3000),
+      setTimeout(() => setRevealedWords(prev => [prev[0], prev[1], prev[2], prev[3], prev[4], true]), 3500),
       setTimeout(() => setSubtitleRevealed(true), 4500), // Subtitle reveals after main words
     ];
 
@@ -195,12 +197,19 @@ export default function HeroChaos() {
             }}>
               {subtitleRevealed ? subtitle : generateSubtitleSplitFlap(subtitle)}
             </p>
-            <button 
-              onClick={() => navigate('/build')}
-              className="text-lg font-medium text-pure-white border-b border-pure-white hover:border-gray-300 hover:text-gray-300 transition-all duration-300 cursor-pointer"
-            >
-              Start Mapping Your Practice
-            </button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <button 
+                className="px-8 py-4 bg-pure-white text-pure-black font-medium hover:bg-gray-100 transition-all duration-300"
+              >
+                Watch a 90‑second demo
+              </button>
+              <button 
+                onClick={() => navigate('/build')}
+                className="text-lg font-medium text-pure-white border border-pure-white px-8 py-4 hover:bg-pure-white hover:text-pure-black transition-all duration-300"
+              >
+                Book a 15‑min walkthrough
+              </button>
+            </div>
           </div>
         </div>
       </div>

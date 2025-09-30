@@ -6,9 +6,9 @@ const ClosingSection = () => {
       <div className="container mx-auto px-8 text-center">
         <ScrollReveal>
           <h2 className="section-title mb-16 text-left">
-            <span className="block">The Real Risk</span>
-            <span className="block">is Running</span>
-            <span className="block">Late.</span>
+            <span className="block">Keep every operatory</span>
+            <span className="block">on time—starting</span>
+            <span className="block">this week</span>
           </h2>
         </ScrollReveal>
 

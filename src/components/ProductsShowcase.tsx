@@ -24,10 +24,20 @@ export default function ProductsShowcase() {
         <ScrollReveal>
           <div className="text-center mb-24">
             <h2 className="section-title text-center">
-              <span className="block">Your practice.</span>
-              <span className="block">Your system.</span>
-              <span className="block">Your rules.</span>
+              <span className="block">How it works</span>
             </h2>
+            
+            <div className="max-w-4xl mx-auto mt-12 space-y-8">
+              <div className="text-left">
+                <h3 className="text-2xl font-semibold mb-2">1. Map your floor plan once – Build ops and lobby in minutes.</h3>
+              </div>
+              <div className="text-left">
+                <h3 className="text-2xl font-semibold mb-2">2. Start a visit – Procedure timers run quietly in the room.</h3>
+              </div>
+              <div className="text-left">
+                <h3 className="text-2xl font-semibold mb-2">3. Stay on time – Wrist/phone prompts cue the right person at the right moment; the live board shows on‑time, late‑risk, and who's needed next.</h3>
+              </div>
+            </div>
           </div>
         </ScrollReveal>
 

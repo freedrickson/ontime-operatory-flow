@@ -10,23 +10,33 @@ const TeamSection = () => {
         <ScrollReveal>
           <div className="text-right mb-16">
             <h2 className="section-title">
-              <span className="block">Enrollment</span>
-              <span className="block">is a</span>
-              <span className="block">Team Sport.</span>
+              <span className="block">Why its different</span>
             </h2>
           </div>
         </ScrollReveal>
 
         <ScrollReveal>
-          <div className="max-w-4xl mx-auto text-center">
-            <p className="subtitle-text text-gray-700 mb-16">
-              We capture data on every key player in the patient journey. 
-              Treatment acceptance is a whole-team effort.
-            </p>
-
-            <Suspense fallback={<div className="h-96 flex items-center justify-center"><div className="text-gray-500">Loading team...</div></div>}>
-              <TeamAvatars />
-            </Suspense>
+          <div className="max-w-4xl mx-auto">
+            <div className="space-y-8 text-left">
+              <div className="flex items-start gap-4">
+                <span className="text-2xl">•</span>
+                <div>
+                  <strong>First of its kind:</strong> Real‑time patient management designed for dentistry, not a generic task app.
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <span className="text-2xl">•</span>
+                <div>
+                  <strong>No new hardware:</strong> Works with Apple Watch, iPhone, and iPad; wall tablet optional.
+                </div>
+              </div>
+              <div className="flex items-start gap-4">
+                <span className="text-2xl">•</span>
+                <div>
+                  <strong>Fast setup:</strong> Map your practice once; go live the same day.
+                </div>
+              </div>
+            </div>
           </div>
         </ScrollReveal>
       </div>
