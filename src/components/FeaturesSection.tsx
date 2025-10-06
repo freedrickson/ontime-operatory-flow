@@ -10,7 +10,7 @@ const FeaturesSection = () => {
     },
     {
       title: "Live floor‑plan dashboard",
-      description: "Live Map of Doctor Requests to Keep the Flow. When a room requests a doctor, it lights up on the floor plan and jumps in the doctor queue—so leads can route the doctor instantly and keep both op and hygiene schedules on time. Rooms on floor plan dashboard changes color as wait time increases.",
+      description: "Live Map of Doctor Requests to Keep the Flow. When a room requests a doctor, it lights up on the floor plan and jumps in the doctor queue—so leads can route the doctor instantly and keep both op and hygiene schedules on time. Rooms on floor plan dashboard changes color as wait time increases. This helps visually indicate urgency so patients time is respected.",
       align: "right"
     }
   ];
