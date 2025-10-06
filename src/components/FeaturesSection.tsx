@@ -4,7 +4,7 @@ const FeaturesSection = () => {
   const features = [
     {
       title: "Know what's needed—without looking up",
-      description: "Customizable haptic notifications on Apple Watch/iPhone tell you what the request is (e.g., 'doctor needed,' 'check anesthetic,' 'ready to seat') without stopping to read a message. When a doctor is requested, the floor-plan changes color and the doctor queue updates in real time so leads can reorder where the doctor goes next.",
+      description: "Customizable haptic notifications on Apple Watch/iPhone tell you what the request is (e.g., 'doctor needed,' 'check anesthetic,' 'ready to seat') without stopping to read a message.",
       micronote: "Works with Apple Watch and phones your team already has; patterns and labels are fully customizable.",
       align: "left"
     },
