@@ -33,13 +33,13 @@ export default function ProductsShowcase() {
             <div className="max-w-2xl">
               <div className="space-y-6">
                 <p className="subtitle-text text-gray-600">
-                  <strong>1. Map your floor plan once</strong> – Build ops and lobby in minutes.
+                  <strong>1. Generate your dashboard from your floor plan</strong> – Build ops and lobby in minutes.
                 </p>
                 <p className="subtitle-text text-gray-600">
-                  <strong>2. Start a visit</strong> – Procedure timers run quietly in the room.
+                  <strong>2. Send a cue</strong> – Patient timers start automatically; color-coded tiles (green → yellow → red) show wait duration.
                 </p>
                 <p className="subtitle-text text-gray-600">
-                  <strong>3. Stay on time</strong> – Wrist/phone prompts cue the right person at the right moment; the live board shows on‑time, late‑risk, and who's needed next.
+                  <strong>3. Stay on time</strong> – Wrist/phone nudges route the right person at the right moment. The live board shows who's on-time, at-risk, and who's needed next.
                 </p>
               </div>
             </div>
