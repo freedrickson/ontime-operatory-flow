@@ -127,8 +127,8 @@ const CLINICAL_LEAD_ENABLED_GROUPS: NeedGroupId[] = [
   'assistant', 'room-turnover', 'sterile-instruments', 'imaging'
 ];
 
-// Front Desk receives Patient Flow cues
-const FRONT_DESK_ENABLED_GROUPS: NeedGroupId[] = ['ready-to-seat', 'ready-for-checkout'];
+// Admin receives Patient Flow cues
+const ADMIN_ENABLED_GROUPS: NeedGroupId[] = ['ready-to-seat', 'ready-for-checkout'];
 
 // Hygienist receives Clinical Support cues
 const HYGIENIST_ENABLED_GROUPS: NeedGroupId[] = ['assistant', 'room-turnover', 'sterile-instruments', 'imaging'];
@@ -149,9 +149,9 @@ const DEFAULT_ROLE_PROFILES: RoleDefaultProfile[] = [
     events: createAllCueConfigs(CLINICAL_LEAD_ENABLED_GROUPS)
   },
   {
-    role: 'Front Desk',
-    enabledNeedGroups: FRONT_DESK_ENABLED_GROUPS,
-    events: createAllCueConfigs(FRONT_DESK_ENABLED_GROUPS)
+    role: 'Admin',
+    enabledNeedGroups: ADMIN_ENABLED_GROUPS,
+    events: createAllCueConfigs(ADMIN_ENABLED_GROUPS)
   },
   {
     role: 'Hygienist',
