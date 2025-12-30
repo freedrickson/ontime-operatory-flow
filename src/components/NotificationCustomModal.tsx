@@ -8,7 +8,7 @@ import { Slider } from '@/components/ui/slider';
 import { Switch } from '@/components/ui/switch';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { ChevronDown } from 'lucide-react';
-import { EventType, ChannelConfig, Role, HapticPattern, SoundStyle, BannerStyle } from '@/types/notifications';
+import { CueNeedType, EventType, ChannelConfig, Role, HapticPattern, SoundStyle, BannerStyle } from '@/types/notifications';
 import { useNotifications } from '@/hooks/useNotifications';
 
 interface NotificationCustomModalProps {

@@ -19,7 +19,7 @@ export type Database = {
           action: string
           created_at: string
           id: number
-          ip: unknown | null
+          ip: unknown
           metadata: Json | null
           org_id: string | null
           user_agent: string | null
@@ -29,7 +29,7 @@ export type Database = {
           action: string
           created_at?: string
           id?: number
-          ip?: unknown | null
+          ip?: unknown
           metadata?: Json | null
           org_id?: string | null
           user_agent?: string | null
@@ -39,7 +39,7 @@ export type Database = {
           action?: string
           created_at?: string
           id?: number
-          ip?: unknown | null
+          ip?: unknown
           metadata?: Json | null
           org_id?: string | null
           user_agent?: string | null

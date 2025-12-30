@@ -26,15 +26,18 @@ import {
 } from 'lucide-react';
 import NavigationOverlay from '@/components/NavigationOverlay';
 import { NotificationCustomModal } from '@/components/NotificationCustomModal';
-import { useNotifications } from '@/hooks/useNotifications';
-import { EventType, Role } from '@/types/notifications';
+import { RoleDefaultsPanel } from '@/components/RoleDefaultsPanel';
+import { useNotifications, getCategoryDisplayName } from '@/hooks/useNotifications';
+import { CueNeedType, Role } from '@/types/notifications';
 
 const SettingsPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('notifications');
   const [customModalOpen, setCustomModalOpen] = useState(false);
+  const [roleDefaultsPanelOpen, setRoleDefaultsPanelOpen] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<Role>('Doctor');
   const [selectedEvent, setSelectedEvent] = useState<{
-    eventId: EventType;
+    eventId: CueNeedType;
     eventName: string;
     userId?: string;
     role: Role;
@@ -64,9 +67,14 @@ const SettingsPage = () => {
     { id: 'support', label: 'Help & Support', icon: HelpCircle },
   ];
 
-  const openCustomModal = (eventId: EventType, eventName: string, userId?: string, role: Role = 'Doctor', isRoleDefault: boolean = false) => {
+  const openCustomModal = (eventId: CueNeedType, eventName: string, userId?: string, role: Role = 'Doctor', isRoleDefault: boolean = false) => {
     setSelectedEvent({ eventId, eventName, userId, role, isRoleDefault });
     setCustomModalOpen(true);
+  };
+
+  const openRoleDefaultsPanel = (role: Role) => {
+    setSelectedRole(role);
+    setRoleDefaultsPanelOpen(true);
   };
 
   const closeCustomModal = () => {
@@ -77,8 +85,8 @@ const SettingsPage = () => {
   const renderNotifications = () => (
     <div className="space-y-8">
       <div>
-        <h2 className="text-4xl md:text-5xl font-black mb-6 text-foreground">Notifications</h2>
-        <p className="subtitle-text text-muted-foreground mb-8">Configure how and when you receive notifications for different events.</p>
+        <h2 className="text-4xl md:text-5xl font-black mb-6 text-foreground">Cue Notifications</h2>
+        <p className="subtitle-text text-muted-foreground mb-8">Configure how and when you receive cues for different needs.</p>
       </div>
 
       <Card className="bg-card/50 backdrop-blur-sm border border-border/50">
@@ -92,13 +100,13 @@ const SettingsPage = () => {
                 <div>
                   <Badge variant="outline">{roleProfile.role}</Badge>
                   <p className="text-sm text-muted-foreground mt-1">
-                    Default notification settings for {roleProfile.role} role
+                    Default cue settings for {roleProfile.role} role
                   </p>
                 </div>
                 <Button 
                   variant="outline" 
                   size="sm"
-                  onClick={() => openCustomModal('doctor-request-0-5', `${roleProfile.role} Defaults`, undefined, roleProfile.role, true)}
+                  onClick={() => openRoleDefaultsPanel(roleProfile.role)}
                 >
                   Edit Defaults
                 </Button>
@@ -110,15 +118,15 @@ const SettingsPage = () => {
 
       <Card className="bg-card/50 backdrop-blur-sm border border-border/50">
         <CardHeader>
-          <CardTitle>Event Notifications</CardTitle>
+          <CardTitle>Cue Notifications</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead>
                 <tr className="border-b">
-                  <th className="text-left p-3">Event</th>
-                  <th className="text-left p-3">Domain</th>
+                  <th className="text-left p-3">Cue</th>
+                  <th className="text-left p-3">Category</th>
                   <th className="text-center p-3">
                     <div className="flex items-center justify-center gap-1">
                       <Vibrate className="h-4 w-4" />
@@ -163,7 +171,7 @@ const SettingsPage = () => {
                         </div>
                       </td>
                       <td className="p-3">
-                        <Badge variant="secondary" className="capitalize">{event.domain}</Badge>
+                        <Badge variant="secondary" className="capitalize">{getCategoryDisplayName(event.category)}</Badge>
                       </td>
                       <td className="text-center p-3">
                         <div className={`w-2 h-2 rounded-full mx-auto ${
@@ -851,6 +859,12 @@ const SettingsPage = () => {
           isRoleDefault={selectedEvent.isRoleDefault}
         />
       )}
+
+      <RoleDefaultsPanel
+        isOpen={roleDefaultsPanelOpen}
+        onClose={() => setRoleDefaultsPanelOpen(false)}
+        role={selectedRole}
+      />
     </div>
   );
 };
