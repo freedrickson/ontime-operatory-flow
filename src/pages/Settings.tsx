@@ -233,7 +233,7 @@ const SettingsPage = () => {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {['Doctor', 'Clinical Lead', 'Hygienist', 'Assistant', 'Front Desk'].map((role) => (
+            {['Doctor', 'Clinical Lead', 'Hygienist', 'Assistant', 'Admin'].map((role) => (
               <div key={role} className="flex items-center justify-between p-4 border rounded-lg">
                 <div>
                   <Badge variant="outline">{role}</Badge>
@@ -242,7 +242,7 @@ const SettingsPage = () => {
                     {role === 'Clinical Lead' && 'Manage clinical operations and staff scheduling'}
                     {role === 'Hygienist' && 'Access to preventive care and patient education'}
                     {role === 'Assistant' && 'Support clinical procedures and patient management'}
-                    {role === 'Front Desk' && 'Handle appointments, billing, and patient communication'}
+                    {role === 'Admin' && 'Handle appointments, billing, and patient communication'}
                   </p>
                 </div>
                 <Button variant="outline" size="sm">Edit Permissions</Button>
@@ -526,7 +526,7 @@ const SettingsPage = () => {
                 <SelectItem value="clinical-lead">Clinical Lead</SelectItem>
                 <SelectItem value="hygienist">Hygienist</SelectItem>
                 <SelectItem value="assistant">Assistant</SelectItem>
-                <SelectItem value="front-desk">Front Desk</SelectItem>
+                <SelectItem value="admin">Admin</SelectItem>
               </SelectContent>
             </Select>
           </div>

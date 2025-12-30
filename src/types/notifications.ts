@@ -91,7 +91,7 @@ export type SoundStyle =
 
 export type BannerStyle = 'Banner only' | 'Badge only' | 'Both';
 
-export type Role = 'Doctor' | 'Clinical Lead' | 'Hygienist' | 'Assistant' | 'Front Desk';
+export type Role = 'Doctor' | 'Clinical Lead' | 'Hygienist' | 'Assistant' | 'Admin';
 
 export interface ChannelConfig {
   haptic: {
